@@ -9,7 +9,7 @@ namespace HumblePractices.Idioms
     public struct Option<T> where T : class
     {
         // ReSharper disable StaticFieldInGenericType
-        private static readonly Option<T> none = new Option<T>(null); // Of course, we want to have 'specialized' static fields.
+        private static readonly Option<T> none = new Option<T>(null); // Of course, we want to have 'specialized' static fields, one for each T.
         // ReSharper restore StaticFieldInGenericType
 
         private readonly T value;
