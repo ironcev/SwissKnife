@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumblePractices", "HumblePractices\HumblePractices.csproj", "{2C883BA3-421C-4996-89CB-7E2769F38286}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumblePractices.Tests.Unit", "HumblePractices.Tests.Unit\HumblePractices.Tests.Unit.csproj", "{E17910D2-92A8-4F36-BA31-CF2F2C4D3B02}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2C883BA3-421C-4996-89CB-7E2769F38286} = {2C883BA3-421C-4996-89CB-7E2769F38286}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

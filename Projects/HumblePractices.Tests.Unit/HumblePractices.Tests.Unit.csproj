@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HumblePractices">
-      <HintPath>..\Bin\Product\Debug\HumblePractices.dll</HintPath>
+      <HintPath>..\Bin\Product\$(Configuration)\HumblePractices.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\Vendors\NUnit 2.5.10.11092\nunit.framework.dll</HintPath>
@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Idioms\Option.StaticCreateMethods.cs" />
+    <Compile Include="Contracts\ArgumentTests.cs" />
+    <Compile Include="Idioms\OptionTests.StaticCreateMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
