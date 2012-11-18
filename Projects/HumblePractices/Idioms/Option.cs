@@ -174,5 +174,17 @@ namespace HumblePractices.Idioms
 
             return IsNone ? null : (TOutput?)mapper(value);
         }
+
+        /// <summary>
+        /// Converts <paramref name="valueOrNull"/> into the <see cref="Option{T}"/> that represents it.
+        /// If the <paramref name="valueOrNull"/> is not null, Some will be returned.
+        /// If the <paramref name="valueOrNull"/> is null, None will be returned.
+        /// </summary>
+        /// <param name="valueOrNull">Value that has to be converted into <see cref="Option{T}"/>.</param>
+        /// <returns>Some if <paramref name="valueOrNull"/> is not null, otherwise None.</returns>
+        public static implicit operator Option<T> (T valueOrNull)
+        {
+            return From(valueOrNull);
+        }
     }
 }
