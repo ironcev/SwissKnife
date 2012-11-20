@@ -5,7 +5,7 @@ namespace HumblePractices.Tests.Unit.Idioms
 {
     // ReSharper disable InconsistentNaming
     [TestFixture]
-    public class OptionTests
+    public partial class OptionTests
     {
         [Test]
         public void None_CreatesNone()
@@ -22,7 +22,7 @@ namespace HumblePractices.Tests.Unit.Idioms
         }
 
         [Test]
-        public void Some_RepresentsValue()
+        public void Some_CreatesSomeThatRepresentsValue()
         {
             var value = new object();
             var some = Option<object>.Some(value);

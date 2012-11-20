@@ -39,7 +39,7 @@ namespace HumblePractices.Idioms
         public static Option<T> Some(T value)
         {
             #region Preconditions
-            if (value == null) throw new ArgumentNullException("value"); // TODO-IG: See if we can use contracts here.
+            if (value == null) throw new ArgumentNullException("value");
             #endregion
 
             return new Option<T>(value);
@@ -84,7 +84,7 @@ namespace HumblePractices.Idioms
         {
             get
             {
-                if (value == null) throw new InvalidOperationException("Option must have a value."); // TODO-IG: Can contracts be used?
+                if (value == null) throw new InvalidOperationException("Option must have a value.");
                 return value;
             }
         }
@@ -121,7 +121,7 @@ namespace HumblePractices.Idioms
         public Option<TOutput> Bind<TOutput>(Func<T, Option<TOutput>> binder) where TOutput : class
         {
             #region Preconditions
-            if (binder == null) throw new ArgumentNullException("binder"); // TODO-IG: Can be replaced with contracts?
+            if (binder == null) throw new ArgumentNullException("binder");
             #endregion
 
             return IsNone ? Option<TOutput>.None : binder(value);
@@ -137,7 +137,7 @@ namespace HumblePractices.Idioms
         public TOutput? Bind<TOutput>(Func<T, TOutput?> binder) where TOutput : struct
         {
             #region Preconditions
-            if (binder == null) throw new ArgumentNullException("binder"); // TODO-IG: Can be replaced with contracts?
+            if (binder == null) throw new ArgumentNullException("binder");
             #endregion
 
             return IsNone ? null : binder(value);
@@ -153,7 +153,7 @@ namespace HumblePractices.Idioms
         public Option<TOutput> MapToOption<TOutput>(Func<T, TOutput> mapper) where TOutput : class
         {
             #region Preconditions
-            if (mapper == null) throw new ArgumentNullException("mapper"); // TODO-IG: Can be replaced with contracts?
+            if (mapper == null) throw new ArgumentNullException("mapper");
             #endregion
 
             return IsNone ? Option<TOutput>.None : Option<TOutput>.From(mapper(value));
@@ -169,7 +169,7 @@ namespace HumblePractices.Idioms
         public TOutput? MapToNullable<TOutput>(Func<T, TOutput> mapper) where TOutput : struct
         {
             #region Preconditions
-            if (mapper == null) throw new ArgumentNullException("mapper"); // TODO-IG: Can be replaced with contracts?
+            if (mapper == null) throw new ArgumentNullException("mapper");
             #endregion
 
             return IsNone ? null : (TOutput?)mapper(value);

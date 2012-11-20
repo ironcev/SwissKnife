@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Compilation of classes used in evey day .NET programming.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The Humble Programmer")]
-[assembly: AssemblyProduct("Humble Practices.")]
+[assembly: AssemblyProduct("Humble Practices")]
 [assembly: AssemblyCopyright("Copyright © 2012 Igor Roncevic")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
