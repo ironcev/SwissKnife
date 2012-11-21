@@ -51,6 +51,37 @@ namespace HumblePractices.Tests.Unit.Idioms
             var some = Option<object>.Some(value);
             Assert.That(some.Value, Is.SameAs(value));
         }
+
+        [Test]
+        public void ValueOrNull_OptionIsNone_ReturnsNull()
+        {
+            var none = Option<object>.None;
+            Assert.That(none.ValueOrNull, Is.Null);
+        }
+
+        [Test]
+        public void ValueOrNull_OptionIsSome_ReturnsValue()
+        {
+            var value = new object();
+            var some = Option<object>.Some(value);
+            Assert.That(some.ValueOrNull, Is.SameAs(value));
+        }
+
+        [Test]
+        public void ValueOr_OptionIsNone_ReturnsDefaultValue()
+        {
+            var defaultValue = new object();
+            var none = Option<object>.None;
+            Assert.That(none.ValueOr(defaultValue), Is.SameAs(defaultValue));
+        }
+
+        [Test]
+        public void ValueOr_OptionIsSome_ReturnsValue()
+        {
+            var value = new object();
+            var some = Option<object>.Some(value);
+            Assert.That(some.ValueOr(new object()), Is.SameAs(value));
+        }
     }
     // ReSharper restore InconsistentNaming
 }
