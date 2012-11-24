@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿// TODO-IG: Fix all AssemblyInfo files in all projects. Add common assembly info.
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

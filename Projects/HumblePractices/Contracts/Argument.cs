@@ -54,5 +54,20 @@ namespace HumblePractices.Contracts
                 throw new ArgumentNullException(parameterName.ValueOrNull);
             Contract.EndContractBlock();
         }
+
+        /// <summary>
+        /// Checks that a method parameter satisfies the <paramref name="validityCondition"/>.
+        /// </summary>
+        /// <param name="validityCondition">Logical condition that is true if the method parameter is valid.</param>
+        /// <param name="parameterName">Name of the method parameter.</param>
+        /// <param name="exceptionMessage">The error message that describes the reason why the parameter is not valid.</param>
+        /// <exception cref="ArgumentException">If <paramref name="validityCondition"/> is false.</exception>
+        [ContractArgumentValidator]
+        public static void IsValid(bool validityCondition, Option<string> exceptionMessage, Option<string> parameterName)
+        {
+            if (!validityCondition)
+                throw new ArgumentException(exceptionMessage.ValueOrNull, parameterName.ValueOrNull);
+            Contract.EndContractBlock();
+        }
     }
 }

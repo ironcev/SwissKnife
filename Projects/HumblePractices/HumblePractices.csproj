@@ -36,6 +36,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\CollectionExtensions.cs" />
     <Compile Include="Contracts\Argument.cs" />
     <Compile Include="Contracts\ContractExtensions.cs" />
     <Compile Include="Contracts\Operation.cs" />

@@ -15,7 +15,7 @@ namespace System.Diagnostics.Contracts
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     [Conditional("CONTRACTS_FULL")]
-    internal sealed class ContractArgumentValidatorAttribute : Attribute
+    public sealed class ContractArgumentValidatorAttribute : Attribute
     {
     }
 
@@ -24,7 +24,7 @@ namespace System.Diagnostics.Contracts
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     [Conditional("CONTRACTS_FULL")]
-    internal sealed class ContractAbbreviatorAttribute : Attribute
+    public sealed class ContractAbbreviatorAttribute : Attribute
     {
     }
 
@@ -33,9 +33,10 @@ namespace System.Diagnostics.Contracts
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
     [Conditional("CONTRACTS_FULL")]
-    internal sealed class ContractOptionAttribute : Attribute
+    public sealed class ContractOptionAttribute : Attribute
     {
         // ReSharper disable UnusedParameter.Local
+        // ReSharper disable CSharpWarnings::CS1591
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "category", Justification = "Build-time only attribute")]
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "setting", Justification = "Build-time only attribute")]
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "toggle", Justification = "Build-time only attribute")]
@@ -44,6 +45,7 @@ namespace System.Diagnostics.Contracts
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "setting", Justification = "Build-time only attribute")]
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value", Justification = "Build-time only attribute")]
         public ContractOptionAttribute(string category, string setting, string value) { }
+        // ReSharper restore CSharpWarnings::CS1591
         // ReSharper restore UnusedParameter.Local
     }
 }

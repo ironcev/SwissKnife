@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\ArgumentTests.cs" />
+    <Compile Include="Idioms\OptionTests.BindingAndMapping.cs" />
     <Compile Include="Idioms\OptionTests.ValueInspectionAndRetrieval.cs" />
     <Compile Include="Idioms\OptionTests.StaticCreateMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
