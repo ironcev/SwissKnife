@@ -46,8 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\CollectionExtensionsTests.cs" />
     <Compile Include="Contracts\ArgumentTests.cs" />
+    <Compile Include="Contracts\OperationTests.cs" />
     <Compile Include="Idioms\OptionTests.BindingAndMapping.cs" />
+    <Compile Include="Idioms\OptionTests.ImplicitConversion.cs" />
     <Compile Include="Idioms\OptionTests.ValueInspectionAndRetrieval.cs" />
     <Compile Include="Idioms\OptionTests.StaticCreateMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
