@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Humble Practices")]
-[assembly: AssemblyDescription("Compilation of classes used in evey day .NET programming.")]
+[assembly: AssemblyDescription("Compilation of classes used in every day .NET programming.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The Humble Programmer")]
 [assembly: AssemblyProduct("Humble Practices")]

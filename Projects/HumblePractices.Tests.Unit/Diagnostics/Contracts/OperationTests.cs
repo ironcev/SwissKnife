@@ -1,9 +1,9 @@
 ﻿using System;
-using HumblePractices.Contracts;
+using HumblePractices.Diagnostics.Contracts;
 using HumblePractices.Idioms;
 using NUnit.Framework;
 
-namespace HumblePractices.Tests.Unit.Contracts
+namespace HumblePractices.Tests.Unit.Diagnostics.Contracts
 {
     // ReSharper disable InconsistentNaming
     [TestFixture]

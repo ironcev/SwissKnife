@@ -1,9 +1,9 @@
-﻿#define CONTRACTS_FULL
+#define CONTRACTS_FULL
 using System;
 using System.Diagnostics.Contracts;
 using HumblePractices.Idioms;
 
-namespace HumblePractices.Contracts
+namespace HumblePractices.Diagnostics.Contracts
 {
     /// <summary>
     /// Contains static contract argument validator methods that represent preconditions on method arguments.

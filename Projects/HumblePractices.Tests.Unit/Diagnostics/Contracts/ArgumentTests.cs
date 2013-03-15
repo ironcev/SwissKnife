@@ -1,9 +1,9 @@
 ﻿using System;
-using HumblePractices.Contracts;
+using HumblePractices.Diagnostics.Contracts;
 using HumblePractices.Idioms;
 using NUnit.Framework;
 
-namespace HumblePractices.Tests.Unit.Contracts
+namespace HumblePractices.Tests.Unit.Diagnostics.Contracts
 {
     // ReSharper disable InconsistentNaming
     [TestFixture]
@@ -153,6 +153,100 @@ namespace HumblePractices.Tests.Unit.Contracts
         {
             const string parameterName = "parameterName";
             string exceptionParameterName = Assert.Throws<ArgumentException>(() => Argument.IsValid(false, null, Option<string>.Some(parameterName))).ParamName;
+            Assert.That(exceptionParameterName, Is.EqualTo(parameterName));
+        }
+        #endregion
+
+        #region Is
+        [Test]
+        public void Is_ParameterValueIsNull_DoesNothing()
+        {
+            Argument.Is(null, typeof(object), Option<string>.None);
+        }
+
+        [Test]
+        public void Is_ParameterValueIsExactlyOfType_DoesNothing()
+        {
+            Argument.Is(new object(), typeof(object), Option<string>.None);
+        }
+
+        [Test]
+        public void Is_ParameterValueIsOfDerivedType_DoesNothing()
+        {
+            Argument.Is(new int(), typeof(object), Option<string>.None);
+        }
+
+        [Test]
+        public void Is_ParameterValueIsNotOfType_ThrowsException()
+        {
+            Assert.Throws<ArgumentException>(() => Argument.Is(new object(), typeof(int), Option<string>.None));
+        }
+
+        [Test]
+        public void Is_TypeIsNull_ThrowsException()
+        {
+            var parameterName = Assert.Throws<ArgumentNullException>(() => Argument.Is(new object(), null, Option<string>.None)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("type"));
+        }
+
+        [Test]
+        public void Is_ParameterNameIsNone_ExceptionParameterNameIsNull()
+        {
+            string parameterName = Assert.Throws<ArgumentException>(() => Argument.Is(new object(), typeof(int),  Option<string>.None)).ParamName;
+            Assert.That(parameterName, Is.Null);
+        }
+
+        [Test]
+        public void Is_ParameterNameIsSome_ExceptionParameterNameHasTheSameName()
+        {
+            const string parameterName = "parameterName";
+            string exceptionParameterName = Assert.Throws<ArgumentException>(() => Argument.Is(new object(), typeof(int), Option<string>.Some(parameterName))).ParamName;
+            Assert.That(exceptionParameterName, Is.EqualTo(parameterName));
+        }
+        #endregion
+
+        #region IsInRange
+        [Test]
+        public void IsInRange_ParameterValueIsInRange_DoesNothing()
+        {
+            Argument.IsInRange(1, 0, 2, Option<string>.None);
+        }
+
+        [Test]
+        public void IsInRange_ParameterValueIsLowerBound_DoesNothing()
+        {
+            Argument.IsInRange(0, 0, 2, Option<string>.None);
+        }
+
+        [Test]
+        public void IsInRange_ParameterValueIsUpperBound_ThrowsException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(2, 0, 2, Option<string>.None));
+        }
+
+        [Test]
+        public void IsInRange_ParameterValueIsGreaterThanUpperBound_ThrowsException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(3, 0, 2, Option<string>.None));
+        }
+
+        [Test]
+        public void IsInRange_ParameterValueIsLowerThanLowerBound_ThrowsException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(-1, 0, 2, Option<string>.None));
+        }
+        [Test]
+        public void IsInRange_ParameterNameIsNone_ExceptionParameterNameIsNull()
+        {
+            string parameterName = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(0, 0, 0, Option<string>.None)).ParamName;
+            Assert.That(parameterName, Is.Null);
+        }
+
+        [Test]
+        public void IsInRange_ParameterNameIsSome_ExceptionParameterNameHasTheSameName()
+        {
+            const string parameterName = "parameterName";
+            string exceptionParameterName = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(0, 0, 0, Option<string>.Some(parameterName))).ParamName;
             Assert.That(exceptionParameterName, Is.EqualTo(parameterName));
         }
         #endregion

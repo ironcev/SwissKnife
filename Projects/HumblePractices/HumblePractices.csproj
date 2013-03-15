@@ -37,9 +37,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\CollectionExtensions.cs" />
-    <Compile Include="Contracts\Argument.cs" />
-    <Compile Include="Contracts\ContractExtensions.cs" />
-    <Compile Include="Contracts\Operation.cs" />
+    <Compile Include="Diagnostics\Contracts\ContractExtensions.cs" />
+    <Compile Include="Diagnostics\Contracts\Argument.cs" />
+    <Compile Include="Diagnostics\Contracts\Operation.cs" />
     <Compile Include="Idioms\Option.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

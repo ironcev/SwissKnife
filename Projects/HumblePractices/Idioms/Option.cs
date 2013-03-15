@@ -101,7 +101,7 @@ namespace HumblePractices.Idioms
         }
 
         /// <summary>
-        /// Gets the value of the option if the option is a Some value, or <paramref name="defaultValue"/> if the option is a None value.
+        /// Gets the value of the option if the option is a Some value, or the <paramref name="defaultValue"/> if the option is a None value.
         /// </summary>
         /// <returns>
         /// The value of the option if the option is a Some value, or <paramref name="defaultValue"/> if the option is a None value.
@@ -114,7 +114,7 @@ namespace HumblePractices.Idioms
         /// <summary>
         /// Invokes a function on an optional value that itself yields an option.
         /// </summary>
-        /// <param name="binder">A function that takes the value of type T from the option and transforms it into an option containing a value of type <typeparamref name="TOutput"/>.</param>
+        /// <param name="binder">A function that takes the value of the type <typeparamref name="T"/> from the option and transforms it into an option containing a value of the type <typeparamref name="TOutput"/>.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <returns>None if the option is None. The output of the <paramref name="binder"/> if the option is Some.</returns>
         /// <exception cref="ArgumentNullException">If the <paramref name="binder"/> is null.</exception>
@@ -186,5 +186,7 @@ namespace HumblePractices.Idioms
         {
             return From(valueOrNull);
         }
+
+        // TODO-IG: Think about equality.
     }
 }
