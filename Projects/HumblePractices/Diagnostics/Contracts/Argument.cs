@@ -74,20 +74,20 @@ namespace HumblePractices.Diagnostics.Contracts
         /// Checks if a method parameter is compatible with a given type.
         /// A method parameter is compatible with a given type if it can be assigned to a variable of that type.
         /// Null is considered to be compatible with all types.
-        /// Thus, if the <paramref name="parameterValue"/> is null, this method will never throw exception.
+        /// Thus, if the <paramref name="parameterValue"/> is null, this method will never throw an exception.
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="type">The type to which the method parameter must be assignable.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
         /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be asigned to an instance of the <paramref name="type"/>.</exception>
         /// <exception cref="ArgumentNullException">If the <paramref name="type"/> is null.</exception>
-        public static void Is(object parameterValue, Type type, Option<string> parameterName)
+        public static void Is(Option<object> parameterValue, Type type, Option<string> parameterName)
         {
             #region Preconditions
             IsNotNull(type, "type");
             #endregion
 
-            if (parameterValue == null) return;
+            if (parameterValue.IsNone) return;
 
             if (!type.IsAssignableFrom(parameterValue.GetType()))
                 throw new ArgumentException(string.Format("Parameter is not compatible with the type '{0}'. The type of the parameter was '{1}'.", type.AssemblyQualifiedName, parameterValue.GetType().AssemblyQualifiedName), parameterName.ValueOrNull);
@@ -97,13 +97,13 @@ namespace HumblePractices.Diagnostics.Contracts
         /// Checks if a method parameter is compatible with a given type.
         /// A method parameter is compatible with a given type if it can be assigned to a variable of that type.
         /// Null is considered to be compatible with all types.
-        /// Thus, if the <paramref name="parameterValue"/> is null, this method will never throw exception.
+        /// Thus, if the <paramref name="parameterValue"/> is null, this method will never throw an exception.
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <typeparam name="T">The type to which the method parameter must be assignable.</typeparam>
         /// <param name="parameterName">The name of the method parameter.</param>
         /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be asigned to an instance of <typeparamref name="T"/>.</exception>
-        public static void Is<T>(object parameterValue, string parameterName)
+        public static void Is<T>(Option<object> parameterValue, Option<string> parameterName)
         {
             Is(parameterValue, typeof(T), parameterName);
         }
