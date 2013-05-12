@@ -8,8 +8,8 @@
     <ProjectGuid>{E17910D2-92A8-4F36-BA31-CF2F2C4D3B02}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HumblePractices.Tests.Unit</RootNamespace>
-    <AssemblyName>HumblePractices.Tests.Unit</AssemblyName>
+    <RootNamespace>SwissKnife.Tests.Unit</RootNamespace>
+    <AssemblyName>SwissKnife.Tests.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
