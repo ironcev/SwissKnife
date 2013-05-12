@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using HumblePractices.Collections;
 using NUnit.Framework;
+using SwissKnife.Collections;
 
-namespace HumblePractices.Tests.Unit.Collections
+namespace SwissKnife.Tests.Unit.Collections
 {
     // ReSharper disable InconsistentNaming
     [TestFixture]

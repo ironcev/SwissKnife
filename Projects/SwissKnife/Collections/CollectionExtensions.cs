@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using HumblePractices.Diagnostics.Contracts;
+using SwissKnife.Diagnostics.Contracts;
 
-namespace HumblePractices.Collections
+namespace SwissKnife.Collections
 {
     /// <summary>
     /// Contains extension methods that can be applyed on different types of collections.

@@ -8,8 +8,8 @@
     <ProjectGuid>{2C883BA3-421C-4996-89CB-7E2769F38286}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HumblePractices</RootNamespace>
-    <AssemblyName>HumblePractices</AssemblyName>
+    <RootNamespace>SwissKnife</RootNamespace>
+    <AssemblyName>SwissKnife</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\Bin\Product\Debug\HumblePractices.xml</DocumentationFile>
+    <DocumentationFile>..\Bin\Product\Debug\SwissKnife.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\Bin\Product\Release\HumblePractices.xml</DocumentationFile>
+    <DocumentationFile>..\Bin\Product\Release\SwissKnife.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

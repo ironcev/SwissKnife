@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Humble Practices")]
+[assembly: AssemblyTitle("Swiss Knife")]
 [assembly: AssemblyConfiguration("")] // TODO-IG: Define proper assembly configuration.
-[assembly: AssemblyCompany("The Humble Programmer")]
-[assembly: AssemblyProduct("Humble Practices")]
-[assembly: AssemblyCopyright("Copyright © 2012 Igor Roncevic")]
+[assembly: AssemblyCompany("Igor Roncevic")]
+[assembly: AssemblyProduct("Swiss Knife")]
+[assembly: AssemblyCopyright("Copyright © 2013 Igor Roncevic")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")] // TODO-IG: Think about assembly culture.
 

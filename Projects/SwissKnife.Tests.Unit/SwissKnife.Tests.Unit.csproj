@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HumblePractices">
-      <HintPath>..\Bin\Product\$(Configuration)\HumblePractices.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\Vendors\NUnit 2.5.10.11092\nunit.framework.dll</HintPath>
     </Reference>
@@ -51,6 +48,12 @@
     <Compile Include="Idioms\OptionTests.ValueInspectionAndRetrieval.cs" />
     <Compile Include="Idioms\OptionTests.StaticCreateMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SwissKnife\SwissKnife.csproj">
+      <Project>{2C883BA3-421C-4996-89CB-7E2769F38286}</Project>
+      <Name>SwissKnife</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

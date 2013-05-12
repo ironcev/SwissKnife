@@ -1,7 +1,7 @@
-﻿using HumblePractices.Idioms;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using SwissKnife.Idioms;
 
-namespace HumblePractices.Tests.Unit.Idioms
+namespace SwissKnife.Tests.Unit.Idioms
 {
     // ReSharper disable InconsistentNaming
     [TestFixture]
