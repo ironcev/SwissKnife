@@ -1,3 +1,3 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyDescription("Swiss knife for .NET development.")]
+[assembly: AssemblyDescription("The Swiss Army knife for .NET developers.")]
