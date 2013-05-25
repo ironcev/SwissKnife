@@ -13,13 +13,13 @@ This genuine Art was practiced by me for years. Every project initiation ceremon
 ##Swiss Army Knife
 All these general purpose classes were diligently copied from one .NET project to another with a good reason. When put together, they form developer's equivalent of the [Swiss Army knife](https://en.wikipedia.org/wiki/Swiss_Army_knife). They are our blades, corkscrews, can openers, screwdrivers, scissors and so on. We need them no matter what kind of a .NET project we work on.
 
-*SwissKnife* is the Swiss Army knife for .NET developers. Symbolically, it represents my decision to abandon the Art. Practically, it replaces the ritual of copy-pasting with the ritual of referencing a lightweight and well tested class library.
+*SwissKnife* is the Swiss Army knife for .NET developers. Symbolically, it represents my decision to abandon the Art. Practically, it replaces the ritual of copy-pasting with the ritual of referencing a lightweight, well documented and well tested class library.
 
 ##Tools
-In its current state, *SwissKnife* is equipped with the following tools:
+*SwissKnife* is currently equipped with the following tools:
 
-* Option idiom
-* Extension methods for various .NET collections
-* Commonly used code contracts
+* [Option idiom](Projects/SwissKnife/Idioms/Option.cs)
+* [Extension methods for various .NET collections](Projects/SwissKnife/Collections/CollectionExtensions.cs)
+* [Commonly used code contracts](Projects/SwissKnife/Diagnostics/Contracts)
 
-If you have a good candidate for an additional one, let me know. I'll be glad to add it to *SwissKnife*.
+If you have a good candidate for an additional tool, let me know. I'll be glad to see it being a part of *SwissKnife*.
