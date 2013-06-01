@@ -48,6 +48,7 @@
     <Compile Include="Idioms\OptionTests.ValueInspectionAndRetrieval.cs" />
     <Compile Include="Idioms\OptionTests.StaticCreateMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SwissKnife\SwissKnife.csproj">

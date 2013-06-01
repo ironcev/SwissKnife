@@ -21,5 +21,6 @@ All these general purpose classes were diligently copied from one .NET project t
 * [Option idiom](Projects/SwissKnife/Idioms/Option.cs)
 * [Extension methods for various .NET collections](Projects/SwissKnife/Collections/CollectionExtensions.cs)
 * [Commonly used code contracts](Projects/SwissKnife/Diagnostics/Contracts)
+* [Extension methods for System.Type](Projects/TypeExtensions.cs)
 
 If you have a good candidate for an additional tool, let me know. I'll be glad to see it being a part of *SwissKnife*.
