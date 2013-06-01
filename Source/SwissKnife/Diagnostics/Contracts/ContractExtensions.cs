@@ -37,6 +37,7 @@ namespace System.Diagnostics.Contracts
     {
         // ReSharper disable UnusedParameter.Local
         // ReSharper disable CSharpWarnings::CS1591
+#pragma warning disable 1591 // warning CS1591: Missing XML comment for publicly visible type or member 'System.Diagnostics.Contracts.ContractOptionAttribute.ContractOptionAttribute(string, string, bool)'
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "category", Justification = "Build-time only attribute")]
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "setting", Justification = "Build-time only attribute")]
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "toggle", Justification = "Build-time only attribute")]
@@ -45,6 +46,7 @@ namespace System.Diagnostics.Contracts
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "setting", Justification = "Build-time only attribute")]
         [CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value", Justification = "Build-time only attribute")]
         public ContractOptionAttribute(string category, string setting, string value) { }
+#pragma warning disable 1591 // warning CS1591: Missing XML comment for publicly visible type or member 'System.Diagnostics.Contracts.ContractOptionAttribute.ContractOptionAttribute(string, string, bool)'
         // ReSharper restore CSharpWarnings::CS1591
         // ReSharper restore UnusedParameter.Local
     }

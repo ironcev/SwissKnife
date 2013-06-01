@@ -16,7 +16,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentException">If <see cref="parameterValue"/> is null or white space.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="parameterValue"/> is null or white space.</exception>
         [ContractArgumentValidator]
         public static void IsNotNullOrWhitespace(string parameterValue, Option<string> parameterName)
         {
@@ -31,7 +31,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentException">If <see cref="parameterValue"/> is null or empty.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="parameterValue"/> is null or empty.</exception>
         [ContractArgumentValidator]
         public static void IsNotNullOrEmpty(string parameterValue, Option<string> parameterName)
         {
@@ -46,7 +46,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentNullException">If <see cref="parameterValue"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="parameterValue"/> is null.</exception>
         [ContractArgumentValidator]
         public static void IsNotNull(object parameterValue, Option<string> parameterName)
         {
