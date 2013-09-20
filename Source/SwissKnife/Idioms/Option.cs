@@ -117,7 +117,7 @@ namespace SwissKnife.Idioms
         /// <param name="binder">A function that takes the value of the type <typeparamref name="T"/> from the option and transforms it into an option containing a value of the type <typeparamref name="TOutput"/>.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <returns>None if the option is None. The output of the <paramref name="binder"/> if the option is Some.</returns>
-        /// <exception cref="ArgumentNullException">If the <paramref name="binder"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="binder"/> is null.</exception>
         public Option<TOutput> Bind<TOutput>(Func<T, Option<TOutput>> binder) where TOutput : class
         {
             #region Preconditions
@@ -133,7 +133,7 @@ namespace SwissKnife.Idioms
         /// <param name="binder">A function that takes the value of type T from the option and transforms it into an nullable containing a value of type <typeparamref name="TOutput"/>.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <returns>Null if the option is None. The output of the <paramref name="binder"/> if the option is Some.</returns>
-        /// <exception cref="ArgumentNullException">If the <paramref name="binder"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="binder"/> is null.</exception>
         public TOutput? Bind<TOutput>(Func<T, TOutput?> binder) where TOutput : struct
         {
             #region Preconditions
@@ -149,7 +149,7 @@ namespace SwissKnife.Idioms
         /// <param name="mapper">A function to apply to the option value.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <returns>None if the option is None or the output of the <paramref name="mapper"/> is null. Some if the output of the <paramref name="mapper"/> is not null.</returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="mapper"/> is null.</exception>
         public Option<TOutput> MapToOption<TOutput>(Func<T, TOutput> mapper) where TOutput : class
         {
             #region Preconditions
@@ -165,7 +165,7 @@ namespace SwissKnife.Idioms
         /// <param name="mapper">A function to apply to the option value.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <returns>None if the option is None or the output of the <paramref name="mapper"/> is null. Some if the output of the <paramref name="mapper"/> is not null.</returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="mapper"/> is null.</exception>
         public TOutput? MapToNullable<TOutput>(Func<T, TOutput> mapper) where TOutput : struct
         {
             #region Preconditions

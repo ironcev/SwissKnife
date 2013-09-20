@@ -16,7 +16,8 @@ namespace SwissKnife.Diagnostics.Contracts
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentException">If <paramref name="parameterValue"/> is null or white space.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="parameterValue"/> is null.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="parameterValue"/> is white space.</exception>
         [ContractArgumentValidator]
         public static void IsNotNullOrWhitespace(string parameterValue, Option<string> parameterName)
         {
@@ -31,7 +32,8 @@ namespace SwissKnife.Diagnostics.Contracts
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentException">If <paramref name="parameterValue"/> is null or empty.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="parameterValue"/> is null.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="parameterValue"/> is null or empty string.</exception>
         [ContractArgumentValidator]
         public static void IsNotNullOrEmpty(string parameterValue, Option<string> parameterName)
         {
@@ -79,8 +81,8 @@ namespace SwissKnife.Diagnostics.Contracts
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="type">The type to which the method parameter must be assignable.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be asigned to an instance of the <paramref name="type"/>.</exception>
         /// <exception cref="ArgumentNullException">If the <paramref name="type"/> is null.</exception>
+        /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be asigned to an instance of the <paramref name="type"/>.</exception>
         public static void Is(Option<object> parameterValue, Type type, Option<string> parameterName)
         {
             #region Preconditions

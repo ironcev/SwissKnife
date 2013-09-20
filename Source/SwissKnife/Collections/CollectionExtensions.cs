@@ -14,6 +14,7 @@ namespace SwissKnife.Collections
         /// </summary>
         /// <param name="enumerable">The enumerable to execute the <paramref name="action"/> on.</param>
         /// <param name="action">The action to execute on the each element of the <paramref name="enumerable"/>.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="enumerable"/> or <paramref name="action"/> are null.</exception>
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
             #region Preconditions
@@ -31,6 +32,8 @@ namespace SwissKnife.Collections
         /// <typeparam name="T">The type of the items in the <paramref name="collection"/>.</typeparam>
         /// <param name="collection">The <see cref="ICollection{T}"/> to which to add <paramref name="itemsToAdd"/>.</param>
         /// <param name="itemsToAdd">Items that has to be added to the <paramref name="collection"/>.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="collection"/> or <paramref name="itemsToAdd"/> are null.</exception>
+        /// <exception cref="NotSupportedException">If <paramref name="collection"/> is read-only.</exception>
         public static void AddMany<T>(this ICollection<T> collection, IEnumerable<T> itemsToAdd)
         {
             #region Preconditions
@@ -54,6 +57,8 @@ namespace SwissKnife.Collections
         /// The function that returns the value that has to be inserted into the <paramref name="dictionary"/> if it does not contain the <paramref name="key"/>.
         /// This function will be called only if the <paramref name="dictionary"/> does not contain the <paramref name="key"/>.
         /// </param>
+        /// <exception cref="ArgumentNullException">If <paramref name="dictionary"/> or <paramref name="key"/> or <paramref name="getValueToAdd"/> are null.</exception>
+        /// <exception cref="NotSupportedException">If <paramref name="dictionary"/> is read-only.</exception>
         public static TValue GetValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> getValueToAdd)
         {
             #region Preconditions
