@@ -1,7 +1,6 @@
 #define CONTRACTS_FULL
 using System;
 using System.Diagnostics.Contracts;
-using SwissKnife.Idioms;
 
 namespace SwissKnife.Diagnostics.Contracts
 {

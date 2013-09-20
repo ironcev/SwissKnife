@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using SwissKnife.Idioms;
 
 namespace SwissKnife.Tests.Unit.Idioms
 {

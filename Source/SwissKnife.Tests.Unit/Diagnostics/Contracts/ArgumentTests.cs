@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using SwissKnife.Diagnostics.Contracts;
-using SwissKnife.Idioms;
 
 namespace SwissKnife.Tests.Unit.Diagnostics.Contracts
 {

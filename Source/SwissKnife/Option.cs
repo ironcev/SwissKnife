@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SwissKnife.Idioms
+namespace SwissKnife
 {
     /// <summary>
     /// Describes the option type. An option is used when a value may or may not exist. An option has an underlying type and may either hold a value of that type or it may not have a value.
