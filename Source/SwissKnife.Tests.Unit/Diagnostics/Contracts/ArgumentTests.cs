@@ -249,6 +249,41 @@ namespace SwissKnife.Tests.Unit.Diagnostics.Contracts
             Assert.That(exceptionParameterName, Is.EqualTo(parameterName));
         }
         #endregion
+
+        #region IsGreaterThanZero
+        [Test]
+        public void IsGreaterThanZero_ParameterValueIsGreaterThanZero_DoesNothing()
+        {
+            Argument.IsGreaterThanZero(1, Option<string>.None);
+        }
+
+        [Test]
+        public void IsGreaterThanZero_ParameterValueIsZero_ThrowsException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsGreaterThanZero(0, Option<string>.None));
+        }
+
+        [Test]
+        public void IsGreaterThanZero_ParameterValueIsLowerThanZero_ThrowsException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsGreaterThanZero(-1, Option<string>.None));
+        }
+
+        [Test]
+        public void IsGreaterThanZero_ParameterNameIsNone_ExceptionParameterNameIsNull()
+        {
+            string parameterName = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsGreaterThanZero(0, Option<string>.None)).ParamName;
+            Assert.That(parameterName, Is.Null);
+        }
+
+        [Test]
+        public void IsGreaterThanZero_ParameterNameIsSome_ExceptionParameterNameHasTheSameName()
+        {
+            const string parameterName = "parameterName";
+            string exceptionParameterName = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsGreaterThanZero(0, Option<string>.Some(parameterName))).ParamName;
+            Assert.That(exceptionParameterName, Is.EqualTo(parameterName));
+        }
+        #endregion
     }
     // ReSharper restore InconsistentNaming
 }

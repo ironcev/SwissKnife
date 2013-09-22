@@ -122,5 +122,17 @@ namespace SwissKnife.Diagnostics.Contracts
             if (!(lowerBound <= parameterValue && parameterValue < upperBound))
                 throw new ArgumentOutOfRangeException(parameterName.ValueOrNull, parameterValue, string.Format("Parameter value is out of the range [{0}, {1}>.", lowerBound, upperBound));
         }
+
+        /// <summary>
+        /// Checks that <see cref="int"/> method parameter is greater than zero.
+        /// </summary>
+        /// <param name="parameterValue">The value of the method parameter.</param>
+        /// <param name="parameterName">The name of the method parameter.</param>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="parameterValue"/> is not greater than zero.</exception>
+        public static void IsGreaterThanZero(int parameterValue, Option<string> parameterName)
+        {
+            if (parameterValue <= 0)
+                throw new ArgumentOutOfRangeException(parameterName.ValueOrNull, parameterValue, "Parameter value must be greater than zero.");
+        }
     }
 }
