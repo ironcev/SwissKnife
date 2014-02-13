@@ -90,8 +90,8 @@ namespace SwissKnife.Diagnostics.Contracts
 
             if (parameterValue.IsNone) return;
 
-            if (!type.IsAssignableFrom(parameterValue.GetType()))
-                throw new ArgumentException(string.Format("Parameter is not compatible with the type '{0}'. The type of the parameter was '{1}'.", type.AssemblyQualifiedName, parameterValue.GetType().AssemblyQualifiedName), parameterName.ValueOrNull);
+            if (!type.IsAssignableFrom(parameterValue.Value.GetType()))
+                throw new ArgumentException(string.Format("Parameter is not compatible with the type '{0}'. The type of the parameter was '{1}'.", type.AssemblyQualifiedName, parameterValue.Value.GetType().AssemblyQualifiedName), parameterName.ValueOrNull);
         }
 
         /// <summary>

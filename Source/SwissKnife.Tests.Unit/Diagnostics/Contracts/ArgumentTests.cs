@@ -169,6 +169,38 @@ namespace SwissKnife.Tests.Unit.Diagnostics.Contracts
             Argument.Is(new object(), typeof(object), Option<string>.None);
         }
 
+        /// <remarks>
+        /// Covers issue #1.
+        /// </remarks>
+        [Test]
+        public void Is_ParameterValueIsExactlyOfReferenceType_DoesNothing()
+        {
+          Argument.Is(new TestClass(), typeof(TestClass), Option<string>.None);
+        }
+        private class TestClass {}
+
+        [Test]
+        public void Is_ParameterValueIsExactlyOfValueType_DoesNothing()
+        {
+          Argument.Is(new TestStruct(), typeof(TestStruct), Option<string>.None);
+        }
+        private struct TestStruct {}
+
+        [Test]
+        public void Is_ParameterValueIsInterfaceOfType_DoesNothing()
+        {
+          ITestInterface baseTestObject = new BaseTestClass();
+          Argument.Is((object)baseTestObject, typeof(ITestInterface), Option<string>.None);
+          Argument.Is((object)baseTestObject, typeof(BaseTestClass), Option<string>.None);
+
+          ITestInterface derivedTestObject = new DerivedTestClass();
+          Argument.Is((object)derivedTestObject, typeof(ITestInterface), Option<string>.None);
+          Argument.Is((object)derivedTestObject, typeof(BaseTestClass), Option<string>.None);
+        }
+        private interface ITestInterface {}
+        private class BaseTestClass : ITestInterface {}
+        private class DerivedTestClass : BaseTestClass { }
+
         [Test]
         public void Is_ParameterValueIsOfDerivedType_DoesNothing()
         {
