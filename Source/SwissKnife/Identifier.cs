@@ -40,6 +40,11 @@ namespace SwissKnife
             return ToString<T, object>(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));
         }
 
+        public static string ToString<T, R>(Expression<Func<T, R>> identifierExpression)
+        {
+            return ToString(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));
+        }
+
         public static string ToString<T>(Expression<Func<T, object>> identifierExpression, Option<ConversionOptions> identifierOptions)
         {
             return ToString<T, object>(identifierExpression, identifierOptions);
@@ -65,6 +70,11 @@ namespace SwissKnife
         }
 
         public static string ToString(Expression<Func<object>> identifierExpression)
+        {
+            return ToString(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));
+        }
+
+        public static string ToString<R>(Expression<Func<R>> identifierExpression)
         {
             return ToString(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));
         }
