@@ -43,6 +43,7 @@
     <Compile Include="Collections\CollectionExtensionsTests.cs" />
     <Compile Include="Diagnostics\Contracts\ArgumentTests.cs" />
     <Compile Include="Diagnostics\Contracts\OperationTests.cs" />
+    <Compile Include="IdentifierTests.cs" />
     <Compile Include="Idioms\OptionTests.BindingAndMapping.cs" />
     <Compile Include="Idioms\OptionTests.ImplicitConversion.cs" />
     <Compile Include="Idioms\OptionTests.ValueInspectionAndRetrieval.cs" />
