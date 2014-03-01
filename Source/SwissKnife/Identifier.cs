@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Text;
 using SwissKnife.Diagnostics.Contracts;
+using SwissKnife.IdentifierConversion;
 
 namespace SwissKnife
 {
@@ -12,29 +13,6 @@ namespace SwissKnife
     /// </summary>
     public static class Identifier // TODO-IG: Implement the class fully! This is just a temporary version needed for internal projects!
     {
-        public enum StaticMemberConversion
-        {
-            MemberNameOnly,
-            ParentTypeName,
-            ParentTypeFullName
-        }
-
-        /// <summary>
-        /// // TODO-iG: Combine these two comments: Represents the parameters used to customize the conversion of identifier expressions into thier string representations.
-        /// Represents the parameters used to customize the output of the <see cref="Identifier.ToString{T}(System.Linq.Expressions.Expression{System.Func{T,object}})"/> methods.
-        /// </summary>
-        public sealed class ConversionOptions // TODO-IG: Add options for conversion of arrays and methods.
-        {
-            public string Separator { get; set; }
-            public StaticMemberConversion StaticMemberConversion { get; set; }
-
-            public ConversionOptions()
-            {
-                Separator = ".";
-                StaticMemberConversion = StaticMemberConversion.MemberNameOnly;
-            }
-        }
-
         public static string ToString<T>(Expression<Func<T, object>> identifierExpression) // TODO-IG: Explain in the implementation why this method, if we already have an input of the type Expression<Func<T, Something>> implicite cast to Func<T, object> not possible.
         {
             return ToString<T, object>(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));

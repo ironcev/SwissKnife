@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SwissKnife.IdentifierConversion;
 
 namespace SwissKnife.Tests.Unit
 {
@@ -52,9 +53,9 @@ namespace SwissKnife.Tests.Unit
         [Test]
         public void AsString_3a()
         {
-            var identifierOptions = new Identifier.ConversionOptions
+            var identifierOptions = new ConversionOptions
             {
-                StaticMemberConversion = Identifier.StaticMemberConversion.ParentTypeName
+                StaticMemberConversion = StaticMemberConversion.ParentTypeName
             };
             Assert.That(Identifier.ToString(() => StaticTestProperty, identifierOptions), Is.EqualTo(string.Format("{0}.StaticTestProperty", typeof(IdentifierTests).Name)));
         }
@@ -62,9 +63,9 @@ namespace SwissKnife.Tests.Unit
         [Test]
         public void AsString_3b()
         {
-            var identifierOptions = new Identifier.ConversionOptions
+            var identifierOptions = new ConversionOptions
             {
-                StaticMemberConversion = Identifier.StaticMemberConversion.ParentTypeFullName
+                StaticMemberConversion = StaticMemberConversion.ParentTypeFullName
             };
             Assert.That(Identifier.ToString(() => StaticTestProperty, identifierOptions), Is.EqualTo(string.Format("{0}.StaticTestProperty", typeof(IdentifierTests).FullName)));
         }
@@ -78,9 +79,9 @@ namespace SwissKnife.Tests.Unit
         [Test]
         public void AsString_4a()
         {
-            var identifierOptions = new Identifier.ConversionOptions
+            var identifierOptions = new ConversionOptions
             {
-                StaticMemberConversion = Identifier.StaticMemberConversion.ParentTypeName
+                StaticMemberConversion = StaticMemberConversion.ParentTypeName
             };
             Assert.That(Identifier.ToString(() => TestClass.StaticProperty, identifierOptions), Is.EqualTo(string.Format("{0}.StaticProperty", typeof(TestClass).Name)));
         }
@@ -88,9 +89,9 @@ namespace SwissKnife.Tests.Unit
         [Test]
         public void AsString_4b()
         {
-            var identifierOptions = new Identifier.ConversionOptions
+            var identifierOptions = new ConversionOptions
             {
-                StaticMemberConversion = Identifier.StaticMemberConversion.ParentTypeFullName
+                StaticMemberConversion = StaticMemberConversion.ParentTypeFullName
             };
             Assert.That(Identifier.ToString(() => TestClass.StaticProperty, identifierOptions), Is.EqualTo(string.Format("{0}.StaticProperty", typeof(TestClass).FullName)));
         }
