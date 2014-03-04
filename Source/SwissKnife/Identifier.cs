@@ -18,7 +18,7 @@ namespace SwissKnife
             return ToString<T, object>(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));
         }
 
-        public static string ToString<T, R>(Expression<Func<T, R>> identifierExpression)
+        public static string ToString<T, TResult>(Expression<Func<T, TResult>> identifierExpression)
         {
             return ToString(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));
         }
@@ -35,7 +35,7 @@ namespace SwissKnife
         /// <param name="identifierExpression"><see cref="Expression"/> that access members of the type <typeparamref name="T"/>.</param>
         /// <exception cref="ArgumentNullException">If the <paramref name="identifierExpression"/> is <code>null</code>.</exception>
         /// <exception cref="ArgumentException">If the <paramref name="identifierExpression"/> is not a valid identifier expression. For example: 'someInstance.IdentifierAsString(x => 0)'.</exception>
-        public static string ToString<T, R>(Expression<Func<T, R>> identifierExpression, Option<ConversionOptions> identifierOptions)
+        public static string ToString<T, TResult>(Expression<Func<T, TResult>> identifierExpression, Option<ConversionOptions> identifierOptions)
         {
             #region Preconditions
             Argument.IsNotNull(identifierExpression, "identifierExpression");
@@ -52,12 +52,12 @@ namespace SwissKnife
             return ToString(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));
         }
 
-        public static string ToString<R>(Expression<Func<R>> identifierExpression)
+        public static string ToString<TResult>(Expression<Func<TResult>> identifierExpression)
         {
             return ToString(identifierExpression, Option<ConversionOptions>.Some(new ConversionOptions()));
         }
 
-        public static string ToString<R>(Expression<Func<R>> identifierExpression, Option<ConversionOptions> identifierOptions) // TODO-IG: Remove duplicated code.
+        public static string ToString<TResult>(Expression<Func<TResult>> identifierExpression, Option<ConversionOptions> identifierOptions) // TODO-IG: Remove duplicated code.
         {
             #region Preconditions
           Argument.IsNotNull(identifierExpression, "identifierExpression");

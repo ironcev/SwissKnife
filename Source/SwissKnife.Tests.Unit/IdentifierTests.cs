@@ -9,9 +9,11 @@ namespace SwissKnife.Tests.Unit
     [TestFixture]
     public class IdentifierTests
     {
+        // ReSharper disable UnusedAutoPropertyAccessor.Local
         private int TestProperty { get; set; }
         private static int StaticTestProperty { get; set; }
         private TestClass TestClassProperty { get; set; }
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
 
         [Test]
         public void AsStringOfT_ExpressionIsOnlyLambdaInputParameter_ReturnsEmptyString()
