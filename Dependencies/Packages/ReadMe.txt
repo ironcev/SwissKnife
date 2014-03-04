@@ -1,0 +1,1 @@
+This mandatory directory contains NuGet packages.
