@@ -1,0 +1,832 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="10.0" Name="SwissKnife">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False" />
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>True</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/Bin/Product/Debug/SwissKnife.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/Bin/Product/Release/SwissKnife.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityTransparencyRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="10.0">
+  <Namespaces>
+   <Namespace Name="SwissKnife.Collections">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2014-03-06 17:30:50Z">
+      <Issue>
+       <Item>SwissKnife.Collections</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="SwissKnife.Diagnostics.Contracts">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2014-03-06 17:30:50Z">
+      <Issue>
+       <Item>SwissKnife.Diagnostics.Contracts</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+   <Namespace Name="SwissKnife.IdentifierConversion">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2014-03-06 17:30:50Z">
+      <Issue>
+       <Item>SwissKnife.IdentifierConversion</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/Bin/Product/Debug/SwissKnife.dll">
+    <Modules>
+     <Module Name="swissknife.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2014-03-06 17:30:50Z">
+        <Issue Name="NoStrongName">
+         <Item>'SwissKnife.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="AttributeStringLiteralsShouldParseCorrectly" Category="Microsoft.Usage" CheckId="CA2243" Created="2014-03-06 17:30:50Z">
+        <Issue>
+         <Item>'AssemblyFileVersionAttribute'</Item>
+         <Item>'version'</Item>
+         <Item>0.2.*</Item>
+         <Item>'Version'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="">
+        <Types>
+         <Type Name="AssemblyDescription">
+          <Messages>
+           <Message TypeName="DeclareTypesInNamespaces" Category="Microsoft.Design" CheckId="CA1050" Created="2014-03-06 17:30:50Z">
+            <Issue>
+             <Item>'AssemblyDescription'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="SwissKnife">
+        <Types>
+         <Type Name="Identifier">
+          <Members>
+           <Member Name="#ConvertMemberAccess(System.Text.StringBuilder,System.Linq.Expressions.MemberExpression,SwissKnife.IdentifierConversion.ConversionOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2014-03-06 17:30:50Z">
+              <Issue Name="NoArguments">
+               <Item>'ArgumentOutOfRangeException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsIndexerGetter(System.Linq.Expressions.Expression)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2014-03-06 17:30:50Z">
+              <Issue Name="Parameter">
+               <Item>'expression'</Item>
+               <Item>'MethodCallExpression'</Item>
+               <Item>'Identifier.IsIndexerGetter(Expression)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString(System.Linq.Expressions.Expression`1&lt;System.Func`1&lt;System.Object&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString(Expression&lt;Func&lt;object&gt;&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;object&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`1(System.Linq.Expressions.Expression`1&lt;System.Func`1&lt;!!0&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;TResult&gt;(Expression&lt;Func&lt;TResult&gt;&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;TResult&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`1(System.Linq.Expressions.Expression`1&lt;System.Func`1&lt;!!0&gt;&gt;,SwissKnife.Option`1&lt;SwissKnife.IdentifierConversion.ConversionOptions&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;TResult&gt;(Expression&lt;Func&lt;TResult&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;TResult&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2014-03-06 17:30:50Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'string.Format(string, object)'</Item>
+               <Item>'Identifier.ToString&lt;TResult&gt;(Expression&lt;Func&lt;TResult&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`1(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;!!0,System.Object&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;T&gt;(Expression&lt;Func&lt;T, object&gt;&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;T, object&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`1(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;!!0,System.Object&gt;&gt;,SwissKnife.Option`1&lt;SwissKnife.IdentifierConversion.ConversionOptions&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;T&gt;(Expression&lt;Func&lt;T, object&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;T, object&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`2(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;!!0,!!1&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;T, TResult&gt;(Expression&lt;Func&lt;T, TResult&gt;&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;T, TResult&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`2(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;!!0,!!1&gt;&gt;,SwissKnife.Option`1&lt;SwissKnife.IdentifierConversion.ConversionOptions&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;T, TResult&gt;(Expression&lt;Func&lt;T, TResult&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;T, TResult&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2014-03-06 17:30:50Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'string.Format(string, object)'</Item>
+               <Item>'Identifier.ToString&lt;T, TResult&gt;(Expression&lt;Func&lt;T, TResult&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Option`1">
+          <Messages>
+           <Message Id="Option" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Created="2014-03-06 17:30:50Z">
+            <Issue Name="Type">
+             <Item>'Option&lt;T&gt;'</Item>
+             <Item>Option</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815" Created="2014-03-06 17:30:50Z">
+            <Issue Name="Equals">
+             <Item>'Option&lt;T&gt;'</Item>
+            </Issue>
+            <Issue Name="op_Equality">
+             <Item>'Option&lt;T&gt;'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#Bind`1(System.Func`2&lt;!0,SwissKnife.Option`1&lt;!!0&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.Bind&lt;TOutput&gt;(Func&lt;T, Option&lt;TOutput&gt;&gt;)'</Item>
+               <Item>'Func&lt;T, Option&lt;TOutput&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Bind`1(System.Func`2&lt;!0,System.Nullable`1&lt;!!0&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.Bind&lt;TOutput&gt;(Func&lt;T, TOutput?&gt;)'</Item>
+               <Item>'Func&lt;T, TOutput?&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#From(!0)">
+            <Messages>
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.From(T)'</Item>
+               <Item>'Option&lt;T&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#None">
+            <Messages>
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.None'</Item>
+               <Item>'Option&lt;T&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Some(!0)">
+            <Messages>
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.Some(T)'</Item>
+               <Item>'Option&lt;T&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="SwissKnife.Diagnostics.Contracts">
+        <Types>
+         <Type Name="Argument">
+          <Members>
+           <Member Name="#Is(SwissKnife.Option`1&lt;System.Object&gt;,System.Type,SwissKnife.Option`1&lt;System.String&gt;)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2014-03-06 17:30:50Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'string.Format(string, object, object)'</Item>
+               <Item>'Argument.Is(Option&lt;object&gt;, Type, Option&lt;string&gt;)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Is`1(SwissKnife.Option`1&lt;System.Object&gt;,SwissKnife.Option`1&lt;System.String&gt;)">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Argument.Is&lt;T&gt;(Option&lt;object&gt;, Option&lt;string&gt;)'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsInRange(System.Int32,System.Int32,System.Int32,SwissKnife.Option`1&lt;System.String&gt;)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2014-03-06 17:30:50Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'string.Format(string, object, object)'</Item>
+               <Item>'Argument.IsInRange(int, int, int, Option&lt;string&gt;)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsNotNullOrWhitespace(System.String,SwissKnife.Option`1&lt;System.String&gt;)">
+            <Messages>
+             <Message Id="Whitespace" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2014-03-06 17:30:50Z">
+              <Issue Name="MemberShouldBeCompoundWord">
+               <Item>Whitespace</Item>
+               <Item>'Argument.IsNotNullOrWhitespace(string, Option&lt;string&gt;)'</Item>
+               <Item>WhiteSpace</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Operation">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2014-03-06 17:30:50Z">
+            <Issue Name="CSharp2_0">
+             <Item>'Operation'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="System.Diagnostics.Contracts">
+        <Types>
+         <Type Name="ContractOptionAttribute">
+          <Messages>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2014-03-06 17:30:50Z">
+            <Issue>
+             <Item>'category'</Item>
+             <Item>'ContractOptionAttribute'</Item>
+            </Issue>
+            <Issue>
+             <Item>'setting'</Item>
+             <Item>'ContractOptionAttribute'</Item>
+            </Issue>
+            <Issue>
+             <Item>'toggle'</Item>
+             <Item>'ContractOptionAttribute'</Item>
+            </Issue>
+            <Issue>
+             <Item>'value'</Item>
+             <Item>'ContractOptionAttribute'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.String,System.String,System.Boolean)">
+            <Messages>
+             <Message Id="category" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'category'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, bool)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="setting" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'setting'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, bool)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="toggle" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'toggle'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, bool)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#.ctor(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="category" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'category'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="setting" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'setting'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="value" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'value'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+   <Target Name="$(ProjectDir)/Bin/Product/Release/SwissKnife.dll">
+    <Modules>
+     <Module Name="swissknife.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2014-03-06 17:30:50Z">
+        <Issue Name="NoStrongName">
+         <Item>'SwissKnife.dll'</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014" Created="2014-03-06 17:30:50Z">
+        <Issue>
+         <Item>'SwissKnife.dll'</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="SwissKnife">
+        <Types>
+         <Type Name="Identifier">
+          <Members>
+           <Member Name="#ConvertMemberAccess(System.Text.StringBuilder,System.Linq.Expressions.MemberExpression,SwissKnife.IdentifierConversion.ConversionOptions)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2014-03-06 17:30:50Z">
+              <Issue Name="NoArguments">
+               <Item>'ArgumentOutOfRangeException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsIndexerGetter(System.Linq.Expressions.Expression)">
+            <Messages>
+             <Message TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800" Created="2014-03-06 17:30:50Z">
+              <Issue Name="Parameter">
+               <Item>'expression'</Item>
+               <Item>'MethodCallExpression'</Item>
+               <Item>'Identifier.IsIndexerGetter(Expression)'</Item>
+               <Item>castclass</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString(System.Linq.Expressions.Expression`1&lt;System.Func`1&lt;System.Object&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString(Expression&lt;Func&lt;object&gt;&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;object&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`1(System.Linq.Expressions.Expression`1&lt;System.Func`1&lt;!!0&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;TResult&gt;(Expression&lt;Func&lt;TResult&gt;&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;TResult&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`1(System.Linq.Expressions.Expression`1&lt;System.Func`1&lt;!!0&gt;&gt;,SwissKnife.Option`1&lt;SwissKnife.IdentifierConversion.ConversionOptions&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;TResult&gt;(Expression&lt;Func&lt;TResult&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;TResult&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2014-03-06 17:30:50Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'string.Format(string, object)'</Item>
+               <Item>'Identifier.ToString&lt;TResult&gt;(Expression&lt;Func&lt;TResult&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`1(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;!!0,System.Object&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;T&gt;(Expression&lt;Func&lt;T, object&gt;&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;T, object&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`1(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;!!0,System.Object&gt;&gt;,SwissKnife.Option`1&lt;SwissKnife.IdentifierConversion.ConversionOptions&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;T&gt;(Expression&lt;Func&lt;T, object&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;T, object&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`2(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;!!0,!!1&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;T, TResult&gt;(Expression&lt;Func&lt;T, TResult&gt;&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;T, TResult&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ToString`2(System.Linq.Expressions.Expression`1&lt;System.Func`2&lt;!!0,!!1&gt;&gt;,SwissKnife.Option`1&lt;SwissKnife.IdentifierConversion.ConversionOptions&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Identifier.ToString&lt;T, TResult&gt;(Expression&lt;Func&lt;T, TResult&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'Expression&lt;Func&lt;T, TResult&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.Format(System.String,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2014-03-06 17:30:50Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'string.Format(string, object)'</Item>
+               <Item>'Identifier.ToString&lt;T, TResult&gt;(Expression&lt;Func&lt;T, TResult&gt;&gt;, Option&lt;ConversionOptions&gt;)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Option`1">
+          <Messages>
+           <Message Id="Option" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Created="2014-03-06 17:30:50Z">
+            <Issue Name="Type">
+             <Item>'Option&lt;T&gt;'</Item>
+             <Item>Option</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815" Created="2014-03-06 17:30:50Z">
+            <Issue Name="Equals">
+             <Item>'Option&lt;T&gt;'</Item>
+            </Issue>
+            <Issue Name="op_Equality">
+             <Item>'Option&lt;T&gt;'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#Bind`1(System.Func`2&lt;!0,SwissKnife.Option`1&lt;!!0&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.Bind&lt;TOutput&gt;(Func&lt;T, Option&lt;TOutput&gt;&gt;)'</Item>
+               <Item>'Func&lt;T, Option&lt;TOutput&gt;&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Bind`1(System.Func`2&lt;!0,System.Nullable`1&lt;!!0&gt;&gt;)">
+            <Messages>
+             <Message TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.Bind&lt;TOutput&gt;(Func&lt;T, TOutput?&gt;)'</Item>
+               <Item>'Func&lt;T, TOutput?&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#From(!0)">
+            <Messages>
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.From(T)'</Item>
+               <Item>'Option&lt;T&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#None">
+            <Messages>
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.None'</Item>
+               <Item>'Option&lt;T&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Some(!0)">
+            <Messages>
+             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Option&lt;T&gt;.Some(T)'</Item>
+               <Item>'Option&lt;T&gt;'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="SwissKnife.Diagnostics.Contracts">
+        <Types>
+         <Type Name="Argument">
+          <Members>
+           <Member Name="#Is(SwissKnife.Option`1&lt;System.Object&gt;,System.Type,SwissKnife.Option`1&lt;System.String&gt;)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2014-03-06 17:30:50Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'string.Format(string, object, object)'</Item>
+               <Item>'Argument.Is(Option&lt;object&gt;, Type, Option&lt;string&gt;)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Is`1(SwissKnife.Option`1&lt;System.Object&gt;,SwissKnife.Option`1&lt;System.String&gt;)">
+            <Messages>
+             <Message TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004" Created="2014-03-06 17:30:50Z">
+              <Issue>
+               <Item>'Argument.Is&lt;T&gt;(Option&lt;object&gt;, Option&lt;string&gt;)'</Item>
+               <Item>'T'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsInRange(System.Int32,System.Int32,System.Int32,SwissKnife.Option`1&lt;System.String&gt;)">
+            <Messages>
+             <Message Id="System.String.Format(System.String,System.Object,System.Object)" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2014-03-06 17:30:50Z">
+              <Issue Name="IFormatProviderAlternateString">
+               <Item>'string.Format(string, object, object)'</Item>
+               <Item>'Argument.IsInRange(int, int, int, Option&lt;string&gt;)'</Item>
+               <Item>'string.Format(IFormatProvider, string, params object[])'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#IsNotNullOrWhitespace(System.String,SwissKnife.Option`1&lt;System.String&gt;)">
+            <Messages>
+             <Message Id="Whitespace" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2014-03-06 17:30:50Z">
+              <Issue Name="MemberShouldBeCompoundWord">
+               <Item>Whitespace</Item>
+               <Item>'Argument.IsNotNullOrWhitespace(string, Option&lt;string&gt;)'</Item>
+               <Item>WhiteSpace</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="Operation">
+          <Messages>
+           <Message TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053" Created="2014-03-06 17:30:50Z">
+            <Issue Name="CSharp2_0">
+             <Item>'Operation'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="System.Diagnostics.Contracts">
+        <Types>
+         <Type Name="ContractOptionAttribute">
+          <Messages>
+           <Message TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019" Created="2014-03-06 17:30:50Z">
+            <Issue>
+             <Item>'category'</Item>
+             <Item>'ContractOptionAttribute'</Item>
+            </Issue>
+            <Issue>
+             <Item>'setting'</Item>
+             <Item>'ContractOptionAttribute'</Item>
+            </Issue>
+            <Issue>
+             <Item>'toggle'</Item>
+             <Item>'ContractOptionAttribute'</Item>
+            </Issue>
+            <Issue>
+             <Item>'value'</Item>
+             <Item>'ContractOptionAttribute'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#.ctor(System.String,System.String,System.Boolean)">
+            <Messages>
+             <Message Id="category" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'category'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, bool)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="setting" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'setting'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, bool)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="toggle" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'toggle'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, bool)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#.ctor(System.String,System.String,System.String)">
+            <Messages>
+             <Message Id="category" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'category'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="setting" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'setting'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="value" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2014-03-06 17:30:50Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'value'</Item>
+               <Item>'ContractOptionAttribute.ContractOptionAttribute(string, string, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Rules>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Resolution Name="NoStrongName">Sign {0} with a strong name key.</Resolution>
+   </Rule>
+   <Rule TypeName="AttributeStringLiteralsShouldParseCorrectly" Category="Microsoft.Usage" CheckId="CA2243">
+    <Resolution Name="Default">In the constructor of {0}, change the value of argument {1}, which is currently "{2}", to something that can be correctly parsed as {3}.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberShouldBeCompoundWord">The discrete term '{0}' in member name {1} should be expressed as a compound word, '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="DeclareTypesInNamespaces" Category="Microsoft.Design" CheckId="CA1050">
+    <Resolution Name="Default">{0} should be declared inside a namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="DefineAccessorsForAttributeArguments" Category="Microsoft.Design" CheckId="CA1019">
+    <Resolution Name="Default">Add a public read-only property accessor for positional argument {0} of Attribute {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCastUnnecessarily" Category="Microsoft.Performance" CheckId="CA1800">
+    <Resolution Name="Parameter">{0}, a parameter, is cast to type {1} multiple times in method {2}. Cache the result of the 'as' operator or direct cast in order to eliminate the redundant {3} instruction.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000">
+    <Resolution Name="Default">Remove {0} from {1} or make it an instance member.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotNestGenericTypesInMemberSignatures" Category="Microsoft.Design" CheckId="CA1006">
+    <Resolution Name="Default">Consider a design where {0} doesn't nest generic type {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="GenericMethodsShouldProvideTypeParameter" Category="Microsoft.Design" CheckId="CA1004">
+    <Resolution Name="Default">Consider a design where {0} doesn't require explicit type parameter {1} in any call to it.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716">
+    <Resolution Name="Type">Rename type {0} so that it no longer conflicts with the reserved language keyword '{1}'. Using a reserved keyword as the name of a type makes it harder for consumers in other languages to use the type.</Resolution>
+   </Rule>
+   <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
+    <Resolution Name="NoArguments">Call the {0} constructor that contains a message and/or paramName parameter.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithClsCompliant" Category="Microsoft.Design" CheckId="CA1014">
+    <Resolution Name="Default">Mark {0} with CLSCompliant(true) because it exposes externally visible types.</Resolution>
+   </Rule>
+   <Rule TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815">
+    <Resolution Name="Equals">{0} should override Equals.</Resolution>
+    <Resolution Name="op_Equality">{0} should override the equality (==) and inequality (!=) operators.</Resolution>
+   </Rule>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Resolution Name="IFormatProviderAlternateString">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be displayed to the user, specify {3} as the 'IFormatProvider' parameter. Otherwise, if the result will be stored and accessed by software, such as when it is persisted to disk or to a database, specify {4}.</Resolution>
+   </Rule>
+   <Rule TypeName="StaticHolderTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1053">
+    <Resolution Name="CSharp2_0">Because type {0} contains only 'static' members, mark it as 'static' to prevent the compiler from adding a default public constructor.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>
