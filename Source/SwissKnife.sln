@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{23DBAA
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwissKnife.Web", "SwissKnife.Web\SwissKnife.Web.csproj", "{563B6D5F-1747-471C-8AE8-D6ABC9529056}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{E17910D2-92A8-4F36-BA31-CF2F2C4D3B02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E17910D2-92A8-4F36-BA31-CF2F2C4D3B02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E17910D2-92A8-4F36-BA31-CF2F2C4D3B02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{563B6D5F-1747-471C-8AE8-D6ABC9529056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{563B6D5F-1747-471C-8AE8-D6ABC9529056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{563B6D5F-1747-471C-8AE8-D6ABC9529056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{563B6D5F-1747-471C-8AE8-D6ABC9529056}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

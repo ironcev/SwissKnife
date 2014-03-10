@@ -27,10 +27,10 @@ internal static partial class AssemblyDescription
 {
     public const string Company = "Igor Rončević";
     public const string Trademark = "";
-    public const string Copyright = "Copyright © 2014 " + Company;
+    public const string Copyright = "Copyright © 2013 - 2014 " + Company;
     public const string Product = "SwissKnife";
 
-    public const string Version = "0.2.0.*";
+    public const string Version = "0.4.0.*";
     public const string FileVersion = Version;
 
     public const string Culture = "";
