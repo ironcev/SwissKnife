@@ -6,7 +6,7 @@ using SwissKnife.Web.Routing;
 
 namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
 {
-    internal static class RouteExtensions
+    public static class RouteExtensions
     {
         public static Route AddDefaults(this Route route, string parameterName, object defaultValue)
         {
