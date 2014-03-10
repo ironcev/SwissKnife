@@ -48,6 +48,13 @@
     <Compile Include="IdentifierConversion\StaticMemberConversion.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Cryptography\EncryptionHelper.cs" />
+    <Compile Include="Security\Cryptography\EncryptionProvider.cs" />
+    <Compile Include="Security\Cryptography\HashingHelper.cs" />
+    <Compile Include="Security\Cryptography\HashingProvider.cs" />
+    <Compile Include="Security\Cryptography\HashingResult.cs" />
+    <Compile Include="Security\Cryptography\StringFormat.cs" />
+    <Compile Include="Security\Cryptography\Util.cs" />
     <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
