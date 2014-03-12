@@ -20,7 +20,7 @@ namespace SwissKnife.Diagnostics.Contracts
         [ContractArgumentValidator]
         public static void IsNotNullOrWhitespace(string parameterValue, Option<string> parameterName)
         {
-            IsNotNull(parameterValue, parameterName);
+            IsNotNullOrEmpty(parameterValue, parameterName);
             if (string.IsNullOrWhiteSpace(parameterValue)) // Argument is surely not null. We are actually checking for white spaces only.
                 throw new ArgumentException("Parameter value must not be white space.", parameterName.ValueOrNull);
             Contract.EndContractBlock();

@@ -30,7 +30,7 @@ internal static partial class AssemblyDescription
     public const string Copyright = "Copyright © 2013 - 2014 " + Company;
     public const string Product = "SwissKnife";
 
-    public const string Version = "0.4.0.*";
+    public const string Version = "0.4.1.*";
     public const string FileVersion = Version;
 
     public const string Culture = "";

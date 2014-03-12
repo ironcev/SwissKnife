@@ -27,9 +27,9 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
             return route;
         }
 
-        public static Route AddConstraint(this Route route, string key, Func<object, bool> constraint)
+        public static Route AddConstraint(this Route route, string key, Predicate<object> constraint)
         {
-            return route.AddConstraint(key, new GenericRouteConstraint(constraint));
+            return route.AddConstraint(key, new PredicateRouteConstraint(constraint));
         }
 
         public static Route AddConstraint(this Route route, string key, IRouteConstraint constraint)
