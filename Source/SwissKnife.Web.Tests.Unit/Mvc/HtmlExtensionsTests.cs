@@ -32,7 +32,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Expression<Func<TestClass, object>> lambdaExpression = x => x.ValueTypeProperty;
             //Assert.That(ExpressionHelper.GetExpressionText(lambdaExpression), Is.EqualTo("ValueTypeProperty"));
 
-            // THe above line asserts with the following message:
+            // The above line asserts with the following message:
             //   Expected string length 17 but was 0. Strings differ at index 0.
             //   Expected: "ValueTypeProperty"
             //   But was:  <string.Empty>
