@@ -60,7 +60,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString TextBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.TextBox(name, value, attributes);
         }
@@ -82,14 +82,14 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString TextAreaFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, string value, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.TextArea(name, value, CreateAttributesDictionaryFromArray(attributes));
         }
 
         public static MvcHtmlString TextAreaFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, string value, int rows, int columns, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.TextArea(name, value, rows, columns, attributes);
         }
@@ -111,7 +111,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString PasswordFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.Password(name, value, attributes);
         }
@@ -123,7 +123,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString CheckBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, bool isChecked, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.CheckBox(name, isChecked, attributes);
         }
@@ -135,7 +135,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString RadioButtonFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, bool isChecked, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.RadioButton(name, value, isChecked, attributes);
         }
@@ -147,7 +147,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString HiddenFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.Hidden(name, value, attributes);
         }
@@ -159,7 +159,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString DropDownListFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, IEnumerable<SelectListItem> selectList, string optionLabel, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.DropDownList(name, selectList, optionLabel, attributes);
         }
@@ -171,7 +171,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString ListBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, IEnumerable<SelectListItem> selectList, params string[] attributes)
         {
-            var name = ExpressionHelper.GetExpressionText(expression);
+            var name = Identifier.ToString(expression);
 
             return htmlHelper.ListBox(name, selectList, attributes);
         }
