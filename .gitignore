@@ -1,3 +1,6 @@
+#Sandcastle documentation
+Source/Documentation/
+
 # NuGet Packages Directory
 Dependencies/Packages/**
 !ReadMe.txt
