@@ -18,7 +18,7 @@
     <HtmlHelpName>SwissKnife</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="SwissKnife\SwissKnife.csproj" configuration="Release" />
+      <DocumentationSource sourceFile="SwissKnife\SwissKnife.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
