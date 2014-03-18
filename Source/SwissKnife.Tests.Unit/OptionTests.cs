@@ -1,12 +1,136 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace SwissKnife.Tests.Unit.Idioms
+namespace SwissKnife.Tests.Unit
 {
     // ReSharper disable InconsistentNaming
     [TestFixture]
-    public partial class OptionTests
+    public class OptionTests
     {
+        #region Static Factory Methods
+        [Test]
+        public void None_CreatesNone()
+        {
+            var none = Option<object>.None;
+            Assert.That(none.IsNone);
+        }
+
+        [Test]
+        public void Some_CreatesSome()
+        {
+            var some = Option<object>.Some(new object());
+            Assert.That(some.IsSome);
+        }
+
+        [Test]
+        public void Some_CreatesSomeThatRepresentsValue()
+        {
+            var value = new object();
+            var some = Option<object>.Some(value);
+            Assert.That(some.Value, Is.SameAs(value));
+        }
+
+        [Test]
+        public void From_ValueIsNull_CreatesNone()
+        {
+            var option = Option<object>.From(null);
+            Assert.That(option.IsNone);
+        }
+
+        [Test]
+        public void From_ValueIsNotNull_CreatesSome()
+        {
+            var option = Option<object>.From(new object());
+            Assert.That(option.IsSome);
+        }
+
+        [Test]
+        public void From_ValueIsNotNull_CreatesSomeThatRepresentsValue()
+        {
+            var value = new object();
+            var option = Option<object>.From(value);
+            Assert.That(option.Value, Is.SameAs(value));
+        }
+        #endregion
+
+        #region Value Inspection and Retrieval
+        [Test]
+        public void IsNone_OptionIsNone_ReturnsTrue()
+        {
+            var none = Option<object>.None;
+            Assert.That(none.IsNone, Is.True);
+        }
+
+        [Test]
+        public void IsNone_OptionIsSome_ReturnsFalse()
+        {
+            var some = Option<object>.Some(new object());
+            Assert.That(some.IsNone, Is.False);
+        }
+
+        [Test]
+        public void IsSome_OptionIsSome_ReturnsTrue()
+        {
+            var some = Option<object>.Some(new object());
+            Assert.That(some.IsSome, Is.True);
+        }
+
+        [Test]
+        public void IsSome_OptionIsNone_ReturnsFalse()
+        {
+            var none = Option<object>.None;
+            Assert.That(none.IsSome, Is.False);
+        }
+
+        [Test]
+        public void Value_OptionIsNone_ThrowsException()
+        {
+            var none = Option<object>.None;
+            var exceptionMessage = Assert.Throws<InvalidOperationException>(() => System.Diagnostics.Debug.Write(none.Value)).Message;
+            Assert.That(exceptionMessage, Is.EqualTo("Option must have a value."));
+        }
+
+        [Test]
+        public void Value_OptionIsSome_ReturnsValue()
+        {
+            var value = new object();
+            var some = Option<object>.Some(value);
+            Assert.That(some.Value, Is.SameAs(value));
+        }
+
+        [Test]
+        public void ValueOrNull_OptionIsNone_ReturnsNull()
+        {
+            var none = Option<object>.None;
+            Assert.That(none.ValueOrNull, Is.Null);
+        }
+
+        [Test]
+        public void ValueOrNull_OptionIsSome_ReturnsValue()
+        {
+            var value = new object();
+            var some = Option<object>.Some(value);
+            Assert.That(some.ValueOrNull, Is.SameAs(value));
+        }
+
+        [Test]
+        public void ValueOr_OptionIsNone_ReturnsDefaultValue()
+        {
+            var defaultValue = new object();
+            var none = Option<object>.None;
+            Assert.That(none.ValueOr(defaultValue), Is.SameAs(defaultValue));
+        }
+
+        [Test]
+        public void ValueOr_OptionIsSome_ReturnsValue()
+        {
+            var value = new object();
+            var some = Option<object>.Some(value);
+            Assert.That(some.ValueOr(new object()), Is.SameAs(value));
+        }
+
+        #endregion
+
         #region BindToOption
         [Test]
         public void BindToOption_BinderIsNull_ThrowsException()
@@ -172,6 +296,30 @@ namespace SwissKnife.Tests.Unit.Idioms
             // ReSharper disable PossibleInvalidOperationException
             Assert.That(result, Is.EqualTo(mapperResult));
             // ReSharper restore PossibleInvalidOperationException
+        }
+        #endregion
+
+        #region Implicit Conversion
+        [Test]
+        public void ImplicitConversion_Null_ConvertsToNone()
+        {
+            Option<object> option = null;
+            Assert.That(option.IsNone);
+        }
+
+        [Test]
+        public void ImplicitConversion_NotNull_ConvertsToSome()
+        {
+            Option<object> option = new object();
+            Assert.That(option.IsSome);
+        }
+
+        [Test]
+        public void ImplicitConversion_NotNull_ConvertsToSomeThatRepresentsSameValue()
+        {
+            var value = new object();
+            Option<object> option = value;
+            Assert.That(option.Value, Is.SameAs(value));
         }
         #endregion
     }

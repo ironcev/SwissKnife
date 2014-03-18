@@ -18,13 +18,15 @@ namespace SwissKnife.Tests.Unit.Diagnostics.Contracts
         [Test]
         public void IsNotNullOrWhitespace_ParameterValueIsEmpty_ThrowsException()
         {
-            Assert.Throws<ArgumentException>(() => Argument.IsNotNullOrWhitespace(string.Empty, null));
+            var exception = Assert.Throws<ArgumentException>(() => Argument.IsNotNullOrWhitespace(string.Empty, null));
+            Assert.That(exception.Message.Contains("empty string"));
         }
 
         [Test]
         public void IsNotNullOrWhitespace_ParameterValueIsWhitespace_ThrowsException()
         {
-            Assert.Throws<ArgumentException>(() => Argument.IsNotNullOrWhitespace(" ", null));
+            var exception = Assert.Throws<ArgumentException>(() => Argument.IsNotNullOrWhitespace(" ", null));
+            Assert.That(exception.Message.Contains("white space"));
         }
 
         [Test]
@@ -210,7 +212,8 @@ namespace SwissKnife.Tests.Unit.Diagnostics.Contracts
         [Test]
         public void Is_ParameterValueIsNotOfType_ThrowsException()
         {
-            Assert.Throws<ArgumentException>(() => Argument.Is(new object(), typeof(int), Option<string>.None));
+            var exception = Assert.Throws<ArgumentException>(() => Argument.Is(new object(), typeof(int), Option<string>.None));
+            Assert.That(exception.Message.StartsWith("Parameter is not compatible with the type"));
         }
 
         [Test]
@@ -252,19 +255,22 @@ namespace SwissKnife.Tests.Unit.Diagnostics.Contracts
         [Test]
         public void IsInRange_ParameterValueIsUpperBound_ThrowsException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(2, 0, 2, Option<string>.None));
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(2, 0, 2, Option<string>.None));
+            Assert.That(exception.Message.StartsWith("Parameter value is out of the range"));
         }
 
         [Test]
         public void IsInRange_ParameterValueIsGreaterThanUpperBound_ThrowsException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(3, 0, 2, Option<string>.None));
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(3, 0, 2, Option<string>.None));
+            Assert.That(exception.Message.StartsWith("Parameter value is out of the range"));
         }
 
         [Test]
         public void IsInRange_ParameterValueIsLowerThanLowerBound_ThrowsException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(-1, 0, 2, Option<string>.None));
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsInRange(-1, 0, 2, Option<string>.None));
+            Assert.That(exception.Message.StartsWith("Parameter value is out of the range"));
         }
         [Test]
         public void IsInRange_ParameterNameIsNone_ExceptionParameterNameIsNull()
@@ -292,13 +298,15 @@ namespace SwissKnife.Tests.Unit.Diagnostics.Contracts
         [Test]
         public void IsGreaterThanZero_ParameterValueIsZero_ThrowsException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsGreaterThanZero(0, Option<string>.None));
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsGreaterThanZero(0, Option<string>.None));
+            Assert.That(exception.Message.StartsWith("Parameter value must be greater than zero"));
         }
 
         [Test]
         public void IsGreaterThanZero_ParameterValueIsLowerThanZero_ThrowsException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsGreaterThanZero(-1, Option<string>.None));
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => Argument.IsGreaterThanZero(-1, Option<string>.None));
+            Assert.That(exception.Message.StartsWith("Parameter value must be greater than zero"));
         }
 
         [Test]

@@ -47,10 +47,7 @@
     <Compile Include="Diagnostics\Contracts\ArgumentTests.cs" />
     <Compile Include="Diagnostics\Contracts\OperationTests.cs" />
     <Compile Include="IdentifierTests.cs" />
-    <Compile Include="Idioms\OptionTests.BindingAndMapping.cs" />
-    <Compile Include="Idioms\OptionTests.ImplicitConversion.cs" />
-    <Compile Include="Idioms\OptionTests.ValueInspectionAndRetrieval.cs" />
-    <Compile Include="Idioms\OptionTests.StaticCreateMethods.cs" />
+    <Compile Include="OptionTests.cs" />
     <Compile Include="TypeExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
