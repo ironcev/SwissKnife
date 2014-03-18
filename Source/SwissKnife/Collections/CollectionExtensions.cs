@@ -54,6 +54,7 @@ namespace SwissKnife.Collections
         /// The key and the value of that new <see cref="KeyValuePair{TKey,TValue}"/> will be set to <paramref name="key"/> and the result of the <paramref name="getValueToAdd"/> respectively.
         /// The <paramref name="getValueToAdd"/> is called only if the <paramref name="dictionary"/> does not already contain the <paramref name="key"/>.
         /// <br/>
+        /// <br/>
         /// <b>Note</b>
         /// <br/>
         /// If the <paramref name="getValueToAdd"/> throws any exception, that exception will be propagated to the caller.
@@ -66,6 +67,9 @@ namespace SwissKnife.Collections
         /// The function that returns the value that has to be inserted into the <paramref name="dictionary"/> if it does not contain the <paramref name="key"/>.
         /// This function will be called only if the <paramref name="dictionary"/> does not already contain the <paramref name="key"/>.
         /// </param>
+        /// <returns>
+        /// Already existing value associated to the <paramref name="key"/> or the newly added value returned by the <paramref name="getValueToAdd"/>.
+        /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="dictionary"/> is null.<br/>-or-<br/><paramref name="key"/> is null.<br/>-or-<br/><paramref name="getValueToAdd"/> is null.</exception>
         /// <exception cref="NotSupportedException"><paramref name="dictionary"/> is read-only.</exception>
         public static TValue GetValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> getValueToAdd)

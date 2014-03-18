@@ -11,11 +11,11 @@ namespace SwissKnife.Diagnostics.Contracts
     public class Operation
     {
         /// <summary>
-        /// Checks that operation satisfies <paramref name="validityCondition"/>.
+        /// Checks that an operation satisfies <paramref name="validityCondition"/>.
         /// </summary>
         /// <param name="validityCondition">Logical condition that is true if the operation is valid.</param>
         /// <param name="message">Exception message if the operation is invalid.</param>
-        /// <exception cref="InvalidOperationException">If <paramref name="validityCondition"/> is false.</exception>
+        /// <exception cref="InvalidOperationException"><paramref name="validityCondition"/> is false.</exception>
         [ContractArgumentValidator]
         public static void IsValid(bool validityCondition, Option<string> message)
         {

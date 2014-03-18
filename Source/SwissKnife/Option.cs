@@ -21,7 +21,7 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Creates an option value that is a None value.
+        /// Creates a None option.
         /// </summary>
         /// <returns>
         /// An option that is set to None.
@@ -32,11 +32,11 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Creates an option value that is a Some value.
+        /// Creates a Some option that represents the <paramref name="value"/>.
         /// </summary>
         /// <param name="value">The value represented by the option.</param>
         /// <returns>An option that represents the <paramref name="value"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         public static Option<T> Some(T value)
         {
             #region Preconditions
@@ -47,10 +47,12 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Creates an option value that is either a None or a Some value.
-        /// If <paramref name="valueOrNull"/> is null, a None value is created.
-        /// If <paramref name="valueOrNull"/> is not null, a Some value is created.
+        /// Creates an option that is either None or Some depending on the provided value.
         /// </summary>
+        /// <remarks>
+        /// If <paramref name="valueOrNull"/> is null, a None option is created.
+        /// If <paramref name="valueOrNull"/> is not null, Some option is created.
+        /// </remarks>
         /// <param name="valueOrNull">The value represented by the option or null.</param>
         /// <returns>None if <paramref name="valueOrNull"/> is null, otherwise Some that represents the value.</returns>
         public static Option<T> From(T valueOrNull)
@@ -59,7 +61,7 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Returns true if the option has the None value.
+        /// Returns true if the option is a None option.
         /// </summary>
         public bool IsNone
         {
@@ -67,7 +69,7 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Returns true if the option has a value that is not None.
+        /// Returns true if the option is a Some option.
         /// </summary>
         public bool IsSome
         {
@@ -75,12 +77,12 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Gets the value of the option if the option is a Some value.
+        /// Gets the value of the option if the option is a Some option.
         /// </summary>
         /// <returns>
-        /// The value of the option if the option is a Some value. An exception is thrown if the option is a None value.
+        /// The value of the option if the option is Some. An <see cref="InvalidOperationException"/> is thrown if the option is a None option.
         /// </returns>
-        /// <exception cref="InvalidOperationException">If the option is a None value.</exception>
+        /// <exception cref="InvalidOperationException">The option is a None option.</exception>
         public T Value
         {
             get
@@ -91,10 +93,10 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Gets the value of the option if the option is a Some value, or null if the option is a None value.
+        /// Gets the value of the option if the option is Some option, or null if the option is a None option.
         /// </summary>
         /// <returns>
-        /// The value of the option if the option is a Some value, or null if the option is a None value.
+        /// The value of the option if the option represents some value, or null if the option is a None option.
         /// </returns>
         public T ValueOrNull
         {
@@ -102,10 +104,11 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Gets the value of the option if the option is a Some value, or the <paramref name="defaultValue"/> if the option is a None value.
+        /// Gets the value of the option if the option is Some option, or some default value if the option is a None option.
         /// </summary>
+        /// <param name="defaultValue">The value that will be returned if the option is a None option.</param>
         /// <returns>
-        /// The value of the option if the option is a Some value, or <paramref name="defaultValue"/> if the option is a None value.
+        /// The value of the option if the option represents some value, or <paramref name="defaultValue"/> if the option is a None option.
         /// </returns>
         public T ValueOr(T defaultValue)
         {
@@ -115,10 +118,17 @@ namespace SwissKnife
         /// <summary>
         /// Invokes a function on an optional value that itself yields an option.
         /// </summary>
+        /// <remarks>
+        /// <br/>
+        /// <br/>
+        /// <b>Note</b>
+        /// <br/>
+        /// If the <paramref name="binder"/> throws any exception, that exception will be propagated to the caller.
+        /// </remarks>
         /// <param name="binder">A function that takes the value of the type <typeparamref name="T"/> from the option and transforms it into an option containing a value of the type <typeparamref name="TOutput"/>.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <returns>None if the option is None. The output of the <paramref name="binder"/> if the option is Some.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="binder"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="binder"/> is null.</exception>
         public Option<TOutput> Bind<TOutput>(Func<T, Option<TOutput>> binder) where TOutput : class
         {
             #region Preconditions
@@ -131,10 +141,17 @@ namespace SwissKnife
         /// <summary>
         /// Invokes a function on an optional value that yields an <see cref="Nullable{TOutput}"/>.
         /// </summary>
-        /// <param name="binder">A function that takes the value of type T from the option and transforms it into an nullable containing a value of type <typeparamref name="TOutput"/>.</param>
+        /// <remarks>
+        /// <br/>
+        /// <br/>
+        /// <b>Note</b>
+        /// <br/>
+        /// If the <paramref name="binder"/> throws any exception, that exception will be propagated to the caller.
+        /// </remarks>
         /// <typeparam name="TOutput">The output type.</typeparam>
+        /// <param name="binder">A function that takes the value of type T from the option and transforms it into an nullable containing a value of type <typeparamref name="TOutput"/>.</param>
         /// <returns>Null if the option is None. The output of the <paramref name="binder"/> if the option is Some.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="binder"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="binder"/> is null.</exception>
         public TOutput? Bind<TOutput>(Func<T, TOutput?> binder) where TOutput : struct
         {
             #region Preconditions
@@ -147,10 +164,17 @@ namespace SwissKnife
         /// <summary>
         /// Transforms an option value by using the specified mapping function.
         /// </summary>
+        /// <remarks>
+        /// <br/>
+        /// <br/>
+        /// <b>Note</b>
+        /// <br/>
+        /// If the <paramref name="mapper"/> throws any exception, that exception will be propagated to the caller.
+        /// </remarks>
         /// <param name="mapper">A function to apply to the option value.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <returns>None if the option is None or the output of the <paramref name="mapper"/> is null. Some if the output of the <paramref name="mapper"/> is not null.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="mapper"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="mapper"/> is null.</exception>
         public Option<TOutput> MapToOption<TOutput>(Func<T, TOutput> mapper) where TOutput : class
         {
             #region Preconditions
@@ -163,10 +187,17 @@ namespace SwissKnife
         /// <summary>
         /// Transforms an option value by using the specified mapping function.
         /// </summary>
+        /// <remarks>
+        /// <br/>
+        /// <br/>
+        /// <b>Note</b>
+        /// <br/>
+        /// If the <paramref name="mapper"/> throws any exception, that exception will be propagated to the caller.
+        /// </remarks>
         /// <param name="mapper">A function to apply to the option value.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <returns>None if the option is None or the output of the <paramref name="mapper"/> is null. Some if the output of the <paramref name="mapper"/> is not null.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="mapper"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="mapper"/> is null.</exception>
         public TOutput? MapToNullable<TOutput>(Func<T, TOutput> mapper) where TOutput : struct
         {
             #region Preconditions
@@ -177,10 +208,12 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Converts <paramref name="valueOrNull"/> into the <see cref="Option{T}"/> that represents it.
-        /// If the <paramref name="valueOrNull"/> is not null, Some will be returned.
-        /// If the <paramref name="valueOrNull"/> is null, None will be returned.
+        /// Converts value or null into the <see cref="Option{T}"/> that represents it.
         /// </summary>
+        /// <remarks>
+        /// Null is converted into None option.
+        /// Non-null vale is converted into Some option.
+        /// </remarks>
         /// <param name="valueOrNull">Value that has to be converted into <see cref="Option{T}"/>.</param>
         /// <returns>Some if <paramref name="valueOrNull"/> is not null, otherwise None.</returns>
         public static implicit operator Option<T> (T valueOrNull)

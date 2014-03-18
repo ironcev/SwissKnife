@@ -11,17 +11,17 @@ namespace SwissKnife.Diagnostics.Contracts
     public static class Argument
     {
         /// <summary>
-        /// Checks if a <see cref="string"/> method parameter is not null or white space.
+        /// Checks if a <see cref="string"/> method parameter is not null, empty or white space.
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="parameterValue"/> is null.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="parameterValue"/> is white space.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="parameterValue"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="parameterValue"/> is empty.<br/>-or-<br/><paramref name="parameterValue"/> is white space.</exception>
         [ContractArgumentValidator]
         public static void IsNotNullOrWhitespace(string parameterValue, Option<string> parameterName)
         {
             IsNotNullOrEmpty(parameterValue, parameterName);
-            if (string.IsNullOrWhiteSpace(parameterValue)) // Argument is surely not null. We are actually checking for white spaces only.
+            if (string.IsNullOrWhiteSpace(parameterValue)) // Argument is surely not null or empty. We are actually checking for white spaces.
                 throw new ArgumentException("Parameter value must not be white space.", parameterName.ValueOrNull);
             Contract.EndContractBlock();
         }
@@ -31,13 +31,13 @@ namespace SwissKnife.Diagnostics.Contracts
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="parameterValue"/> is null.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="parameterValue"/> is null or empty string.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="parameterValue"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="parameterValue"/> is empty string.</exception>
         [ContractArgumentValidator]
         public static void IsNotNullOrEmpty(string parameterValue, Option<string> parameterName)
         {
             IsNotNull(parameterValue, parameterName);
-            if (string.IsNullOrEmpty(parameterValue)) // Argument is surely not null. We are actually checking for empty string only.
+            if (string.IsNullOrEmpty(parameterValue)) // Argument is surely not null. We are actually checking for empty string.
                 throw new ArgumentException("Parameter value must not be empty string.", parameterName.ValueOrNull);
             Contract.EndContractBlock();
         }
@@ -47,7 +47,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="parameterValue"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="parameterValue"/> is null.</exception>
         [ContractArgumentValidator]
         public static void IsNotNull(object parameterValue, Option<string> parameterName)
         {
@@ -62,7 +62,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// <param name="validityCondition">Logical condition that is true if the method parameter is valid.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
         /// <param name="exceptionMessage">The error message that describes the reason why the parameter is not valid.</param>
-        /// <exception cref="ArgumentException">If <paramref name="validityCondition"/> is false.</exception>
+        /// <exception cref="ArgumentException"><paramref name="validityCondition"/> is false.</exception>
         [ContractArgumentValidator]
         public static void IsValid(bool validityCondition, Option<string> exceptionMessage, Option<string> parameterName)
         {
@@ -73,15 +73,17 @@ namespace SwissKnife.Diagnostics.Contracts
 
         /// <summary>
         /// Checks if a method parameter is compatible with a given type.
+        /// </summary>
+        /// <remarks>
         /// A method parameter is compatible with a given type if it can be assigned to a variable of that type.
         /// Null is considered to be compatible with all types.
         /// Thus, if the <paramref name="parameterValue"/> is null, this method will never throw an exception.
-        /// </summary>
+        /// </remarks>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="type">The type to which the method parameter must be assignable.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentNullException">If the <paramref name="type"/> is null.</exception>
-        /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be assigned to an instance of the <paramref name="type"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="type"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="parameterValue"/> cannot be assigned to an instance of the <paramref name="type"/>.</exception>
         public static void Is(Option<object> parameterValue, Type type, Option<string> parameterName)
         {
             #region Preconditions
@@ -96,27 +98,29 @@ namespace SwissKnife.Diagnostics.Contracts
 
         /// <summary>
         /// Checks if a method parameter is compatible with a given type.
+        /// </summary>
+        /// <remarks>
         /// A method parameter is compatible with a given type if it can be assigned to a variable of that type.
         /// Null is considered to be compatible with all types.
         /// Thus, if the <paramref name="parameterValue"/> is null, this method will never throw an exception.
-        /// </summary>
-        /// <param name="parameterValue">The value of the method parameter.</param>
+        /// </remarks>
         /// <typeparam name="T">The type to which the method parameter must be assignable.</typeparam>
+        /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be assigned to an instance of <typeparamref name="T"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="parameterValue"/> cannot be assigned to an instance of <typeparamref name="T"/>.</exception>
         public static void Is<T>(Option<object> parameterValue, Option<string> parameterName)
         {
             Is(parameterValue, typeof(T), parameterName);
         }
 
         /// <summary>
-        /// Checks that <see cref="int"/> method parameter is greater than or equal to <paramref name="lowerBound"/> and lower than <paramref name="upperBound"/>.
+        /// Checks that <see cref="int"/> method parameter is <b>greater than or equal to</b> the <paramref name="lowerBound"/> and <b>lower than</b> the <paramref name="upperBound"/>.
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="lowerBound">The lower bound of the range.</param>
         /// <param name="upperBound">The upper bound of the range.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="parameterValue"/> is not in the range [<paramref name="lowerBound"/>, <paramref name="upperBound"/>).</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="parameterValue"/> is not in the range [<paramref name="lowerBound"/>, <paramref name="upperBound"/>).</exception>
         public static void IsInRange(int parameterValue, int lowerBound, int upperBound, Option<string> parameterName)
         {
             if (!(lowerBound <= parameterValue && parameterValue < upperBound))
@@ -128,7 +132,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="parameterValue"/> is not greater than zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="parameterValue"/> is not greater than zero.</exception>
         public static void IsGreaterThanZero(int parameterValue, Option<string> parameterName)
         {
             if (parameterValue <= 0)

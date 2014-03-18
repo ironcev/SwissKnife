@@ -11,7 +11,7 @@ namespace SwissKnife
         /// <summary>
         /// Gets a value indicating whether the <paramref name="type"/> is static.
         /// </summary>
-        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="type"/> is null.</exception>
         public static bool IsStatic(this Type type)
         {
             #region Preconditions
