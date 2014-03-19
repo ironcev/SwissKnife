@@ -1,4 +1,7 @@
-﻿using System;
+﻿/*
+ * Original version of this class was developed by Marin Rončević (http://github.com/mroncev).
+ */
+using System;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
