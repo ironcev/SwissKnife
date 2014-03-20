@@ -207,6 +207,102 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Assert.That(route.Defaults["year"], Is.EqualTo(2014));
         }
         #endregion
+
+        #region SetDefaults
+        [Test]
+        public void SetDefaults_RouteIsNull_ThrowsException()
+        {
+            string parameterName = Assert.Throws<ArgumentNullException>(() => RouteExtensions.SetDefaults(null, parameter => new object())).ParamName;
+            Assert.That(parameterName, Is.EqualTo("route"));
+        }
+
+        [Test]
+        public void SetDefaults_UrlParametersAndDefaultValuesIsNull_ThrowsException()
+        {
+            string parameterName = Assert.Throws<ArgumentNullException>(() => emptyRoute.SetDefaults(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlParametersAndDefaultValues"));
+        }
+
+        [Test]
+        public void SetDefaults_CalculatedDefaultValueIsNull_ThrowsException()
+        {
+            Route route = new Route("{language}", new Mock<IRouteHandler>().Object);
+            var exception = Assert.Throws<ArgumentException>(() => emptyRoute.SetDefaults(language => null));
+            Assert.That(exception.ParamName, Is.EqualTo("urlParametersAndDefaultValues"));
+            Assert.That(exception.Message.StartsWith("The calculated default value must not be null."));
+            Assert.That(exception.Message.Contains("'language'"));
+        }
+
+        [Test]
+        public void SetDefaults_DefaultsWasNull_SetDefaults()
+        {
+            Route route = new Route("{language}/{year}", new Mock<IRouteHandler>().Object);
+            route.Defaults = null;
+            Assert.That(route.Defaults, Is.Null);
+
+            route.SetDefaults(language => "en-US", year => 2014);
+
+            Assert.That(route.Defaults, Is.Not.Null);
+            Assert.That(route.Defaults.Count, Is.EqualTo(2));
+            Assert.That(route.Defaults.ContainsKey("language"));
+            Assert.That(route.Defaults.ContainsKey("year"));
+            Assert.That(route.Defaults["language"], Is.EqualTo("en-US"));
+            Assert.That(route.Defaults["year"], Is.EqualTo(2014));
+        }
+
+        [Test]
+        public void SetDefaults_DefaultsWasNotNull_SetDefaults()
+        {
+            Route route = new Route("{language}/{year}", new Mock<IRouteHandler>().Object);
+            route.Defaults = new RouteValueDictionary();
+            Assert.That(route.Defaults, Is.Not.Null);
+            Assert.That(route.Defaults.Count, Is.EqualTo(0));
+
+            route.SetDefaults(language => "en-US", year => 2014);
+
+            Assert.That(route.Defaults, Is.Not.Null);
+            Assert.That(route.Defaults.Count, Is.EqualTo(2));
+            Assert.That(route.Defaults.ContainsKey("language"));
+            Assert.That(route.Defaults.ContainsKey("year"));
+            Assert.That(route.Defaults["language"], Is.EqualTo("en-US"));
+            Assert.That(route.Defaults["year"], Is.EqualTo(2014));
+        }
+
+        [Test]
+        public void SetDefaults_ReturnsOriginalRoute()
+        {
+            Route route = new Route("{language}/{year}", new Mock<IRouteHandler>().Object);
+            Assert.That(route.SetDefaults(language => "en-US", year => 2014), Is.SameAs(route));
+        }
+
+        [Test]
+        public void SetDefaults_OverwritesExistingDefaultValue()
+        {
+            Route route = new Route("{language}/{year}", new Mock<IRouteHandler>().Object);
+            route.Defaults = new RouteValueDictionary { { "language", "hr-HR" }, { "year", 2000} };
+            Assert.That(route.Defaults["language"], Is.EqualTo("hr-HR"));
+            Assert.That(route.Defaults["year"], Is.EqualTo(2000));
+
+            route.SetDefaults(language => "en-US", year => 2014);
+
+            Assert.That(route.Defaults.Count, Is.EqualTo(2));
+            Assert.That(route.Defaults.ContainsKey("language"));
+            Assert.That(route.Defaults.ContainsKey("year"));
+            Assert.That(route.Defaults["language"], Is.EqualTo("en-US"));
+            Assert.That(route.Defaults["year"], Is.EqualTo(2014));
+        }
+
+        [Test]
+        public void SetDefaults_CanBeChained()
+        {
+            Route route = new Route("{language}/{year}", new Mock<IRouteHandler>().Object);
+
+            route.SetDefaults(language => "en-US").SetDefaults(year => 2014);
+
+            Assert.That(route.Defaults["language"], Is.EqualTo("en-US"));
+            Assert.That(route.Defaults["year"], Is.EqualTo(2014));
+        }
+        #endregion
     }
     // ReSharper restore InconsistentNaming
 }
