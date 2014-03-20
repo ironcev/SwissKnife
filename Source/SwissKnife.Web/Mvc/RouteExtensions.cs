@@ -25,7 +25,9 @@ namespace SwissKnife.Web.Mvc
         /// <returns>
         /// The original <paramref name="route"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException"><paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameter"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameter"/> is null.<br/>-or-<br/><paramref name="defaultValue"/> is null.
+        /// </exception>
         /// <exception cref="ArgumentException"><paramref name="urlParameter"/> is empty string.<br/>-or-<br/><paramref name="urlParameter"/> is white space.</exception>
         public static Route SetDefault(this Route route, string urlParameter, object defaultValue)
         {
@@ -79,7 +81,7 @@ namespace SwissKnife.Web.Mvc
         }
 
         /// <summary>
-        /// Sets default values for a route URL parameters.
+        /// Sets default values for route URL parameters.
         /// </summary>
         /// <remarks>
         /// URL parameters are defined as lambda expressions. For example: language => "en-US" will set the "language" URL parameter to the value "en-US".
@@ -122,16 +124,100 @@ namespace SwissKnife.Web.Mvc
             return route;
         }
 
-        public static Route AddConstraint(this Route route, string key, Predicate<object> constraint)
+        /// <summary>
+        /// Sets constraint for a route URL parameter expressed as an arbitrary predicate that checks whether a URL parameter value is valid.
+        /// </summary>
+        /// <remarks>
+        /// If a constraint for the URL parameter is already set it will be overwritten by the <paramref name="predicate"/>.
+        /// <br/>
+        /// <br/>
+        /// <b>Note</b>
+        /// <br/>
+        /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
+        /// </remarks>
+        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Constraints"/> will be set.</param>
+        /// <param name="urlParameter">Name of the URL parameter.</param>
+        /// <param name="predicate">The predicate that returns true if the value of the <paramref name="urlParameter"/> is valid.</param>
+        /// <returns>
+        /// The original <paramref name="route"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameter"/> is null.<br/>-or-<br/><paramref name="predicate"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="urlParameter"/> is empty string.<br/>-or-<br/><paramref name="urlParameter"/> is white space.</exception>
+        public static Route SetConstraint(this Route route, string urlParameter, Predicate<object> predicate)
         {
-            return route.AddConstraint(key, new PredicateRouteConstraint(constraint));
+            #region Preconditions
+            // Other preconditions will be checked in the calling method.
+            Argument.IsNotNull(predicate, "predicate");
+            #endregion
+
+            return route.SetConstraint(urlParameter, new PredicateRouteConstraint(predicate));
         }
 
-        public static Route AddConstraint(this Route route, string key, IRouteConstraint constraint)
+        /// <summary>
+        /// Sets constraint for a route URL parameter expressed as an arbitrary route constraint.
+        /// </summary>
+        /// <remarks>
+        /// If a constraint for the URL parameter is already set it will be overwritten by the <paramref name="constraint"/>.
+        /// <br/>
+        /// <br/>
+        /// <b>Note</b>
+        /// <br/>
+        /// If the <paramref name="constraint"/> throws an exception, that exception will be propagated to the caller.
+        /// </remarks>
+        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Constraints"/> will be set.</param>
+        /// <param name="urlParameter">Name of the URL parameter.</param>
+        /// <param name="constraint"><see cref="IRouteConstraint"/> that checks whether the value of the <paramref name="urlParameter"/> is valid.</param>
+        /// <returns>
+        /// The original <paramref name="route"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameter"/> is null.<br/>-or-<br/><paramref name="constraint"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="urlParameter"/> is empty string.<br/>-or-<br/><paramref name="urlParameter"/> is white space.</exception>
+        public static Route SetConstraint(this Route route, string urlParameter, IRouteConstraint constraint)
         {
-            Argument.IsNotNullOrWhitespace(key, "key");
+            #region Preconditions
+            Argument.IsNotNull(route, "route");
+            Argument.IsNotNullOrWhitespace(urlParameter, "urlParameter");
+            Argument.IsNotNull(constraint, "predicate");            
+            #endregion
 
-            route.Constraints[key] = constraint;
+            if (route.Constraints == null) route.Constraints = new RouteValueDictionary();
+
+            route.Constraints[urlParameter] = constraint;
+
+            return route;
+        }
+
+        /// <summary>
+        /// Sets predicate for a route URL parameter expressed as a regular expression.
+        /// </summary>
+        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Constraints"/> will be set.</param>
+        /// <param name="urlParameter">Name of the URL parameter.</param>
+        /// <param name="regularExpression">Regular expression that defines a valid <paramref name="urlParameter"/>.</param>
+        /// <returns>
+        /// The original <paramref name="route"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameter"/> is null.<br/>-or-<br/><paramref name="regularExpression"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="urlParameter"/> is empty string.<br/>-or-<br/><paramref name="urlParameter"/> is white space.<br/>-or-<br/>
+        /// <paramref name="regularExpression"/> is empty string.<br/>-or-<br/><paramref name="regularExpression"/> is white space.
+        /// </exception>
+        public static Route SetConstraint(this Route route, string urlParameter, string regularExpression)
+        {
+            #region Preconditions
+            Argument.IsNotNull(route, "route");
+            Argument.IsNotNullOrWhitespace(urlParameter, "urlParameter");
+            Argument.IsNotNull(regularExpression, "regularExpression");
+            #endregion
+
+            if (route.Constraints == null) route.Constraints = new RouteValueDictionary();
+
+            route.Constraints[urlParameter] = regularExpression;
 
             return route;
         }

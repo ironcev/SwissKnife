@@ -303,6 +303,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Assert.That(route.Defaults["year"], Is.EqualTo(2014));
         }
         #endregion
+
+        // TODO-IG: SetConstraint tests.
     }
     // ReSharper restore InconsistentNaming
 }
