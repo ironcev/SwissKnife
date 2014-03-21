@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
-using SwissKnife.Diagnostics.Contracts;
 
 namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
 {
@@ -29,12 +28,12 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
             return HttpUtility.JavaScriptStringEncode(value);
         }
 
-        public static MvcForm BeginForm(this HtmlHelper htmlHelper, params string[] attributes)
+        public static MvcForm BeginForm(this HtmlHelper htmlHelper, params Func<object, string>[] attributes)
         {
             return htmlHelper.BeginForm(FormMethod.Post, attributes);
         }
 
-        public static MvcForm BeginForm(this HtmlHelper htmlHelper, FormMethod formMethod, params string[] attributes)
+        public static MvcForm BeginForm(this HtmlHelper htmlHelper, FormMethod formMethod, params Func<object, string>[] attributes)
         {
             var dictionary = new RouteValueDictionary();
 
@@ -55,17 +54,17 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString TextBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value)
         {
-            return htmlHelper.TextBoxFor(expression, value, new string[] { });
+            return htmlHelper.TextBoxFor(expression, value, new Func<object, string>[] { });
         }
 
-        public static MvcHtmlString TextBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params string[] attributes)
+        public static MvcHtmlString TextBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.TextBox(name, value, attributes);
         }
 
-        public static MvcHtmlString TextBox(this HtmlHelper htmlHelper, string name, object value, params string[] attributes)
+        public static MvcHtmlString TextBox(this HtmlHelper htmlHelper, string name, object value, params Func<object, string>[] attributes)
         {
             return htmlHelper.TextBox(name, value, CreateAttributesDictionaryFromArray(attributes));
         }
@@ -77,24 +76,24 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString TextAreaFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, string value)
         {
-            return htmlHelper.TextAreaFor(expression, value, new string[] { });
+            return htmlHelper.TextAreaFor(expression, value, new Func<object, string>[] { });
         }
 
-        public static MvcHtmlString TextAreaFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, string value, params string[] attributes)
+        public static MvcHtmlString TextAreaFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, string value, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.TextArea(name, value, CreateAttributesDictionaryFromArray(attributes));
         }
 
-        public static MvcHtmlString TextAreaFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, string value, int rows, int columns, params string[] attributes)
+        public static MvcHtmlString TextAreaFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, string value, int rows, int columns, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.TextArea(name, value, rows, columns, attributes);
         }
 
-        public static MvcHtmlString TextArea(this HtmlHelper htmlHelper, string name, string value, int rows, int columns, params string[] attributes)
+        public static MvcHtmlString TextArea(this HtmlHelper htmlHelper, string name, string value, int rows, int columns, params Func<object, string>[] attributes)
         {
             return htmlHelper.TextArea(name, value, rows, columns, CreateAttributesDictionaryFromArray(attributes));
         }
@@ -106,93 +105,90 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString PasswordFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value)
         {
-            return htmlHelper.PasswordFor(expression, value, new string[] { });
+            return htmlHelper.PasswordFor(expression, value, new Func<object, string>[] { });
         }
 
-        public static MvcHtmlString PasswordFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params string[] attributes)
+        public static MvcHtmlString PasswordFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.Password(name, value, attributes);
         }
 
-        public static MvcHtmlString Password(this HtmlHelper htmlHelper, string name, object value, params string[] attributes)
+        public static MvcHtmlString Password(this HtmlHelper htmlHelper, string name, object value, params Func<object, string>[] attributes)
         {
             return htmlHelper.Password(name, value, CreateAttributesDictionaryFromArray(attributes));
         }
 
-        public static MvcHtmlString CheckBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, bool isChecked, params string[] attributes)
+        public static MvcHtmlString CheckBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, bool isChecked, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.CheckBox(name, isChecked, attributes);
         }
 
-        public static MvcHtmlString CheckBox(this HtmlHelper htmlHelper, string name, bool isChecked, params string[] attributes)
+        public static MvcHtmlString CheckBox(this HtmlHelper htmlHelper, string name, bool isChecked, params Func<object, string>[] attributes)
         {
             return htmlHelper.CheckBox(name, isChecked, CreateAttributesDictionaryFromArray(attributes));
         }
 
-        public static MvcHtmlString RadioButtonFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, bool isChecked, params string[] attributes)
+        public static MvcHtmlString RadioButtonFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, bool isChecked, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.RadioButton(name, value, isChecked, attributes);
         }
 
-        public static MvcHtmlString RadioButton(this HtmlHelper htmlHelper, string name, object value, bool isChecked, params string[] attributes)
+        public static MvcHtmlString RadioButton(this HtmlHelper htmlHelper, string name, object value, bool isChecked, params Func<object, string>[] attributes)
         {
             return htmlHelper.RadioButton(name, value, isChecked, CreateAttributesDictionaryFromArray(attributes));
         }
 
-        public static MvcHtmlString HiddenFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params string[] attributes)
+        public static MvcHtmlString HiddenFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, object value, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.Hidden(name, value, attributes);
         }
 
-        public static MvcHtmlString Hidden(this HtmlHelper htmlHelper, string name, object value, params string[] attributes)
+        public static MvcHtmlString Hidden(this HtmlHelper htmlHelper, string name, object value, params Func<object, string>[] attributes)
         {
             return htmlHelper.Hidden(name, value, CreateAttributesDictionaryFromArray(attributes));
         }
 
-        public static MvcHtmlString DropDownListFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, IEnumerable<SelectListItem> selectList, string optionLabel, params string[] attributes)
+        public static MvcHtmlString DropDownListFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, IEnumerable<SelectListItem> selectList, string optionLabel, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.DropDownList(name, selectList, optionLabel, attributes);
         }
 
-        public static MvcHtmlString DropDownList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> selectList, string optionLabel, params string[] attributes)
+        public static MvcHtmlString DropDownList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> selectList, string optionLabel, params Func<object, string>[] attributes)
         {
             return htmlHelper.DropDownList(name, selectList, optionLabel, CreateAttributesDictionaryFromArray(attributes));
         }
 
-        public static MvcHtmlString ListBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, IEnumerable<SelectListItem> selectList, params string[] attributes)
+        public static MvcHtmlString ListBoxFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression, IEnumerable<SelectListItem> selectList, params Func<object, string>[] attributes)
         {
             var name = Identifier.ToString(expression);
 
             return htmlHelper.ListBox(name, selectList, attributes);
         }
 
-        public static MvcHtmlString ListBox(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> selectList, params string[] attributes)
+        public static MvcHtmlString ListBox(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> selectList, params Func<object, string>[] attributes)
         {
             return htmlHelper.ListBox(name, selectList, CreateAttributesDictionaryFromArray(attributes));
         }
 
-        private static IDictionary<string, object> CreateAttributesDictionaryFromArray(params string[] attributes)
+        private static IDictionary<string, string> CreateAttributesDictionaryFromArray(params Func<object, string>[] attributes)
         {
-            if (attributes == null || !attributes.Any()) return new Dictionary<string, object>();
+            if (attributes == null || !attributes.Any()) return new Dictionary<string, string>();
 
-            Argument.IsValid(attributes.Length % 2 == 0, "Attributes array does not contain even number of elements.", "attributes");
-            Argument.IsValid(!attributes.Where((item, index) => string.IsNullOrWhiteSpace(item) && index % 2 == 0).Any(), @"CreateAttributesDictionaryFromArray() attribute names must not be null or whitespace.", "attributes");
+            var dictionary = new Dictionary<string, string>();
 
-            var dictionary = new Dictionary<string, object>();
-
-            for (var i = 0; i < attributes.Length - 1; i += 2)
+            foreach (var function in attributes)
             {
-                dictionary.Add(attributes[i], attributes[i + 1]);
+                dictionary.Add(function.Method.GetParameters()[0].Name, function(null));
             }
 
             return dictionary;

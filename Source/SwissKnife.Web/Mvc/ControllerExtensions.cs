@@ -41,8 +41,8 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         private static RedirectToRouteResult RedirectToAction<TController>(Controller controller, Expression actionBody, RouteValueDictionary routeValues) where TController : Controller
         {
-            var actionName = ExtensionsHelper.GetActionNameFromExpression(actionBody);
-            var controllerName = ExtensionsHelper.GetControllerNameFromType(typeof(TController));
+            var actionName = ControllerHelper.GetActionNameFromActionExpression(actionBody);
+            var controllerName = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
 
             var methodInfo = typeof(TController).GetMethod("RedirectToAction", BindingFlags.NonPublic | BindingFlags.Instance, null, new[]
                                                                        {

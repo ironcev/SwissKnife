@@ -20,8 +20,8 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> action, RouteValueDictionary routeValues) where TController : Controller
         {
-            var actionName = ExtensionsHelper.GetActionNameFromExpression(action.Body);
-            var controllerName = ExtensionsHelper.GetControllerNameFromType(typeof(TController));
+            var actionName = ControllerHelper.GetActionNameFromActionExpression(action.Body);
+            var controllerName = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
 
             htmlHelper.RenderAction(actionName, controllerName, routeValues);
         }

@@ -3,17 +3,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using System.Web.Routing;
-using SwissKnife.Diagnostics.Contracts;
 
 namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
 {
     public static class UrlExtensions
     {
-        public static MvcHtmlString Current(this UrlHelper helper, params object[] routeValueDictionaryKeysAndValues)
+        public static MvcHtmlString Current(this UrlHelper helper, params Func<object, object>[] urlParametersAndDefaultValues)
         {
-            Argument.IsValid((routeValueDictionaryKeysAndValues != null && routeValueDictionaryKeysAndValues.Length % 2 == 0) || routeValueDictionaryKeysAndValues == null, @"Current() route value dictionary keys and values must have even number of objects. First object represents route value dictionary key, second is corresponding value and so on.", "routeValueDictionaryKeysAndValues");
-            Argument.IsValid((routeValueDictionaryKeysAndValues != null && !routeValueDictionaryKeysAndValues.Where((item, index) => (item == null || string.IsNullOrWhiteSpace(item.ToString())) && index % 2 == 0).Any()) || routeValueDictionaryKeysAndValues == null, @"Current() route value dictionary keys must not be null or whitespace.", "routeValueDictionaryKeysAndValues");
-
             var rvd = new RouteValueDictionary(helper.RequestContext.RouteData.Values);
             var qs = helper.RequestContext.HttpContext.Request.QueryString;
 
@@ -22,11 +18,11 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
                 rvd[param] = qs[param];
             }
 
-            if (routeValueDictionaryKeysAndValues != null)
+            if (urlParametersAndDefaultValues != null)
             {
-                for (var i = 0; i < routeValueDictionaryKeysAndValues.Length - 1; i += 2)
+                foreach (var function in urlParametersAndDefaultValues)
                 {
-                    rvd[routeValueDictionaryKeysAndValues[i].ToString()] = routeValueDictionaryKeysAndValues[i + 1];
+                    rvd[function.Method.GetParameters()[0].Name] = function(null);
                 }
             }
 
@@ -59,8 +55,8 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static string Action<TController>(this UrlHelper helper, Expression<Func<TController, ActionResult>> action, RouteValueDictionary routeValues) where TController : Controller
         {
-            var actionName = ExtensionsHelper.GetActionNameFromExpression(action.Body);
-            var controllerName = ExtensionsHelper.GetControllerNameFromType(typeof(TController));
+            var actionName = ControllerHelper.GetActionNameFromActionExpression(action.Body);
+            var controllerName = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
 
             return helper.Action(actionName, controllerName, routeValues);
         }

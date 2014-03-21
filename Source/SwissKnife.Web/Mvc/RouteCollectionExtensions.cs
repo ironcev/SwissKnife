@@ -56,8 +56,8 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
             var defaultValues = new RouteValueDictionary(defaults);
 
-            defaultValues["controller"] = ExtensionsHelper.GetControllerNameFromType(typeof(TController));
-            defaultValues["action"] = ExtensionsHelper.GetActionNameFromExpression(actionBody);
+            defaultValues["controller"] = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
+            defaultValues["action"] = ControllerHelper.GetActionNameFromActionExpression(actionBody);
 
             routeHandler = routeHandler ?? new MvcRouteHandler();
 
@@ -68,7 +68,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
                 DataTokens = new RouteValueDictionary()
             };
 
-            route.DataTokens["Namespaces"] = new[] { ExtensionsHelper.GetControllerNamespaceFromType(typeof(TController)) };
+            route.DataTokens["Namespaces"] = new[] { typeof(TController).Namespace };
 
             routes.Add(name, route);
 
