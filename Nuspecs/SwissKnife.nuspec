@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>SwissKnife</id>
+        <version>0.4.1.13988</version>
+        <title>SwissKnife</title>
+        <authors>Igor Rončević</authors>
+        <projectUrl>http://github.com/ironcev/swissknife</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>The Swiss Army knife for .NET developers.</description>
+        <copyright>Copyright © 2013 - 2014 Igor Rončević</copyright>
+    </metadata>
+    <files>
+        <file src="..\Source\Bin\Product\Release\SwissKnife.dll" target="lib\net40\SwissKnife.dll" />
+        <file src="..\Source\Bin\Product\Release\SwissKnife.xml" target="lib\net40\SwissKnife.xml" />
+    </files>
+</package>
