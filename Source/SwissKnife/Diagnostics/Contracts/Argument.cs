@@ -5,7 +5,7 @@ using System.Diagnostics.Contracts;
 namespace SwissKnife.Diagnostics.Contracts
 {
     /// <summary>
-    /// Contains static contract argument validator methods that represent preconditions on method arguments.
+    /// Contains static contract methods that validate preconditions on method arguments.
     /// Each static method of the <see cref="Argument"/> class throws an exception if a certain precondition is not fulfilled.
     /// </summary>
     public static class Argument
@@ -81,7 +81,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// <param name="type">The type to which the method parameter must be assignable.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
         /// <exception cref="ArgumentNullException">If the <paramref name="type"/> is null.</exception>
-        /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be asigned to an instance of the <paramref name="type"/>.</exception>
+        /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be assigned to an instance of the <paramref name="type"/>.</exception>
         public static void Is(Option<object> parameterValue, Type type, Option<string> parameterName)
         {
             #region Preconditions
@@ -103,7 +103,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <typeparam name="T">The type to which the method parameter must be assignable.</typeparam>
         /// <param name="parameterName">The name of the method parameter.</param>
-        /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be asigned to an instance of <typeparamref name="T"/>.</exception>
+        /// <exception cref="ArgumentException">If the <paramref name="parameterValue"/> cannot be assigned to an instance of <typeparamref name="T"/>.</exception>
         public static void Is<T>(Option<object> parameterValue, Option<string> parameterName)
         {
             Is(parameterValue, typeof(T), parameterName);

@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using SwissKnife.Diagnostics.Contracts;
 
-// TODO-IG: Originall inspired by http://www.codeproject.com/Articles/10154/NET-Encryption-Simplified 
+// TODO-IG: Originally inspired by http://www.codeproject.com/Articles/10154/NET-Encryption-Simplified 
 namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
 {
     /// <summary>

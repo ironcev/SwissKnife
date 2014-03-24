@@ -5,7 +5,7 @@ using System.Diagnostics.Contracts;
 namespace SwissKnife.Diagnostics.Contracts
 {
     /// <summary>
-    /// Contains static contract argument validator methods that represent preconditions on method arguments.
+    /// Contains static contract methods that validate operations done by methods.
     /// Each static method of the <see cref="Operation"/> class throws an exception if a certain precondition is not fulfilled.
     /// </summary>
     public class Operation

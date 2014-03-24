@@ -5,7 +5,7 @@ using SwissKnife.Diagnostics.Contracts;
 namespace SwissKnife.Collections
 {
     /// <summary>
-    /// Contains extension methods that can be applyed on different types of collections.
+    /// Contains extension methods that can be applied on different types of collections.
     /// </summary>
     public static class CollectionExtensions
     {

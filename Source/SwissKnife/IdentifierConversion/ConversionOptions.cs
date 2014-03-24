@@ -1,7 +1,7 @@
 ﻿namespace SwissKnife.IdentifierConversion
 {
     /// <summary>
-    /// // TODO-iG: Combine these two comments: Represents the parameters used to customize the conversion of identifier expressions into thier string representations.
+    /// // TODO-iG: Combine these two comments: Represents the parameters used to customize the conversion of identifier expressions into their string representations.
     /// Represents the parameters used to customize the output of the <see cref="Identifier.ToString{T}(System.Linq.Expressions.Expression{System.Func{T,object}})"/> methods.
     /// </summary>
     public sealed class ConversionOptions // TODO-IG: Add options for conversion of arrays and methods.

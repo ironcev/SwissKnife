@@ -7,7 +7,7 @@ using SwissKnife.IdentifierConversion;
 namespace SwissKnife
 {
     /// <summary>
-    /// Contains methods for converting identifier expressions into thier string representations.
+    /// Contains methods for converting identifier expressions into their string representations.
     /// For example, the identifier expression 'x => x.Property.SubProperty' will be converted into 'Property.SubProperty' and
     /// identifier expression '() => Property' into 'Property'.
     /// </summary>
@@ -31,7 +31,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts <paramref name="identifierExpression"/> into <see cref="string"/>.
         /// </summary>
-        /// <typeparam name="T">Type whose memeber identifier has to be converted into <see cref="string"/>.</typeparam>
+        /// <typeparam name="T">Type whose member identifier has to be converted into <see cref="string"/>.</typeparam>
         /// <param name="identifierExpression"><see cref="Expression"/> that access members of the type <typeparamref name="T"/>.</param>
         /// <exception cref="ArgumentNullException">If the <paramref name="identifierExpression"/> is <code>null</code>.</exception>
         /// <exception cref="ArgumentException">If the <paramref name="identifierExpression"/> is not a valid identifier expression. For example: 'someInstance.IdentifierAsString(x => 0)'.</exception>
