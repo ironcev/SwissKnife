@@ -66,7 +66,9 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static MvcHtmlString TextBox(this HtmlHelper htmlHelper, string name, object value, params Func<object, string>[] attributes)
         {
-            return htmlHelper.TextBox(name, value, CreateAttributesDictionaryFromArray(attributes));
+            var res = htmlHelper.TextBox(name, value, CreateAttributesDictionaryFromArray(attributes));
+            return res;
+            //return htmlHelper.TextBox(name, value, CreateAttributesDictionaryFromArray(attributes));
         }
 
         public static MvcHtmlString TextAreaFor<T>(this HtmlHelper htmlHelper, Expression<Func<T, object>> expression)
@@ -180,15 +182,22 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
             return htmlHelper.ListBox(name, selectList, CreateAttributesDictionaryFromArray(attributes));
         }
 
-        private static IDictionary<string, string> CreateAttributesDictionaryFromArray(params Func<object, string>[] attributes)
+        private static IDictionary<string, object> CreateAttributesDictionaryFromArray(params Func<object, string>[] attributes)
         {
-            if (attributes == null || !attributes.Any()) return new Dictionary<string, string>();
+            if (attributes == null || !attributes.Any()) return new Dictionary<string, object>();
 
-            var dictionary = new Dictionary<string, string>();
+            var dictionary = new Dictionary<string, object>();
 
             foreach (var function in attributes)
             {
-                dictionary.Add(function.Method.GetParameters()[0].Name, function(null));
+                string attributeName = function.Method.GetParameters()[0].Name;
+
+                if (attributeName.StartsWith("data") && attributeName.Length > "data".Length)
+                {
+                    attributeName = "data-" + attributeName.Substring("data".Length).ToLowerInvariant();
+                }
+
+                dictionary.Add(attributeName, function(null));
             }
 
             return dictionary;

@@ -66,6 +66,30 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
         // ReSharper restore UnusedAutoPropertyAccessor.Local
         // ReSharper restore ClassNeverInstantiated.Local
+
+        /// <remarks>
+        /// Covers issue #4.
+        /// </remarks>
+        [Test]
+        public void TextBoxFor_AttributesDefined_ReturnsRenderedAttributes()
+        {
+            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, accesskey => "a").ToString(),
+                        Is.EqualTo(@"<input accesskey=""a"" id=""ValueTypeProperty"" name=""ValueTypeProperty"" type=""text"" value="""" />"));
+        }
+
+        /// <remarks>
+        /// Covers issue #4.
+        /// </remarks>
+        [Test]
+        public void TextBoxFor_DataAttributesDefined_ReturnsRenderedDataAttributes()
+        {
+            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, dataCustom => "custom data").ToString(),
+                        Is.EqualTo(@"<input data-custom=""custom data"" id=""ValueTypeProperty"" name=""ValueTypeProperty"" type=""text"" value="""" />"));
+        }
     }
     // ReSharper restore InconsistentNaming
 }
