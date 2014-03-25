@@ -71,24 +71,102 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         /// Covers issue #4.
         /// </remarks>
         [Test]
-        public void TextBoxFor_AttributesDefined_ReturnsRenderedAttributes()
+        public void TextBoxFor_AttributeDefined_RendersAttribute()
         {
             HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
 
-            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, accesskey => "a").ToString(),
-                        Is.EqualTo(@"<input accesskey=""a"" id=""ValueTypeProperty"" name=""ValueTypeProperty"" type=""text"" value="""" />"));
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, accesskey => "a").ToString()
+                        .Contains(@" accesskey=""a"" "));
         }
 
         /// <remarks>
         /// Covers issue #4.
         /// </remarks>
         [Test]
-        public void TextBoxFor_DataAttributesDefined_ReturnsRenderedDataAttributes()
+        public void TextBoxFor_DataAttributeDefined_ReturnsRenderedDataAttribute()
         {
             HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
 
-            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, dataCustom => "custom data").ToString(),
-                        Is.EqualTo(@"<input data-custom=""custom data"" id=""ValueTypeProperty"" name=""ValueTypeProperty"" type=""text"" value="""" />"));
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, dataCustom => "custom data").ToString()
+                        .Contains(@" data-custom=""custom data"" "));
+        }
+
+        /// <remarks>
+        /// Covers issue #4.
+        /// </remarks>
+        [Test]
+        public void TextBoxFor_CamelCaseAttributeDefined_ReturnsRenderedAttribute()
+        {
+            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, camelCaseAttributeName => 101).ToString()
+                        .Contains(@" camel-case-attribute-name=""101"" "));
+        }
+
+        [Test]
+        public void TextBoxFor_PascalCaseAttributeDefined_ReturnsRenderedAttribute()
+        {
+            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, PascalCaseAttributeName => 101).ToString()
+                        .Contains(@" pascal-case-attribute-name=""101"" "));
+        }
+
+        [Test]
+        public void TextBoxFor_AttributeNameHasSingleUpperCaseCharacter_ReturnsRenderedAttribute()
+        {
+            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, A => 101).ToString()
+                        .Contains(@" a=""101"" "));
+        }
+
+        [Test]
+        public void TextBoxFor_AttributeNameHasSingleLoweCaseCharacter_ReturnsRenderedAttribute()
+        {
+            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, a => 101).ToString()
+                        .Contains(@" a=""101"" "));
+        }
+
+        [Test]
+        public void TextBoxFor_AttributeNameHasOnlyCapitalCharacter_ReturnsRenderedAttribute()
+        {
+            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+
+            Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, CAPITALS => 101).ToString()
+                        .Contains(@" c-a-p-i-t-a-l-s=""101"" "));
+        }
+
+        [Test]
+        public void TextBoxFor_SeveralAttributesDefined_ReturnsRenderedAttributes()
+        {
+            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+
+            var result = htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null,
+                                                          accesskey => "a",
+                                                          dataCustom => "custom data",
+                                                          camelCaseAttributeName => 1,
+                                                          PascalCaseAttributeName => 1.2,
+                                                          A => 1.23,
+                                                          CAPITALS => 101).ToString();
+
+            var expectedAttributes = new[]
+            {
+                @" accesskey=""a"" ",
+                @" data-custom=""custom data"" ",
+                @" camel-case-attribute-name=""1"" ",
+                @" pascal-case-attribute-name=""1.2"" ",
+                @" a=""1.23"" ",
+                @" c-a-p-i-t-a-l-s=""101"" "
+            };
+
+
+            foreach (var expectedAttribute in expectedAttributes)
+            {
+                Assert.That(result.Contains(expectedAttribute));
+            }
         }
     }
     // ReSharper restore InconsistentNaming

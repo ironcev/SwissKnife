@@ -86,7 +86,7 @@ namespace SwissKnife.Tests.Unit
         public void Value_OptionIsNone_ThrowsException()
         {
             var none = Option<object>.None;
-            var exceptionMessage = Assert.Throws<InvalidOperationException>(() => System.Diagnostics.Debug.Write(none.Value)).Message;
+            var exceptionMessage = Assert.Throws<InvalidOperationException>(() => Console.WriteLine(none.Value)).Message;
             Assert.That(exceptionMessage, Is.EqualTo("Option must have a value."));
         }
 
