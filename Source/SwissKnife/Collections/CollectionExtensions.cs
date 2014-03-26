@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SwissKnife.Diagnostics.Contracts;
 
 namespace SwissKnife.Collections
@@ -66,6 +67,41 @@ namespace SwissKnife.Collections
                 dictionary.Add(key, getValueToAdd());
 
             return dictionary[key];
+        }
+
+        /// <summary>
+        /// Splits <see cref="IEnumerable{T}"/> into groups of specified size.
+        /// </summary>
+        /// <remarks>
+        /// This method is implemented by using deferred execution. The immediate return value is an object that stores all the information that is required to perform the action.
+        /// The query represented by this method is not executed until the object is enumerated either by calling its <b>GetEnumerator</b> method directly or by using <b>foreach</b>
+        /// in Visual C# or <b>For Each</b> in Visual Basic.
+        /// <br/>
+        /// <br/>
+        /// The <paramref name="groupSize"/> can be greater than the number of elements in the <paramref name="source"/>. In that case, the result contains only one group which is the same as the <paramref name="source"/>.
+        /// <br/>
+        /// <br/>
+        /// The splitting preserves the order of the elements.
+        /// </remarks>
+        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}"/> to split into groups.</param>
+        /// <param name="groupSize">The number of elements in each group except eventually the last one. The last group can have less elements than the group size.</param>
+        /// <returns>Enumerable whose each element is an <see cref="IEnumerable{T}"/> that represents a single group.<br/>-or-<br/>Empty enumerable if the <paramref name="source"/> is empty.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="groupSize"/> is not greater than zero.</exception>
+        public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int groupSize)
+        {
+            #region Preconditions
+            Argument.IsNotNull(source, "source");
+            Argument.IsGreaterThanZero(groupSize, "groupSize");
+            #endregion
+
+            // The source is implicitly captured in a closure. This is exactly what we want, because we want to have method implemented by using deferred execution.
+            // The method actually enumerates the source several times, first time to get the first element in each group and later on to take the members of each group.
+            // This is an acceptable trade-off keeping in mind that we easily got implementation with deferred execution.
+            // ReSharper disable PossibleMultipleEnumeration
+            return source.Where((x, i) => i % groupSize == 0).Select((x, i) => source.Skip(i * groupSize).Take(groupSize));
+            // ReSharper restore PossibleMultipleEnumeration
         }
     }
 }
