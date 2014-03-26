@@ -10,24 +10,6 @@ namespace SwissKnife.Collections
     public static class CollectionExtensions
     {
         /// <summary>
-        /// Executes the <paramref name="action"/> on each element of the <paramref name="enumerable"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of objects to enumerate.</typeparam>
-        /// <param name="enumerable">The enumerable to execute the <paramref name="action"/> on.</param>
-        /// <param name="action">The action to execute on the each element of the <paramref name="enumerable"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="enumerable"/> is null.<br/>-or-<br/><paramref name="action"/> is null.</exception>
-        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
-        {
-            #region Preconditions
-            Argument.IsNotNull(enumerable, "enumerable");
-            Argument.IsNotNull(action, "action");
-            #endregion
-
-            foreach (T element in enumerable)
-                action(element);
-        }
-
-        /// <summary>
         /// Adds <paramref name="itemsToAdd"/> to the <paramref name="collection"/>.
         /// </summary>
         /// <typeparam name="T">The type of the items in the <paramref name="collection"/>.</typeparam>
