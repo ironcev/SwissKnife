@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using NUnit.Framework;
 using SwissKnife.Collections;
 
@@ -196,6 +197,7 @@ namespace SwissKnife.Tests.Unit.Collections
         [Test]
         public void Split_DefersExecution()
         {
+            // ReSharper disable PossibleMultipleEnumeration
             var source = new List<int>();
 
             var query = source.Split(3);
@@ -209,6 +211,101 @@ namespace SwissKnife.Tests.Unit.Collections
             CollectionAssert.AreEqual(result[1], source.Skip(3).Take(3));
             CollectionAssert.AreEqual(result[2], source.Skip(6).Take(3));
             CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
+
+            source.AddRange(new[] { 8, 9, 10 });
+
+            result = query.ToList();
+
+            Assert.That(result.Count, Is.EqualTo(4));
+            CollectionAssert.AreEqual(result[0], source.Take(3));
+            CollectionAssert.AreEqual(result[1], source.Skip(3).Take(3));
+            CollectionAssert.AreEqual(result[2], source.Skip(6).Take(3));
+            CollectionAssert.AreEqual(result[3], source.Skip(9).Take(3));
+            CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
+            // ReSharper restore PossibleMultipleEnumeration
+        }
+        #endregion
+
+        #region Randomize<T>
+        [Test]
+        public void Randomize_SourceIsNull_ThrowsException()
+        {
+            string parameterName = Assert.Throws<ArgumentNullException>(() => CollectionExtensions.Randomize<object>(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("source"));
+        }
+
+        [Test]
+        public void Randomize_SourceIsEmpty_ReturnsEmptyEnumerable()
+        {
+            CollectionAssert.IsEmpty(Enumerable.Empty<object>().Randomize());
+        }
+
+        [Test]
+        public void Randomize_SourceHasOneElement_ReturnsEnumerableWithOnlyThatElement()
+        {
+            var source = new[] { 1 };
+
+            CollectionAssert.AreEqual(source.Randomize(), source);
+        }
+
+        [Test]
+        public void Randomize_ReturnsEquivalentEnumerable()
+        {
+            var source = new[] { 1, 2, 3 };
+
+            CollectionAssert.AreEquivalent(source.Randomize(), source);
+        }
+
+        [Test]
+        public void Randomize_ReturnsRandomizedEnumerable()
+        {
+            AssertThatRandomizeReturnsRandomizedEnumerable(Enumerable.Range(0, 100));
+        }
+
+        [Test]
+        public void Randomize_IsThreadSafe()
+        {
+            // Let's run the previous test on 100 concurrent threads.
+            for (int i = 0; i < 100; i++)
+                new Thread(() => AssertThatRandomizeReturnsRandomizedEnumerable(Enumerable.Range(0, 100))).Start();
+        }
+
+        /// <remarks>
+        /// Strictly seen, this test is not deterministic and it could fail even if the <see cref="CollectionExtensions.Randomize{T}"/> method works properly.
+        /// The method does not guarantee that the new sequence will have different order of elements than the original one.
+        /// However, for "large enough" number of elements, we expect this to always be the case.
+        /// </remarks>
+        private static void AssertThatRandomizeReturnsRandomizedEnumerable(IEnumerable<int> originalEnumerable)
+        {
+            var previousSource = originalEnumerable.ToArray();
+            for (int i = 0; i < 20; i++) // Let's create 20 subsequent randomized results and ensure that each has different order than its source (the previous one)                
+            {
+                var randomized = previousSource.Randomize().ToArray();
+                CollectionAssert.AreEquivalent(previousSource, randomized);
+                CollectionAssert.AreNotEqual(previousSource, randomized);
+            }                        
+        }
+
+        [Test]
+        public void Randomize_DefersExecution()
+        {
+            // ReSharper disable PossibleMultipleEnumeration
+            var source = new List<int>();
+
+            var query = source.Randomize();
+
+            source.AddRange(new[] { 1, 2, 3 });
+
+            var result = query.ToList();
+
+            CollectionAssert.AreEquivalent(source, result);
+
+            source.AddRange(new[] { 4, 5, 6 });
+
+            result = query.ToList();
+
+            CollectionAssert.AreEquivalent(source, result);
+            // ReSharper restore PossibleMultipleEnumeration
         }
         #endregion
     }

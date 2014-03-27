@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using SwissKnife.Diagnostics.Contracts;
 
 namespace SwissKnife.Collections
@@ -102,6 +103,34 @@ namespace SwissKnife.Collections
             // ReSharper disable PossibleMultipleEnumeration
             return source.Where((x, i) => i % groupSize == 0).Select((x, i) => source.Skip(i * groupSize).Take(groupSize));
             // ReSharper restore PossibleMultipleEnumeration
+        }
+
+        // It's perfectly fine if different threads start with the same seed (in case that the Random objects are created very shortly one ofter another).
+        private static readonly ThreadLocal<Random> _random = new ThreadLocal<Random>(() => new Random());
+        /// <summary>
+        /// Randomizes the order of elements in <see cref="IEnumerable{T}"/>.
+        /// </summary>
+        /// <remarks>
+        /// This method is implemented by using deferred execution. The immediate return value is an object that stores all the information that is required to perform the action.
+        /// The query represented by this method is not executed until the object is enumerated either by calling its <b>GetEnumerator</b> method directly or by using <b>foreach</b>
+        /// in Visual C# or <b>For Each</b> in Visual Basic.
+        /// <br/>
+        /// <br/>
+        /// The method does not guarantee that the order of elements in the returned sequence will always be different than the order in the original sequence.
+        /// If the sequence has exactly one element, the order will be the same in both the <paramref name="source"/> and the returned value.
+        /// In case of small number of elements in the <paramref name="source"/>, like two or three, there is a probability of getting back the same order of elements like in the <paramref name="source"/>.
+        /// This probability drops rapidly as the number of elements grows.
+        /// </remarks>
+        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}"/> to randomize.</param>
+        /// <returns>Randomized <see cref="IEnumerable{T}"/>.</returns>
+        public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
+        {
+            #region Preconditions
+            Argument.IsNotNull(source, "source");
+            #endregion
+            
+            return source.OrderBy(x => _random.Value.Next());
         }
     }
 }
