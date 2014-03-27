@@ -106,7 +106,7 @@ namespace SwissKnife.Collections
         }
 
         // It's perfectly fine if different threads start with the same seed (in case that the Random objects are created very shortly one ofter another).
-        private static readonly ThreadLocal<Random> _random = new ThreadLocal<Random>(() => new Random());
+        private static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
         /// <summary>
         /// Randomizes the order of elements in <see cref="IEnumerable{T}"/>.
         /// </summary>
@@ -130,7 +130,7 @@ namespace SwissKnife.Collections
             Argument.IsNotNull(source, "source");
             #endregion
             
-            return source.OrderBy(x => _random.Value.Next());
+            return source.OrderBy(x => random.Value.Next());
         }
     }
 }

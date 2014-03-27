@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using NUnit.Framework;
 using SwissKnife.Collections;
@@ -130,7 +129,7 @@ namespace SwissKnife.Tests.Unit.Collections
         [Test]
         public void Split_GroupSizeIsLessThanZero_ThrowsException()
         {
-            string parameterName = Assert.Throws<ArgumentOutOfRangeException>(() => CollectionExtensions.Split(Enumerable.Empty<object>(), -1)).ParamName;
+            string parameterName = Assert.Throws<ArgumentOutOfRangeException>(() => Enumerable.Empty<object>().Split(-1)).ParamName;
             Assert.That(parameterName, Is.EqualTo("groupSize"));
         }
 

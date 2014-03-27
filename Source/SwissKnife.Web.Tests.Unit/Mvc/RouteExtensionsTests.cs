@@ -138,7 +138,6 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void SetDefaultLambda_CalculatedDefaultValueIsNull_ThrowsException()
         {
-            Route route = new Route("{language}", new Mock<IRouteHandler>().Object);
             var exception = Assert.Throws<ArgumentException>(() => emptyRoute.SetDefault(language => null));
             Assert.That(exception.ParamName, Is.EqualTo("urlParameterAndDefaultValue"));
             Assert.That(exception.Message.StartsWith("The calculated default value must not be null."));
@@ -226,7 +225,6 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void SetDefaults_CalculatedDefaultValueIsNull_ThrowsException()
         {
-            Route route = new Route("{language}", new Mock<IRouteHandler>().Object);
             var exception = Assert.Throws<ArgumentException>(() => emptyRoute.SetDefaults(language => null));
             Assert.That(exception.ParamName, Is.EqualTo("urlParametersAndDefaultValues"));
             Assert.That(exception.Message.StartsWith("The calculated default value must not be null."));

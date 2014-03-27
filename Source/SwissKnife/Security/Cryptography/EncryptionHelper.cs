@@ -15,7 +15,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
     /// </summary>
     public static class EncryptionHelper
     {
-        private static readonly Encoding DefaultEncoding = Encoding.UTF8;
+        private static readonly Encoding defaultEncoding = Encoding.UTF8;
         private const string DefaultInitializationVector = "zA%1-q=T@";
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
 
             var encryptionAlgorithm = GetEncryptionAlgorithm(encryptionProvider);
 
-            var dataBytes = DefaultEncoding.GetBytes(data);
+            var dataBytes = defaultEncoding.GetBytes(data);
 
             encryptionAlgorithm.Key = CreateCryptoKey(encryptionAlgorithm, key);
             encryptionAlgorithm.IV = CreateCryptoIv(encryptionAlgorithm, DefaultInitializationVector);
@@ -58,7 +58,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
 
             var encryptionAlgorithm = GetEncryptionAlgorithm(encryptionProvider);
 
-            var dataBytes = Util.StringToBytes(data, stringFormat, DefaultEncoding).ToArray();
+            var dataBytes = Util.StringToBytes(data, stringFormat, defaultEncoding).ToArray();
 
             encryptionAlgorithm.Key = CreateCryptoKey(encryptionAlgorithm, key);
             encryptionAlgorithm.IV = CreateCryptoIv(encryptionAlgorithm, DefaultInitializationVector);
@@ -76,7 +76,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
             // Clean trailing zeros.
             result = Util.CleanBytes(result).ToArray();
 
-            return Util.BytesToTextString(result, DefaultEncoding);
+            return Util.BytesToTextString(result, defaultEncoding);
         }
 
         private static SymmetricAlgorithm GetEncryptionAlgorithm(EncryptionProvider encryptionProvider)
@@ -98,7 +98,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
 
         private static byte[] CreateCryptoKey(SymmetricAlgorithm cryptoAlgorithm, string key)
         {
-            var keyBytes = DefaultEncoding.GetBytes(key);
+            var keyBytes = defaultEncoding.GetBytes(key);
             var maxBytes = cryptoAlgorithm.LegalKeySizes[0].MaxSize / 8;
             var minBytes = cryptoAlgorithm.LegalKeySizes[0].MinSize / 8;
 
@@ -107,7 +107,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
 
         private static byte[] CreateCryptoIv(SymmetricAlgorithm cryptoAlgorithm, string iv)
         {
-            var ivBytes = DefaultEncoding.GetBytes(iv);
+            var ivBytes = defaultEncoding.GetBytes(iv);
             var bytes = cryptoAlgorithm.BlockSize / 8;
 
             return GetBytesRange(ivBytes, bytes, bytes);

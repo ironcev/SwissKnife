@@ -8,9 +8,9 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
     /// </summary>
     public sealed class HashingResult
     {
-        private string _asHex;
-        private string _asBase64;
-        private string _asText;
+        private string asHex;
+        private string asBase64;
+        private string asText;
 
         internal HashingResult(IEnumerable<byte> bytes)
         {
@@ -31,7 +31,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
         /// </summary>
         public string HexValue
         {
-            get { return _asHex ?? (_asHex = Util.BytesToHexString(Bytes)); }
+            get { return asHex ?? (asHex = Util.BytesToHexString(Bytes)); }
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
         /// </summary>
         public string Base64Value
         {
-            get { return _asBase64 ?? (_asBase64 = Util.BytesToBase64String(Bytes)); }
+            get { return asBase64 ?? (asBase64 = Util.BytesToBase64String(Bytes)); }
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
         /// </summary>
         public string TextValue
         {
-            get { return _asText ?? (_asText = Util.BytesToTextString(Bytes, HashingHelper.DefaultEncoding)); }
+            get { return asText ?? (asText = Util.BytesToTextString(Bytes, HashingHelper.DefaultEncoding)); }
         }
 
         internal string As(StringFormat stringFormat)
