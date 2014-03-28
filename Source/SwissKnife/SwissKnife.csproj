@@ -56,6 +56,9 @@
     <Compile Include="Security\Cryptography\HashingResult.cs" />
     <Compile Include="Security\Cryptography\StringFormat.cs" />
     <Compile Include="Security\Cryptography\Util.cs" />
+    <Compile Include="Time\ConstantTimeGenerator.cs" />
+    <Compile Include="Time\SystemTimeGenerator.cs" />
+    <Compile Include="Time\TimeGenerator.cs" />
     <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup />

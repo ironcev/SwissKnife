@@ -49,6 +49,9 @@
     <Compile Include="GuidUtilityTests.cs" />
     <Compile Include="IdentifierTests.cs" />
     <Compile Include="OptionTests.cs" />
+    <Compile Include="Time\ConstantTimeGeneratorTests.cs" />
+    <Compile Include="Time\SystemTimeGeneratorTests.cs" />
+    <Compile Include="Time\TimeGeneratorTests.cs" />
     <Compile Include="TypeExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
