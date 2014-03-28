@@ -46,6 +46,7 @@
     <Compile Include="Collections\CollectionExtensionsTests.cs" />
     <Compile Include="Diagnostics\Contracts\ArgumentTests.cs" />
     <Compile Include="Diagnostics\Contracts\OperationTests.cs" />
+    <Compile Include="GuidUtilityTests.cs" />
     <Compile Include="IdentifierTests.cs" />
     <Compile Include="OptionTests.cs" />
     <Compile Include="TypeExtensionsTests.cs" />
