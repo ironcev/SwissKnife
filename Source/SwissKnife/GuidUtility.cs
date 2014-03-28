@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace SwissKnife
@@ -54,6 +52,68 @@ namespace SwissKnife
             Array.Copy(msecsArray, msecsArray.Length - 4, guidArray, guidArray.Length - 4, 4);
 
             return new Guid(guidArray);
+        }
+
+
+        /// <summary>
+        /// Converts a <see cref="Guid"/> to its short string representation.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// A typical short string representation of a <see cref="Guid"/> looks like this one "K-ROb0hYA0KbtCGZpBVv2g".
+        /// </p>
+        /// <p>
+        /// Short string representations always have the length of 22 characters and can contain only the following characters:<br/>
+        /// <ul>
+        /// <li>uppercase characters "A" to "Z"</li>
+        /// <li>the lowercase characters "a" to "z"</li>
+        /// <li>the numerals "0" to "9"</li>
+        /// <li>the symbols "_" and "-"</li>
+        /// </ul>
+        /// </p>
+        /// </remarks>
+        /// <param name="guid">The <see cref="Guid"/> that has to be converted to its short string representation.</param>
+        /// <returns>
+        /// The short string representation of the <paramref name="guid"/>.
+        /// </returns>
+        public static string ToShortString(Guid guid)
+        {
+            return Convert.ToBase64String(guid.ToByteArray()) // Returns something similar to "K/ROb0hYA0KbtCGZpBVv2g==".
+                            // The value will always have length of 24 characters and two trailing "==".
+                            // Also, it can contain the "/" and "+" signs.
+                            .Substring(0, 22)
+                            .Replace('/', '_')
+                            .Replace('+', '-');
+        }
+
+        /// <summary>
+        /// Creates new <see cref="Guid"/> out of its short string representation.
+        /// </summary>
+        /// <param name="shortStringGuidRepresentation">Short string representation of a <see cref="Guid"/>.</param>
+        /// <returns>
+        /// <see cref="Guid"/> represented by the <paramref name="shortStringGuidRepresentation"/>.
+        /// <br/>-or-<br/>
+        /// Null if the <paramref name="shortStringGuidRepresentation"/> is null or does not represent a valid short string GUID representation.
+        /// </returns>
+        public static Guid? FromShortString(Option<string> shortStringGuidRepresentation)
+        {
+            if (shortStringGuidRepresentation.IsNone) return null;
+
+            if (shortStringGuidRepresentation.Value.Length != 22) return null;
+
+            StringBuilder sb = new StringBuilder(shortStringGuidRepresentation.Value);
+            sb.Replace('_', '/');
+            sb.Replace('-', '+');
+            sb.Append("==");
+
+            try
+            {
+                return new Guid(Convert.FromBase64String(sb.ToString()));
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
