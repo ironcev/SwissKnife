@@ -34,14 +34,15 @@ namespace SwissKnife.Collections
         /// Gets the value from the <paramref name="dictionary"/> associated with the specified <paramref name="key"/>. If the value does not exist in the <paramref name="dictionary"/> it will be added to it.
         /// </summary>
         /// <remarks>
+        /// <p>
         /// If the <paramref name="dictionary"/> does not contain the <paramref name="key"/>, a new <see cref="KeyValuePair{TKey,TValue}"/> will be added to the <paramref name="dictionary"/>.
         /// The key and the value of that new <see cref="KeyValuePair{TKey,TValue}"/> will be set to <paramref name="key"/> and the result of the <paramref name="getValueToAdd"/> respectively.
         /// The <paramref name="getValueToAdd"/> is called only if the <paramref name="dictionary"/> does not already contain the <paramref name="key"/>.
-        /// <br/>
-        /// <br/>
+        /// </p>
+        /// <p>
         /// <b>Note</b>
-        /// <br/>
         /// If the <paramref name="getValueToAdd"/> throws any exception, that exception will be propagated to the caller.
+        /// </p>
         /// </remarks>
         /// <typeparam name="TKey">The type of keys in the <paramref name="dictionary"/>.</typeparam>
         /// <typeparam name="TValue">The type of values in the <paramref name="dictionary"/>.</typeparam>
@@ -74,15 +75,17 @@ namespace SwissKnife.Collections
         /// Splits <see cref="IEnumerable{T}"/> into groups of specified size.
         /// </summary>
         /// <remarks>
+        /// <p>
         /// This method is implemented by using deferred execution. The immediate return value is an object that stores all the information that is required to perform the action.
         /// The query represented by this method is not executed until the object is enumerated either by calling its <b>GetEnumerator</b> method directly or by using <b>foreach</b>
         /// in Visual C# or <b>For Each</b> in Visual Basic.
-        /// <br/>
-        /// <br/>
+        /// </p>
+        /// <p>
         /// The <paramref name="groupSize"/> can be greater than the number of elements in the <paramref name="source"/>. In that case, the result contains only one group which is the same as the <paramref name="source"/>.
-        /// <br/>
-        /// <br/>
-        /// The splitting preserves the order of the elements.
+        /// </p>
+        /// <p>
+        /// Splitting preserves the order of the elements.
+        /// </p>
         /// </remarks>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
         /// <param name="source">The <see cref="IEnumerable{T}"/> to split into groups.</param>
@@ -111,15 +114,17 @@ namespace SwissKnife.Collections
         /// Randomizes the order of elements in <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <remarks>
+        /// <p>
         /// This method is implemented by using deferred execution. The immediate return value is an object that stores all the information that is required to perform the action.
         /// The query represented by this method is not executed until the object is enumerated either by calling its <b>GetEnumerator</b> method directly or by using <b>foreach</b>
         /// in Visual C# or <b>For Each</b> in Visual Basic.
-        /// <br/>
-        /// <br/>
+        /// </p>
+        /// <p>
         /// The method does not guarantee that the order of elements in the returned sequence will always be different than the order in the original sequence.
         /// If the sequence has exactly one element, the order will be the same in both the <paramref name="source"/> and the returned value.
         /// In case of small number of elements in the <paramref name="source"/>, like two or three, there is a probability of getting back the same order of elements like in the <paramref name="source"/>.
         /// This probability drops rapidly as the number of elements grows.
+        /// </p>
         /// </remarks>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
         /// <param name="source">The <see cref="IEnumerable{T}"/> to randomize.</param>

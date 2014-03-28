@@ -119,10 +119,7 @@ namespace SwissKnife
         /// Invokes a function on an optional value that itself yields an option.
         /// </summary>
         /// <remarks>
-        /// <br/>
-        /// <br/>
-        /// <b>Note</b>
-        /// <br/>
+        /// <b>Note</b><br/>
         /// If the <paramref name="binder"/> throws any exception, that exception will be propagated to the caller.
         /// </remarks>
         /// <param name="binder">A function that takes the value of the type <typeparamref name="T"/> from the option and transforms it into an option containing a value of the type <typeparamref name="TOutput"/>.</param>
@@ -142,10 +139,7 @@ namespace SwissKnife
         /// Invokes a function on an optional value that yields an <see cref="Nullable{TOutput}"/>.
         /// </summary>
         /// <remarks>
-        /// <br/>
-        /// <br/>
-        /// <b>Note</b>
-        /// <br/>
+        /// <b>Note</b><br/>
         /// If the <paramref name="binder"/> throws any exception, that exception will be propagated to the caller.
         /// </remarks>
         /// <typeparam name="TOutput">The output type.</typeparam>
@@ -165,10 +159,7 @@ namespace SwissKnife
         /// Transforms an option value by using the specified mapping function.
         /// </summary>
         /// <remarks>
-        /// <br/>
-        /// <br/>
-        /// <b>Note</b>
-        /// <br/>
+        /// <b>Note</b><br/>
         /// If the <paramref name="mapper"/> throws any exception, that exception will be propagated to the caller.
         /// </remarks>
         /// <param name="mapper">A function to apply to the option value.</param>
@@ -188,10 +179,7 @@ namespace SwissKnife
         /// Transforms an option value by using the specified mapping function.
         /// </summary>
         /// <remarks>
-        /// <br/>
-        /// <br/>
-        /// <b>Note</b>
-        /// <br/>
+        /// <b>Note</b><br/>
         /// If the <paramref name="mapper"/> throws any exception, that exception will be propagated to the caller.
         /// </remarks>
         /// <param name="mapper">A function to apply to the option value.</param>
