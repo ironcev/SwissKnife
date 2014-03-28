@@ -9,6 +9,7 @@ namespace SwissKnife.Time
     /// The constant time to generate is defined in the class constructor and cannot be changed afterwards.
     /// It can be inspected via the <see cref="ConstantTime"/> property.
     /// </remarks>
+    [Serializable]
     public class ConstantTimeGenerator : TimeGenerator
     {
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using SwissKnife.Diagnostics.Contracts;
 
 namespace SwissKnife.Time
 {
@@ -14,8 +15,12 @@ namespace SwissKnife.Time
     /// Typical example would be mocking date and time generation for testing purposes.
     /// </p>
     /// </remarks>
+    [Serializable]
     public abstract class TimeGenerator
     {
+        private static readonly object syncLock = new object();
+        private static Func<DateTimeOffset> getLocalNow = () => DateTimeOffset.Now;
+
         /// <summary>
         /// Gets a <see cref="DateTimeOffset"/> object that represents the current date and time, with the offset set to the local time's offset from Coordinated Universal Time (UTC).
         /// </summary>
@@ -47,6 +52,73 @@ namespace SwissKnife.Time
         public DateTime Today()
         {
             return LocalNow().Date;
+        }
+
+        /// <summary>
+        /// Gets and sets a delegate for returning object that represents the current date and time, with the offset set to the local time's offset from Coordinated Universal Time (UTC).
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// This delegate is never null. By default, it returns the current date and time on the current computer.
+        /// </p>
+        /// <p>
+        /// <b>Note</b>
+        /// If the delegate throws any exception, that exception will be propagated to the caller.
+        /// </p>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+        public static Func<DateTimeOffset> GetLocalNow
+        {
+            get
+            {
+                lock (syncLock)
+                {
+                    return getLocalNow;
+                }
+            }
+            set
+            {
+                #region Preconditions
+                Argument.IsNotNull(value, "value");                
+                #endregion
+
+                lock (syncLock)
+                {                    
+                    getLocalNow = value;                    
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="DateTimeOffset"/> object whose date and time are set to the current Coordinated Universal Time (UTC) date and time and whose offset is <see cref="TimeSpan.Zero"/>.
+        /// The current data and time is calculated by using the <see cref="GetLocalNow"/> delegate.
+        /// </summary>
+        /// <remarks>
+        /// <b>Note</b>
+        /// If the <see cref="GetLocalNow"/> delegate throws any exception, that exception will be propagated to the caller.
+        /// </remarks>
+        /// <returns>
+        /// An object whose date and time is the current Coordinated Universal Time (UTC) and whose offset is <see cref="TimeSpan.Zero"/>.
+        /// </returns>
+        public static DateTimeOffset GetUtcNow()
+        {
+            return GetLocalNow().ToUniversalTime();
+        }
+
+        /// <summary>
+        /// Gets the current date.
+        /// The current data is calculated by using the <see cref="GetLocalNow"/> delegate.
+        /// </summary>
+        /// <remarks>
+        /// <b>Note</b>
+        /// If the <see cref="GetLocalNow"/> delegate throws any exception, that exception will be propagated to the caller.
+        /// </remarks>
+        /// <returns>
+        /// An object that is set to today's date, with the time component set to 00:00:00.
+        /// </returns>
+        public static DateTime GetToday()
+        {
+            return GetLocalNow().Date;
         }
     }
 }
