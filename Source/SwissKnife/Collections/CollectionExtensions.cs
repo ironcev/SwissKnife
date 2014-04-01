@@ -137,5 +137,58 @@ namespace SwissKnife.Collections
             
             return source.OrderBy(x => random.Value.Next());
         }
+
+        /// <summary>
+        /// Splits <see cref="IEnumerable{T}"/> into specified number of groups.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// This method is implemented by using deferred execution. The immediate return value is an object that stores all the information that is required to perform the action.
+        /// The query represented by this method is not executed until the object is enumerated either by calling its <b>GetEnumerator</b> method directly or by using <b>foreach</b>
+        /// in Visual C# or <b>For Each</b> in Visual Basic.
+        /// </p>
+        /// <p>
+        /// The <paramref name="numberOfGroups"/> can be greater than or equal to the number of elements in the <paramref name="source"/>.
+        /// In both case, the result contains groups of size 1.
+        /// The number of returned groups will be equal to the number of elements in the <paramref name="source"/>.
+        /// </p>
+        /// <p>
+        /// All groups except maybe the last one will have same number of elements. The last group can have less elements than other groups.
+        /// </p>
+        /// <p>
+        /// Splitting preserves the order of the elements.
+        /// </p>
+        /// </remarks>
+        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}"/> to split into groups.</param>
+        /// <param name="numberOfGroups">The number of resulting groups. The exact number of resulting is either equal to this value or to the number of elements in the <paramref name="source"/>.</param>
+        /// <returns>Enumerable whose each element is an <see cref="IEnumerable{T}"/> that represents a single group.<br/>-or-<br/>Empty enumerable if the <paramref name="source"/> is empty.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="numberOfGroups"/> is not greater than zero.</exception>
+        public static IEnumerable<IEnumerable<T>> SplitByNumberOfGroups<T>(this IEnumerable<T> source, int numberOfGroups)
+        {
+            #region Preconditions
+            Argument.IsNotNull(source, "source");
+            Argument.IsGreaterThanZero(numberOfGroups, "numberOfGroups");            
+            #endregion
+
+            List<T> sourceAsList = source.ToList();
+            int numberOfElements = sourceAsList.Count;
+
+            if (numberOfElements == 0)
+                yield break;
+
+            // We cannot have more groups then elements.
+            numberOfGroups = Math.Min(numberOfElements, numberOfGroups);
+
+            // Since numberOfGroups is greater than zero and numberOfElements is greater than zero,
+            // we know that newly calculated numberOfGroups will never be zero.
+            // Therefore, the below devision will never be devision by zero.
+
+            int groupSize = (int)Math.Ceiling(numberOfElements / (double)numberOfGroups);
+
+            foreach (var group in Split(sourceAsList, groupSize))
+                yield return group;
+        }
     }
 }

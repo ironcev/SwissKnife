@@ -307,6 +307,134 @@ namespace SwissKnife.Tests.Unit.Collections
             // ReSharper restore PossibleMultipleEnumeration
         }
         #endregion
+
+        #region SplitByNumberOfGroups<T>
+        [Test]
+        public void SplitByNumberOfGroups_SourceIsNull_ThrowsException()
+        {
+            // ReSharper disable ReturnValueOfPureMethodIsNotUsed
+            string parameterName = Assert.Throws<ArgumentNullException>(() => CollectionExtensions.SplitByNumberOfGroups<object>(null, 1).ToList()).ParamName;
+            // ReSharper restore ReturnValueOfPureMethodIsNotUsed
+            Assert.That(parameterName, Is.EqualTo("source"));
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups_NumberOfGroupsIsLessThanZero_ThrowsException()
+        {
+            // ReSharper disable ReturnValueOfPureMethodIsNotUsed
+            string parameterName = Assert.Throws<ArgumentOutOfRangeException>(() => Enumerable.Empty<object>().SplitByNumberOfGroups(-1).ToList()).ParamName;
+            // ReSharper restore ReturnValueOfPureMethodIsNotUsed
+            Assert.That(parameterName, Is.EqualTo("numberOfGroups"));
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups_NumberOfGroupsIsZero_ThrowsException()
+        {
+            // ReSharper disable ReturnValueOfPureMethodIsNotUsed
+            string parameterName = Assert.Throws<ArgumentOutOfRangeException>(() => Enumerable.Empty<object>().SplitByNumberOfGroups(0).ToList()).ParamName;
+            // ReSharper restore ReturnValueOfPureMethodIsNotUsed
+            Assert.That(parameterName, Is.EqualTo("numberOfGroups"));
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups_SourceIsEmpty_ReturnsEmptyEnumerable()
+        {
+            var result = Enumerable.Empty<object>().SplitByNumberOfGroups(1).ToList();
+
+            CollectionAssert.IsEmpty(result);
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups_NumberOfGroupsIsOne_ReturnsSingleGroupSameAsSource()
+        {
+            var source = new[] { 1, 2, 3 };
+            var result = source.SplitByNumberOfGroups(1).ToList();
+
+            Assert.That(result.Count, Is.EqualTo(1));
+            CollectionAssert.AreEqual(result[0], source);
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups_NumberOfGroupsIsSameAsSourceCount_ReturnsSingleElementGroups()
+        {
+            var source = new[] { 1, 2, 3 };
+            var result = source.SplitByNumberOfGroups(source.Length).ToList();
+
+            Assert.That(result.Count, Is.EqualTo(source.Length));
+            foreach (var group in result)
+                Assert.That(group.Count(), Is.EqualTo(1));
+            CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups_NumberOfGroupsIsGreaterThanSourceCount_ReturnsSingleElementGroups()
+        {
+            var source = new[] { 1, 2, 3 };
+            var result = source.SplitByNumberOfGroups(source.Length + 1).ToList();
+
+            Assert.That(result.Count, Is.EqualTo(source.Length));
+            foreach (var group in result)
+                Assert.That(group.Count(), Is.EqualTo(1));
+            CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups__NumberOfGroupsIsLessThenSourceCount_And_SourceCountIsMultipleOfNumberOfGroups__ReturnsGroupsOfSameSize()
+        {
+            var source = new[] { 1, 2, 3, 4, 5, 6 };
+            var result = source.SplitByNumberOfGroups(source.Length / 3).ToList(); // 6 / 3 = 2 groups
+
+            Assert.That(result.Count, Is.EqualTo(2));
+            CollectionAssert.AreEqual(result[0], source.Take(3));
+            CollectionAssert.AreEqual(result[1], source.Skip(3).Take(3));
+            CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups__NumberOfGroupsIsLessThenSourceCount_And_SourceCountIsNotMultipleOfNumberOfGroups__LastGroupHasSmallerSize()
+        {
+            var source = new[] { 1, 2, 3, 4, 5, 6, 7 };
+            var result = source.SplitByNumberOfGroups(3).ToList(); // {1,2,3} {4,5,6} {7}
+
+            Assert.That(result.Count, Is.EqualTo(3));
+            CollectionAssert.AreEqual(result[0], source.Take(3));
+            CollectionAssert.AreEqual(result[1], source.Skip(3).Take(3));
+            CollectionAssert.AreEqual(result[2], source.Skip(6).Take(3));
+            Assert.That(result[0].Count(), Is.EqualTo(result[1].Count()));
+            Assert.That(result[2].Count(), Is.LessThan(result[0].Count()));
+            CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
+        }
+
+        [Test]
+        public void SplitByNumberOfGroups_DefersExecution()
+        {
+            // ReSharper disable PossibleMultipleEnumeration
+            var source = new List<int>();
+
+            var query = source.SplitByNumberOfGroups(3);
+
+            source.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7 });
+
+            var result = query.ToList();
+
+            Assert.That(result.Count, Is.EqualTo(3));
+            CollectionAssert.AreEqual(result[0], source.Take(3));
+            CollectionAssert.AreEqual(result[1], source.Skip(3).Take(3));
+            CollectionAssert.AreEqual(result[2], source.Skip(6).Take(3));
+            CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
+
+            source.AddRange(new[] { 8, 9, 10 });
+
+            result = query.ToList();
+
+            Assert.That(result.Count, Is.EqualTo(3));
+            CollectionAssert.AreEqual(result[0], source.Take(4));
+            CollectionAssert.AreEqual(result[1], source.Skip(4).Take(4));
+            CollectionAssert.AreEqual(result[2], source.Skip(8).Take(4));
+            CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
+            // ReSharper restore PossibleMultipleEnumeration
+        }
+        #endregion
     }
     // ReSharper restore InconsistentNaming
 }
