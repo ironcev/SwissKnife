@@ -263,11 +263,11 @@ namespace SwissKnife.Tests.Unit.Collections
         }
 
         [Test]
-        public void Randomize_IsThreadSafe()
+        public void Randomize_IsThreadSafe() // TODO-IG: This test is currently meaningless. Rewrite it once when the Conscen is implemented.
         {
             // Let's run the previous test on 100 concurrent threads.
             for (int i = 0; i < 100; i++)
-                new Thread(() => AssertThatRandomizeReturnsRandomizedEnumerable(Enumerable.Range(0, 100))).Start();
+                new Thread(Randomize_ReturnsRandomizedEnumerable).Start();
         }
 
         /// <remarks>
@@ -278,12 +278,12 @@ namespace SwissKnife.Tests.Unit.Collections
         private static void AssertThatRandomizeReturnsRandomizedEnumerable(IEnumerable<int> originalEnumerable)
         {
             var previousSource = originalEnumerable.ToArray();
-            for (int i = 0; i < 20; i++) // Let's create 20 subsequent randomized results and ensure that each has different order than its source (the previous one)                
+            for (int i = 0; i < 20; i++) // Let's create 20 subsequent randomized results and ensure that each has different order than its source (the previous one).
             {
                 var randomized = previousSource.Randomize().ToArray();
                 CollectionAssert.AreEquivalent(previousSource, randomized);
                 CollectionAssert.AreNotEqual(previousSource, randomized);
-            }                        
+            }
         }
 
         [Test]
@@ -539,6 +539,196 @@ namespace SwissKnife.Tests.Unit.Collections
             Assert.That(exceptionMessage.Contains("Collection was modified"));
         }
 
+        #endregion
+
+        #region Random<T> where T : class
+        [Test]
+        public void Random_SourceIsNull_ThrowsException()
+        {
+            string parameterName = Assert.Throws<ArgumentNullException>(() => CollectionExtensions.Random<object>(null, o => true)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("source"));
+        }
+
+        [Test]
+        public void Random_PredicateIsNull_ThrowsException()
+        {
+            string parameterName = Assert.Throws<ArgumentNullException>(() => Enumerable.Empty<object>().Random(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("predicate"));
+        }
+
+        [Test]
+        public void Random_SourceIsEmpty_ReturnsNone()
+        {            
+            Assert.That(Enumerable.Empty<object>().Random(o => true).IsNone);
+        }
+
+        [Test]
+        public void Random__SourceHasOneElement_And_ElementSatisfiesPredicate__ReturnsThatElement()
+        {
+            var source = new[] { new object() };
+            Assert.That(source.Random(o => true).Value, Is.SameAs(source[0]));
+        }
+
+        [Test]
+        public void Random__SourceHasMoreThanOneElement_And_AllElementsSatisfyPredicate__ReturnsAnElementFromTheSource()
+        {
+            var source = new[] { new object(), new object(), new object() };
+            CollectionAssert.Contains(source, source.Random(o => true).Value);
+        }
+
+        [Test]
+        public void Random__SourceHasMoreThanOneElement_And_SomeElementsSatisfyPredicate__ReturnsAnElementFromTheSourceThatSatisfyPredicate()
+        {
+            var source = new [] { new object(), new object(), new object() };
+            var elementsThatSatisfyPredicate = new[] { source[0], source[2] };
+            CollectionAssert.Contains(elementsThatSatisfyPredicate, source.Random(elementsThatSatisfyPredicate.Contains).Value);
+        }
+
+        [Test]
+        public void Random__SourceHasOneElement_And_ElementDoesNotSatisfyPredicate__ReturnsNone()
+        {
+            var source = new[] { new object() };
+            Assert.That(source.Random(o => false).IsNone);
+        }
+
+        [Test]
+        public void Random__SourceHasMoreThanOneElement_And_AllElementsDoNotSatisfyPredicate__ReturnsNone()
+        {
+            var source = new[] { new object(), new object(), new object() };
+            Assert.That(source.Random(o => false).IsNone);
+        }
+
+        [Test]
+        public void Random_ReturnsRandomElement()
+        {
+            AssertThatRandomReturnsRandomElement(CreateLargeCollectionOfDifferentObjects());
+        }
+
+        public static IEnumerable<object> CreateLargeCollectionOfDifferentObjects()
+        {
+            for (int i = 0; i < 1000; i++) yield return new object();
+        }
+
+        [Test]
+        public void Random_IsThreadSafe() // TODO-IG: This test is currently meaningless. Rewrite it once when the Conscen is implemented.
+        {
+            // Let's run the previous test on 100 concurrent threads.
+            for (int i = 0; i < 100; i++)
+                new Thread(Random_ReturnsRandomElement).Start();
+        }
+
+        /// <remarks>
+        /// Strictly seen, this test is not deterministic and it could fail even if the <see cref="CollectionExtensions.Random{T}(IEnumerable{T}, Predicate{T})"/> method works properly.
+        /// The method does not guarantee that the next random value obtained from the same collection will be different than the previous one.
+        /// However, for "large enough" number of elements that are all different, we expect this to always be the case.
+        /// </remarks>
+        private static void AssertThatRandomReturnsRandomElement(IEnumerable<object> enumerable)
+        {
+            var previousRandom = enumerable.Random(o => true);
+            for (int i = 0; i < 20; i++) // Let's get 20 subsequent random elements and ensure that each is different then the previous one.
+            {
+                var actualRandom = enumerable.Random(o => true);
+                Assert.That(actualRandom, Is.Not.EqualTo(previousRandom));
+            }
+        }
+        #endregion
+
+        #region RandomElement<T> where T : struct
+        [Test]
+        public void RandomElement_SourceIsNull_ThrowsException()
+        {
+            string parameterName = Assert.Throws<ArgumentNullException>(() => CollectionExtensions.RandomElement<int>(null, o => true)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("source"));
+        }
+
+        [Test]
+        public void RandomElement_PredicateIsNull_ThrowsException()
+        {
+            string parameterName = Assert.Throws<ArgumentNullException>(() => Enumerable.Empty<int>().RandomElement(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("predicate"));
+        }
+
+        [Test]
+        public void RandomElement_SourceIsEmpty_ReturnsNone()
+        {
+            Assert.That(Enumerable.Empty<int>().RandomElement(o => true).HasValue, Is.False);
+        }
+
+        [Test]
+        public void RandomElement__SourceHasOneElement_And_ElementSatisfiesPredicate__ReturnsThatElement()
+        {
+            var source = new[] { 1 };
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(source.RandomElement(o => true).Value, Is.EqualTo(source[0]));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void RRandomElement__SourceHasMoreThanOneElement_And_AllElementsSatisfyPredicate__ReturnsAnElementFromTheSource()
+        {
+            var source = new[] { 1, 2, 3 };
+            // ReSharper disable PossibleInvalidOperationException
+            CollectionAssert.Contains(source, source.RandomElement(o => true).Value);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void RandomElement__SourceHasMoreThanOneElement_And_SomeElementsSatisfyPredicate__ReturnsAnElementFromTheSourceThatSatisfyPredicate()
+        {
+            var source = new[] { 1, 2, 3 };
+            var elementsThatSatisfyPredicate = new[] { source[0], source[2] };
+            // ReSharper disable PossibleInvalidOperationException
+            CollectionAssert.Contains(elementsThatSatisfyPredicate, source.RandomElement(elementsThatSatisfyPredicate.Contains).Value);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void RandomElement__SourceHasOneElement_And_ElementDoesNotSatisfyPredicate__ReturnsNone()
+        {
+            var source = new[] { 1 };
+            Assert.That(source.RandomElement(o => false).HasValue, Is.False);
+        }
+
+        [Test]
+        public void RandomElement__SourceHasMoreThanOneElement_And_AllElementsDoNotSatisfyPredicate__ReturnsNone()
+        {
+            var source = new[] { 1, 2, 3 };
+            Assert.That(source.RandomElement(o => false).HasValue, Is.False);
+        }
+
+        [Test]
+        public void RandomElement_ReturnsRandomElement()
+        {
+            AssertThatRandomElementReturnsRandomElement(CreateLargeCollectionOfDifferentValueObjects());
+        }
+
+        public static IEnumerable<int> CreateLargeCollectionOfDifferentValueObjects()
+        {
+            return Enumerable.Range(1, 1000);
+        }
+
+        [Test]
+        public void RandomElement_IsThreadSafe() // TODO-IG: This test is currently meaningless. Rewrite it once when the Conscen is implemented.
+        {
+            // Let's run the previous test on 100 concurrent threads.
+            for (int i = 0; i < 100; i++)
+                new Thread(RandomElement_ReturnsRandomElement).Start();
+        }
+
+        /// <remarks>
+        /// Strictly seen, this test is not deterministic and it could fail even if the <see cref="CollectionExtensions.RandomElement{T}(IEnumerable{T}, Predicate{T})"/> method works properly.
+        /// The method does not guarantee that the next random value obtained from the same collection will be different than the previous one.
+        /// However, for "large enough" number of elements that are all different, we expect this to always be the case.
+        /// </remarks>
+        private static void AssertThatRandomElementReturnsRandomElement(IEnumerable<int> enumerable)
+        {
+            var previousRandom = enumerable.RandomElement(o => true);
+            for (int i = 0; i < 20; i++) // Let's get 20 subsequent random elements and ensure that each is different then the previous one.
+            {
+                var actualRandom = enumerable.RandomElement(o => true);
+                Assert.That(actualRandom, Is.Not.EqualTo(previousRandom));
+            }
+        }
         #endregion
     }
     // ReSharper restore InconsistentNaming

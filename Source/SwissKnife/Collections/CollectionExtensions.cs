@@ -12,6 +12,11 @@ namespace SwissKnife.Collections
     /// </summary>
     public static class CollectionExtensions
     {
+        // Random generator used in the Randomize<T> and Random<T> methods.
+        // It's perfectly fine if different threads start with the same seed (in case that the Random objects are created very shortly one ofter another).
+        private static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
+
+
         /// <summary>
         /// Adds <paramref name="itemsToAdd"/> to the <paramref name="collection"/>.
         /// </summary>
@@ -109,8 +114,6 @@ namespace SwissKnife.Collections
             // ReSharper restore PossibleMultipleEnumeration
         }
 
-        // It's perfectly fine if different threads start with the same seed (in case that the Random objects are created very shortly one ofter another).
-        private static readonly ThreadLocal<Random> random = new ThreadLocal<Random>(() => new Random());
         /// <summary>
         /// Randomizes the order of elements in <see cref="IEnumerable{T}"/>.
         /// </summary>
@@ -257,6 +260,94 @@ namespace SwissKnife.Collections
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns a random element from a sequence that satisfies a condition or <see cref="Option{T}.None"/> if no such element is found.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// <b>Note</b>
+        /// If the <paramref name="predicate"/> throws any exception, that exception will be propagated to the caller.
+        /// </p>
+        /// </remarks>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
+        /// <param name="predicate">A <see cref="Predicate{T}"/> to test each element for a condition.</param>
+        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <returns>
+        /// <see cref="Option{T}.None"/> if source is empty or if no element passes the test specified by the <paramref name="predicate"/>; 
+        /// otherwise, a random element in <paramref name="source"/> that passes the test specified by the <paramref name="predicate"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.<br/>-or-<br/><paramref name="predicate"/> is null.</exception>
+        public static Option<T> Random<T>(this IEnumerable<T> source, Predicate<T> predicate) where T : class
+        {
+            Argument.IsNotNull(source, "source");
+            Argument.IsNotNull(predicate, "predicate");
+
+            // ReSharper disable PossibleMultipleEnumeration
+            // We know that the Argument.IsNotNull() method does not enumerates the source.
+            var filteredSource = source.Where(x => predicate(x)).ToList();
+            // ReSharper restore PossibleMultipleEnumeration
+
+            return filteredSource.Count <= 0 ? Option<T>.None : filteredSource.ElementAt(random.Value.Next(filteredSource.Count));
+        }
+
+        /// <summary>
+        /// Returns a random element from a sequence or <see cref="Option{T}.None"/> if the sequence is empty.
+        /// </summary>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
+        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <returns>
+        /// <see cref="Option{T}.None"/> if the <paramref name="source"/> is empty; otherwise, a random element in <paramref name="source"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static Option<T> Random<T>(this IEnumerable<T> source) where T : class
+        {
+            return Random(source, x => true);
+        }
+
+        /// <summary>
+        /// Returns a random value type element from a sequence that satisfies a condition or null if no such element is found.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// <b>Note</b>
+        /// If the <paramref name="predicate"/> throws any exception, that exception will be propagated to the caller.
+        /// </p>
+        /// </remarks>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
+        /// <param name="predicate">A <see cref="Predicate{T}"/> to test each element for a condition.</param>
+        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <returns>
+        /// Null if the <paramref name="source"/> is empty or if no element passes the test specified by the <paramref name="predicate"/>; 
+        /// otherwise, a random element in <paramref name="source"/> that passes the test specified by the <paramref name="predicate"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.<br/>-or-<br/><paramref name="predicate"/> is null.</exception>
+        public static T? RandomElement<T>(this IEnumerable<T> source, Predicate<T> predicate) where T : struct
+        {
+            Argument.IsNotNull(source, "source");
+            Argument.IsNotNull(predicate, "predicate");
+
+            // ReSharper disable PossibleMultipleEnumeration
+            // We know that the Argument.IsNotNull() method does not enumerates the source.
+            var filteredSource = source.Where(x => predicate(x)).ToList();
+            // ReSharper restore PossibleMultipleEnumeration
+
+            return filteredSource.Count <= 0 ? (T?)null : filteredSource.ElementAt(random.Value.Next(filteredSource.Count));
+        }
+
+        /// <summary>
+        /// Returns a random element from a sequence or null if the sequence is empty.
+        /// </summary>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
+        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <returns>
+        /// Null if the <paramref name="source"/> is empty; otherwise, a random element in <paramref name="source"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static T? RandomElement<T>(this IEnumerable<T> source) where T : struct
+        {
+            return RandomElement(source, x => true);
         }
     }
 }
