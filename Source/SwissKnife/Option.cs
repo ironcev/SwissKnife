@@ -120,7 +120,7 @@ namespace SwissKnife
         /// </summary>
         /// <remarks>
         /// <b>Note</b><br/>
-        /// If the <paramref name="binder"/> throws any exception, that exception will be propagated to the caller.
+        /// If the <paramref name="binder"/> throws an exception, that exception will be propagated to the caller.
         /// </remarks>
         /// <param name="binder">A function that takes the value of the type <typeparamref name="T"/> from the option and transforms it into an option containing a value of the type <typeparamref name="TOutput"/>.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>
@@ -140,7 +140,7 @@ namespace SwissKnife
         /// </summary>
         /// <remarks>
         /// <b>Note</b><br/>
-        /// If the <paramref name="binder"/> throws any exception, that exception will be propagated to the caller.
+        /// If the <paramref name="binder"/> throws an exception, that exception will be propagated to the caller.
         /// </remarks>
         /// <typeparam name="TOutput">The output type.</typeparam>
         /// <param name="binder">A function that takes the value of type T from the option and transforms it into an nullable containing a value of type <typeparamref name="TOutput"/>.</param>
@@ -160,7 +160,7 @@ namespace SwissKnife
         /// </summary>
         /// <remarks>
         /// <b>Note</b><br/>
-        /// If the <paramref name="mapper"/> throws any exception, that exception will be propagated to the caller.
+        /// If the <paramref name="mapper"/> throws an exception, that exception will be propagated to the caller.
         /// </remarks>
         /// <param name="mapper">A function to apply to the option value.</param>
         /// <typeparam name="TOutput">The output type.</typeparam>

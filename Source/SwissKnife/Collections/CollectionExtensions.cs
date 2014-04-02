@@ -47,7 +47,7 @@ namespace SwissKnife.Collections
         /// </p>
         /// <p>
         /// <b>Note</b>
-        /// If the <paramref name="getValueToAdd"/> throws any exception, that exception will be propagated to the caller.
+        /// If the <paramref name="getValueToAdd"/> throws an exception, that exception will be propagated to the caller.
         /// </p>
         /// </remarks>
         /// <typeparam name="TKey">The type of keys in the <paramref name="dictionary"/>.</typeparam>
@@ -268,7 +268,7 @@ namespace SwissKnife.Collections
         /// <remarks>
         /// <p>
         /// <b>Note</b>
-        /// If the <paramref name="predicate"/> throws any exception, that exception will be propagated to the caller.
+        /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
         /// </p>
         /// </remarks>
         /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
@@ -312,7 +312,7 @@ namespace SwissKnife.Collections
         /// <remarks>
         /// <p>
         /// <b>Note</b>
-        /// If the <paramref name="predicate"/> throws any exception, that exception will be propagated to the caller.
+        /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
         /// </p>
         /// </remarks>
         /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>

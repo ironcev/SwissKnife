@@ -63,7 +63,7 @@ namespace SwissKnife.Time
         /// </p>
         /// <p>
         /// <b>Note</b>
-        /// If the delegate throws any exception, that exception will be propagated to the caller.
+        /// If the delegate throws an exception, that exception will be propagated to the caller.
         /// </p>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
@@ -95,7 +95,7 @@ namespace SwissKnife.Time
         /// </summary>
         /// <remarks>
         /// <b>Note</b>
-        /// If the <see cref="GetLocalNow"/> delegate throws any exception, that exception will be propagated to the caller.
+        /// If the <see cref="GetLocalNow"/> delegate throws an exception, that exception will be propagated to the caller.
         /// </remarks>
         /// <returns>
         /// An object whose date and time is the current Coordinated Universal Time (UTC) and whose offset is <see cref="TimeSpan.Zero"/>.
