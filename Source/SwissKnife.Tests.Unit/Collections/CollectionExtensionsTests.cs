@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -434,6 +435,110 @@ namespace SwissKnife.Tests.Unit.Collections
             CollectionAssert.AreEqual(result.SelectMany(group => group.ToList()), source);
             // ReSharper restore PossibleMultipleEnumeration
         }
+        #endregion
+
+        #region ToEnumerable<T>
+        [Test]
+        public void ToEnumerableOfT_EnumeratorIsNull_ThrowsException()
+        {
+            // ReSharper disable ReturnValueOfPureMethodIsNotUsed
+            string parameterName = Assert.Throws<ArgumentNullException>(() => CollectionExtensions.ToEnumerable<object>(null).ToList()).ParamName;
+            // ReSharper restore ReturnValueOfPureMethodIsNotUsed
+            Assert.That(parameterName, Is.EqualTo("enumerator"));   
+        }
+
+        [Test]
+        public void ToEnumerableOfT_EmptyEnumerator_ReturnsEmptyEnumerable()
+        {
+            CollectionAssert.IsEmpty(Enumerable.Empty<object>().GetEnumerator().ToEnumerable());
+        }
+
+        [Test]
+        public void ToEnumerableOfT_ReturnsEnumeratedEnumerable()
+        {
+            var enumerable = new List<int> { 1, 2, 3 };
+
+            CollectionAssert.AreEqual(enumerable, enumerable.GetEnumerator().ToEnumerable());
+        }
+
+        [Test]
+        public void ToEnumerableOfT_RepedetlyCalledOnSameUnmodifedCollection_ReturnsEnumeratedEnumerable()
+        {
+            var enumerable = new List<int> { 1, 2, 3 };
+
+            var enumerator = enumerable.GetEnumerator();
+
+            CollectionAssert.AreEqual(enumerable, enumerator.ToEnumerable());
+            CollectionAssert.AreEqual(enumerable, enumerator.ToEnumerable());
+            CollectionAssert.AreEqual(enumerable, enumerator.ToEnumerable());
+        }
+
+        [Test]
+        public void ToEnumerableOfT_CollectionWasModified_ThrowsException()
+        {
+            // ReSharper disable PossibleMultipleEnumeration
+            var enumerable = new List<int>();
+
+            var enumerator = enumerable.GetEnumerator();
+
+            enumerable.AddRange(new [] { 1, 2, 3 });
+
+            string exceptionMessage = Assert.Throws<InvalidOperationException>(() => enumerator.ToEnumerable()).Message;
+            Assert.That(exceptionMessage.Contains("Collection was modified"));
+        }
+
+        #endregion
+
+        #region ToEnumerable
+        [Test]
+        public void ToEnumerable_EnumeratorIsNull_ThrowsException()
+        {
+            // ReSharper disable ReturnValueOfPureMethodIsNotUsed
+            string parameterName = Assert.Throws<ArgumentNullException>(() => CollectionExtensions.ToEnumerable(null).OfType<object>().ToList()).ParamName;
+            // ReSharper restore ReturnValueOfPureMethodIsNotUsed
+            Assert.That(parameterName, Is.EqualTo("enumerator"));
+        }
+
+        [Test]
+        public void ToEnumerable_EmptyEnumerator_ReturnsEmptyEnumerable()
+        {
+            CollectionAssert.IsEmpty(new ArrayList().GetEnumerator().ToEnumerable());
+        }
+
+        [Test]
+        public void ToEnumerable_ReturnsEnumeratedEnumerable()
+        {
+            ArrayList enumerable = new ArrayList { 1, 2, 3 };
+
+            CollectionAssert.AreEqual(enumerable, enumerable.GetEnumerator().ToEnumerable());
+        }
+
+        [Test]
+        public void ToEnumerable_RepedetlyCalledOnSameUnmodifedCollection_ReturnsEnumeratedEnumerable()
+        {
+            ArrayList enumerable = new ArrayList { 1, 2, 3 };
+
+            var enumerator = enumerable.GetEnumerator();
+
+            CollectionAssert.AreEqual(enumerable, enumerator.ToEnumerable());
+            CollectionAssert.AreEqual(enumerable, enumerator.ToEnumerable());
+            CollectionAssert.AreEqual(enumerable, enumerator.ToEnumerable());
+        }
+
+        [Test]
+        public void ToEnumerable_CollectionWasModified_ThrowsException()
+        {
+            // ReSharper disable PossibleMultipleEnumeration
+            ArrayList enumerable = new ArrayList();
+
+            var enumerator = enumerable.GetEnumerator();
+
+            enumerable.AddRange(new[] { 1, 2, 3 });
+
+            string exceptionMessage = Assert.Throws<InvalidOperationException>(() => enumerator.ToEnumerable()).Message;
+            Assert.That(exceptionMessage.Contains("Collection was modified"));
+        }
+
         #endregion
     }
     // ReSharper restore InconsistentNaming

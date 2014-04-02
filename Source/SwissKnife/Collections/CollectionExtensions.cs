@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -189,6 +190,73 @@ namespace SwissKnife.Collections
 
             foreach (var group in Split(sourceAsList, groupSize))
                 yield return group;
+        }
+
+        /// <summary>
+        /// Enumerates <see cref="IEnumerator{T}"/> and returns resulting <see cref="IEnumerable{T}"/>.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// The execution of <see cref="ToEnumerable{T}"/> is not deferred.
+        /// The method immediately advances the <paramref name="enumerator"/> until the end of the collection.
+        /// </p>
+        /// <p>
+        /// The method will reset the <paramref name="enumerator"/> before enumerating it.
+        /// </p>
+        /// </remarks>
+        /// <typeparam name="T">The type of the elements enumerated by the <paramref name="enumerator"/>.</typeparam>
+        /// <param name="enumerator">The <see cref="IEnumerator{T}"/> to enumerate.</param>
+        /// <returns>Enumerable whose each element is return by the <paramref name="enumerator"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="enumerator"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">The collection was modified after the <paramref name="enumerator"/> was created.</exception>
+        public static IEnumerable<T> ToEnumerable<T>(this IEnumerator<T> enumerator)
+        {
+            #region Preconditions
+            Argument.IsNotNull(enumerator, "enumerator");
+            #endregion
+
+            List<T> result = new List<T>();
+
+            enumerator.Reset();
+            while (enumerator.MoveNext())
+            {
+                result.Add(enumerator.Current);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Enumerates <see cref="IEnumerator"/> and returns resulting <see cref="IEnumerable"/>.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// The execution of <see cref="ToEnumerable"/> is not deferred.
+        /// The method immediately advances the <paramref name="enumerator"/> until the end of the collection.
+        /// </p>
+        /// <p>
+        /// The method will reset the <paramref name="enumerator"/> before enumerating it.
+        /// </p>
+        /// </remarks>
+        /// <param name="enumerator">The <see cref="IEnumerator"/> to enumerate.</param>
+        /// <returns>Enumerable whose each element is return by the <paramref name="enumerator"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="enumerator"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">The collection was modified after the <paramref name="enumerator"/> was created.</exception>
+        public static IEnumerable ToEnumerable(this IEnumerator enumerator)
+        {
+            #region Preconditions
+            Argument.IsNotNull(enumerator, "enumerator");
+            #endregion
+
+            ArrayList result = new ArrayList();
+
+            enumerator.Reset();
+            while (enumerator.MoveNext())
+            {
+                result.Add(enumerator.Current);
+            }
+
+            return result;
         }
     }
 }
