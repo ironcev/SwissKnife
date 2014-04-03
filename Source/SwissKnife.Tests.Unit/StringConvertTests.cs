@@ -588,6 +588,200 @@ namespace SwissKnife.Tests.Unit
             Assert.That(StringConvert.ToSingleOr(654.321f.ToString(CultureInfo.CurrentCulture), 123.456f), Is.EqualTo(654.321f));
         }
         #endregion
+
+        #region ToDouble
+        [Test]
+        public void ToDouble_ValueIsNone_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDouble(null).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDouble_ValueIsEmpty_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDouble(string.Empty).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDouble_ValueIsWhiteSpace_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDouble(" ").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDouble_ValueIsNotAnDouble_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDouble("QWERT").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDouble_ValueIsLessThanMinDouble_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDouble("-1" + double.MinValue.ToString("F").Remove(0, 1)).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDouble_ValueIsGreaterThanMaxDouble_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDouble("1" + double.MaxValue.ToString("F")).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDouble_ValueIsMinDouble_ReturnsMinDouble()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToDouble(double.MinValue.ToString("E20")).Value, Is.EqualTo(double.MinValue));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToDouble_ValueIsMaxDouble_ReturnsMaxDouble()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToDouble(double.MaxValue.ToString("E20")).Value, Is.EqualTo(double.MaxValue));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToDouble_ValueIsZero_ReturnsZero()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToDouble(0d.ToString(CultureInfo.CurrentCulture)).Value, Is.EqualTo(0d));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToDouble_ValueIsArbitraryDouble_ReturnsThatDouble()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToDouble(123.456d.ToString(CultureInfo.CurrentCulture)).Value, Is.EqualTo(123.456d));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+        #endregion
+
+        #region ToDoubleOrZero
+        [Test]
+        public void ToDoubleOrZero_ValueIsNone_ReturnsZero()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero(null), Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsEmpty_ReturnsZero()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero(string.Empty), Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsWhiteSpace_ReturnsZero()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero(" "), Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsNotAnDouble_ReturnsZero()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero("QWERT"), Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsLessThanMinDouble_ReturnsZero()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero("-1" + double.MinValue.ToString("F").Remove(0, 1)), Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsGreaterThanMaxDouble_ReturnsZero()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero("1" + double.MaxValue.ToString("F")), Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsMinDouble_ReturnsMinDouble()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero(double.MinValue.ToString("E20")), Is.EqualTo(double.MinValue));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsMaxDouble_ReturnsMaxDouble()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero(double.MaxValue.ToString("E20")), Is.EqualTo(double.MaxValue));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsZero_ReturnsZero()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero(0.ToString(CultureInfo.CurrentCulture)), Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsArbitraryDouble_ReturnsThatDouble()
+        {
+            Assert.That(StringConvert.ToDoubleOrZero(123.456d.ToString(CultureInfo.CurrentCulture)), Is.EqualTo(123.456d));
+        }
+        #endregion
+
+        #region ToDoubleOr
+        [Test]
+        public void ToDoubleOr_ValueIsNone_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToDoubleOr(null, 123.456d), Is.EqualTo(123.456d));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsEmpty_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToDoubleOr(string.Empty, 123.456d), Is.EqualTo(123.456d));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsWhiteSpace_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToDoubleOr(" ", 123.456d), Is.EqualTo(123.456d));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsNotAnDouble_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToDoubleOr("QWERT", 123.456d), Is.EqualTo(123.456d));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsLessThanMinDouble_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToDoubleOr("-1" + double.MinValue.ToString("F").Remove(0, 1), 123.456d), Is.EqualTo(123.456d));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsGreaterThanMaxDouble_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToDoubleOr("1" + double.MaxValue.ToString("F"), 123.456d), Is.EqualTo(123.456d));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsMinDouble_ReturnsMinDouble()
+        {
+            Assert.That(StringConvert.ToDoubleOr(double.MinValue.ToString("E20"), 123.456d), Is.EqualTo(double.MinValue));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsMaxDouble_ReturnsMaxDouble()
+        {
+            Assert.That(StringConvert.ToDoubleOr(double.MaxValue.ToString("E20"), 123.456d), Is.EqualTo(double.MaxValue));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsZero_ReturnsZero()
+        {
+            Assert.That(StringConvert.ToDoubleOr(0d.ToString(CultureInfo.CurrentCulture), 123.456d), Is.EqualTo(0d));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsArbitraryDouble_ReturnsThatDouble()
+        {
+            Assert.That(StringConvert.ToDoubleOr(654.321d.ToString(CultureInfo.CurrentCulture), 123.456d), Is.EqualTo(654.321d));
+        }
+        #endregion
     }
     // ReSharper restore InconsistentNaming
 }
