@@ -48,13 +48,13 @@ namespace SwissKnife.Web.Mvc
         /// Sets the default value for a route URL parameter.
         /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// If the default value for the URL parameter is already set it will be overwritten by the new default value.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// <b>Note</b><br/>
         /// If the <paramref name="urlParameterAndDefaultValue"/> throws an exception, that exception will be propagated to the caller.
-        /// </p>
+        /// </para>
         /// </remarks>
         /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Defaults"/> will be set.</param>
         /// <param name="urlParameterAndDefaultValue">URL parameter and its values defined as lambda expressions.</param>
@@ -85,17 +85,17 @@ namespace SwissKnife.Web.Mvc
         /// Sets default values for route URL parameters.
         /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// URL parameters are defined as lambda expressions. For example: language => "en-US" will set the "language" URL parameter to the value "en-US".
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// If any of the URL parameters is already set it will be overwritten by the specified default values.
         /// If any URL parameter is specified in the <paramref name="urlParametersAndDefaultValues"/> more than once, the last definition wins.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// <b>Note</b><br/>
         /// If any of the <paramref name="urlParametersAndDefaultValues"/> throws an exception, that exception will be propagated to the caller.
-        /// </p>
+        /// </para>
         /// </remarks>
         /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Defaults"/> will be set.</param>
         /// <param name="urlParametersAndDefaultValues">URL parameters and their values defined as lambda expressions.</param>
@@ -131,13 +131,13 @@ namespace SwissKnife.Web.Mvc
         /// Sets constraint for a route URL parameter expressed as an arbitrary predicate that checks whether a URL parameter value is valid.
         /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// If a constraint for the URL parameter is already set it will be overwritten by the <paramref name="predicate"/>.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// <b>Note</b><br/>
         /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
-        /// </p>
+        /// </para>
         /// </remarks>
         /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Constraints"/> will be set.</param>
         /// <param name="urlParameter">Name of the URL parameter.</param>
@@ -163,13 +163,13 @@ namespace SwissKnife.Web.Mvc
         /// Sets constraint for a route URL parameter expressed as an arbitrary route constraint.
         /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// If a constraint for the URL parameter is already set it will be overwritten by the <paramref name="constraint"/>.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// <b>Note</b><br/>
         /// If the <paramref name="constraint"/> throws an exception, that exception will be propagated to the caller.
-        /// </p>
+        /// </para>
         /// </remarks>
         /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Constraints"/> will be set.</param>
         /// <param name="urlParameter">Name of the URL parameter.</param>

@@ -12,14 +12,14 @@ namespace SwissKnife
         /// Creates new sequential <see cref="Guid"/>.
         /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// <see cref="NewSequentialGuid"/> method uses an algorithm originally suggested in 
         /// <a href="http://www.informit.com/articles/article.asp?p=25862">Jimmy Nilsson's article</a> on <a href="http://www.informit.com">informit.com</a>.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// This algorithm is known as the <b>comb algorithm</b>. It is designed to make the use of GUIDs as database primary keys, foreign keys, 
         /// and indexes nearly as efficient as <see cref="Int32"/>.
-        /// </p>
+        /// </para>
         /// </remarks>
         /// <returns>
         /// Sequential <see cref="Guid"/>.
@@ -59,10 +59,10 @@ namespace SwissKnife
         /// Converts a <see cref="Guid"/> to its short string representation.
         /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// A typical short string representation of a <see cref="Guid"/> looks like this one "K-ROb0hYA0KbtCGZpBVv2g".
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// Short string representations always have the length of 22 characters and can contain only the following characters:<br/>
         /// <ul>
         /// <li>uppercase characters "A" to "Z"</li>
@@ -70,7 +70,7 @@ namespace SwissKnife
         /// <li>the numerals "0" to "9"</li>
         /// <li>the symbols "_" and "-"</li>
         /// </ul>
-        /// </p>
+        /// </para>
         /// </remarks>
         /// <param name="guid">The <see cref="Guid"/> that has to be converted to its short string representation.</param>
         /// <returns>

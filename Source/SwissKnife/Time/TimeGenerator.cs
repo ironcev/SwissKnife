@@ -7,13 +7,13 @@ namespace SwissKnife.Time
     /// Generates current date and time.
     /// </summary>
     /// <remarks>
-    /// <p>
+    /// <para>
     /// Concrete implementations must override the <see cref="LocalNow"/> method to specify how the current data and time is generated.
-    /// </p>
-    /// <p>
+    /// </para>
+    /// <para>
     /// Consider using this class in all of the scenarios where taking control over date and time creation is necessary.
     /// Typical example would be mocking date and time generation for testing purposes.
-    /// </p>
+    /// </para>
     /// </remarks>
     [Serializable]
     public abstract class TimeGenerator
@@ -58,13 +58,13 @@ namespace SwissKnife.Time
         /// Gets and sets a delegate for returning object that represents the current date and time, with the offset set to the local time's offset from Coordinated Universal Time (UTC).
         /// </summary>
         /// <remarks>
-        /// <p>
+        /// <para>
         /// This delegate is never null. By default, it returns the current date and time on the current computer.
-        /// </p>
-        /// <p>
+        /// </para>
+        /// <para>
         /// <b>Note</b>
         /// If the delegate throws an exception, that exception will be propagated to the caller.
-        /// </p>
+        /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         public static Func<DateTimeOffset> GetLocalNow
