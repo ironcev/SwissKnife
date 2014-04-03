@@ -27,7 +27,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToInt32_ValueIsNotAnInt32_ReturnsNull()
+        public void ToInt32_ValueIsNotInt32_ReturnsNull()
         {
             Assert.That(StringConvert.ToInt32("QWERT").HasValue, Is.False);
         }
@@ -97,7 +97,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToInt32OrZero_ValueIsNotAnInt32_ReturnsZero()
+        public void ToInt32OrZero_ValueIsNotInt32_ReturnsZero()
         {
             Assert.That(StringConvert.ToInt32OrZero("QWERT"), Is.EqualTo(0));
         }
@@ -159,7 +159,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToInt32Or_ValueIsNotAnInt32_ReturnsDefaultValue()
+        public void ToInt32Or_ValueIsNotInt32_ReturnsDefaultValue()
         {
             Assert.That(StringConvert.ToInt32Or("QWERT", 123), Is.EqualTo(123));
         }
@@ -221,7 +221,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToInt64_ValueIsNotAnInt64_ReturnsNull()
+        public void ToInt64_ValueIsNotInt64_ReturnsNull()
         {
             Assert.That(StringConvert.ToInt64("QWERT").HasValue, Is.False);
         }
@@ -291,7 +291,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToInt64OrZero_ValueIsNotAnInt64_ReturnsZero()
+        public void ToInt64OrZero_ValueIsNotInt64_ReturnsZero()
         {
             Assert.That(StringConvert.ToInt64OrZero("QWERT"), Is.EqualTo(0));
         }
@@ -353,7 +353,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToInt64Or_ValueIsNotAnInt64_ReturnsDefaultValue()
+        public void ToInt64Or_ValueIsNotInt64_ReturnsDefaultValue()
         {
             Assert.That(StringConvert.ToInt64Or("QWERT", 123), Is.EqualTo(123));
         }
@@ -415,7 +415,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToSingle_ValueIsNotAnSingle_ReturnsNull()
+        public void ToSingle_ValueIsNotSingle_ReturnsNull()
         {
             Assert.That(StringConvert.ToSingle("QWERT").HasValue, Is.False);
         }
@@ -463,6 +463,31 @@ namespace SwissKnife.Tests.Unit
             Assert.That(StringConvert.ToSingle(123.456f.ToString(CultureInfo.CurrentCulture)).Value, Is.EqualTo(123.456f));
             // ReSharper restore PossibleInvalidOperationException
         }
+
+        [Test]
+        public void ToSingle_ValueIsArbitraryNonNegativeSingleInScientificNotation_ReturnsThatSingle()
+        {
+            const float value = 1.234e20f;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToSingle(valueAsString).Value, Is.EqualTo(value));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToSingle_ValueIsArbitraryNegativeSingleInScientificNotation_ReturnsThatSingle()
+        {
+            const float value = -1.234e20f;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.StartsWith("-"));
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToSingle(valueAsString).Value, Is.EqualTo(value));
+            // ReSharper restore PossibleInvalidOperationException
+        }
         #endregion
 
         #region ToSingleOrZero
@@ -485,7 +510,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToSingleOrZero_ValueIsNotAnSingle_ReturnsZero()
+        public void ToSingleOrZero_ValueIsNotSingle_ReturnsZero()
         {
             Assert.That(StringConvert.ToSingleOrZero("QWERT"), Is.EqualTo(0f));
         }
@@ -525,6 +550,27 @@ namespace SwissKnife.Tests.Unit
         {
             Assert.That(StringConvert.ToSingleOrZero(123.456f.ToString(CultureInfo.CurrentCulture)), Is.EqualTo(123.456f));
         }
+
+        [Test]
+        public void ToSingleOrZero_ValueIsArbitraryNonNegativeSingleInScientificNotation_ReturnsThatSingle()
+        {
+            const float value = 1.234e20f;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            Assert.That(StringConvert.ToSingleOrZero(valueAsString), Is.EqualTo(value));
+        }
+
+        [Test]
+        public void ToSingleOrZero_ValueIsArbitraryNegativeSingleInScientificNotation_ReturnsThatSingle()
+        {
+            const float value = -1.234e20f;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.StartsWith("-"));
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            Assert.That(StringConvert.ToSingleOrZero(valueAsString), Is.EqualTo(value));
+        }
         #endregion
 
         #region ToSingleOr
@@ -547,7 +593,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToSingleOr_ValueIsNotAnSingle_ReturnsDefaultValue()
+        public void ToSingleOr_ValueIsNotSingle_ReturnsDefaultValue()
         {
             Assert.That(StringConvert.ToSingleOr("QWERT", 123.456f), Is.EqualTo(123.456f));
         }
@@ -587,6 +633,27 @@ namespace SwissKnife.Tests.Unit
         {
             Assert.That(StringConvert.ToSingleOr(654.321f.ToString(CultureInfo.CurrentCulture), 123.456f), Is.EqualTo(654.321f));
         }
+
+        [Test]
+        public void ToSingleOr_ValueIsArbitraryNonNegativeSingleInScientificNotation_ReturnsThatSingle()
+        {
+            const float value = 1.234e20f;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            Assert.That(StringConvert.ToSingleOr(valueAsString, 123.4556f), Is.EqualTo(value));
+        }
+
+        [Test]
+        public void ToSingleOr_ValueIsArbitraryNegativeSingleInScientificNotation_ReturnsThatSingle()
+        {
+            const float value = -1.234e20f;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.StartsWith("-"));
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            Assert.That(StringConvert.ToSingleOr(valueAsString, 123.4556f), Is.EqualTo(value));
+        }
         #endregion
 
         #region ToDouble
@@ -609,7 +676,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToDouble_ValueIsNotAnDouble_ReturnsNull()
+        public void ToDouble_ValueIsNotDouble_ReturnsNull()
         {
             Assert.That(StringConvert.ToDouble("QWERT").HasValue, Is.False);
         }
@@ -657,6 +724,31 @@ namespace SwissKnife.Tests.Unit
             Assert.That(StringConvert.ToDouble(123.456d.ToString(CultureInfo.CurrentCulture)).Value, Is.EqualTo(123.456d));
             // ReSharper restore PossibleInvalidOperationException
         }
+
+        [Test]
+        public void ToDouble_ValueIsArbitraryNonNegativeSingleInScientificNotation_ReturnsThatDouble()
+        {
+            const double value = 1.234e20d;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToDouble(valueAsString).Value, Is.EqualTo(value));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToDouble_ValueIsArbitraryNegativeDoubleInScientificNotation_ReturnsThatDouble()
+        {
+            const double value = -1.234e20d;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.StartsWith("-"));
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToDouble(valueAsString).Value, Is.EqualTo(value));
+            // ReSharper restore PossibleInvalidOperationException
+        }
         #endregion
 
         #region ToDoubleOrZero
@@ -679,7 +771,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToDoubleOrZero_ValueIsNotAnDouble_ReturnsZero()
+        public void ToDoubleOrZero_ValueIsNotDouble_ReturnsZero()
         {
             Assert.That(StringConvert.ToDoubleOrZero("QWERT"), Is.EqualTo(0d));
         }
@@ -719,6 +811,27 @@ namespace SwissKnife.Tests.Unit
         {
             Assert.That(StringConvert.ToDoubleOrZero(123.456d.ToString(CultureInfo.CurrentCulture)), Is.EqualTo(123.456d));
         }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsArbitraryNonNegativeDoubleInScientificNotation_ReturnsThatDouble()
+        {
+            const double value = 1.234e20d;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            Assert.That(StringConvert.ToDoubleOrZero(valueAsString), Is.EqualTo(value));
+        }
+
+        [Test]
+        public void ToDoubleOrZero_ValueIsArbitraryNegativeDoubleInScientificNotation_ReturnsThatDouble()
+        {
+            const double value = -1.234e20d;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.StartsWith("-"));
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            Assert.That(StringConvert.ToDoubleOrZero(valueAsString), Is.EqualTo(value));
+        }
         #endregion
 
         #region ToDoubleOr
@@ -741,7 +854,7 @@ namespace SwissKnife.Tests.Unit
         }
 
         [Test]
-        public void ToDoubleOr_ValueIsNotAnDouble_ReturnsDefaultValue()
+        public void ToDoubleOr_ValueIsNotDouble_ReturnsDefaultValue()
         {
             Assert.That(StringConvert.ToDoubleOr("QWERT", 123.456d), Is.EqualTo(123.456d));
         }
@@ -780,6 +893,261 @@ namespace SwissKnife.Tests.Unit
         public void ToDoubleOr_ValueIsArbitraryDouble_ReturnsThatDouble()
         {
             Assert.That(StringConvert.ToDoubleOr(654.321d.ToString(CultureInfo.CurrentCulture), 123.456d), Is.EqualTo(654.321d));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsArbitraryNonNegativeDoubleInScientificNotation_ReturnsThatDouble()
+        {
+            const double value = 1.234e20d;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            Assert.That(StringConvert.ToDoubleOr(valueAsString, 123.4556f), Is.EqualTo(value));
+        }
+
+        [Test]
+        public void ToDoubleOr_ValueIsArbitraryNegativeDoubleInScientificNotation_ReturnsThatDouble()
+        {
+            const double value = -1.234e20d;
+            string valueAsString = value.ToString("E10");
+            Assert.That(valueAsString.StartsWith("-"));
+            Assert.That(valueAsString.ToLowerInvariant().Contains("e"));
+
+            Assert.That(StringConvert.ToDoubleOr(valueAsString, 123.4556f), Is.EqualTo(value));
+        }
+        #endregion
+
+        #region ToBoolean
+        [Test]
+        public void ToBoolean_ValueIsNone_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToBoolean(null).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsEmpty_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToBoolean(string.Empty).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsWhiteSpace_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToBoolean(" ").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsNotBoolean_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToBoolean("QWERT").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsZero_ReturnsFalse()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBoolean("0").Value, Is.False);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsOne_ReturnsTrue()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBoolean("1").Value, Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsZeroWithTrailing_ReturnsFalse()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBoolean(" 0 ").Value, Is.False);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsOneWithTrailing_ReturnsTrue()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBoolean(" 1 ").Value, Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsFalseString_ReturnsFalse()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBoolean(bool.FalseString).Value, Is.False);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsTrueString_ReturnsTrue()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBoolean(bool.TrueString).Value, Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsFalseStringWithTrailing_ReturnsFalse()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBoolean(" " + bool.FalseString + " ").Value, Is.False);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsTrueStringWithTrailing_ReturnsTrue()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBoolean(" " + bool.TrueString + " ").Value, Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsNonNegativeIntegerDifferentThanOne_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToBoolean("10").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToBoolean_ValueIsNegativeInteger_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToBoolean("-1").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToBoolean_IsCaseInsensitive()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            foreach (var value in new[] { "false", "False", "FALSE", "fAlSe" })
+                Assert.That(StringConvert.ToBoolean(value).Value, Is.False);
+
+            foreach (var value in new[] { "true", "True", "TRUE", "tRuE" })
+                Assert.That(StringConvert.ToBoolean(value).Value, Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+        #endregion
+
+        #region ToBooleanOr
+        [Test]
+        public void ToBooleanOr_ValueIsNone_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToBooleanOr(null, true), Is.True);
+            Assert.That(StringConvert.ToBooleanOr(null, false), Is.False);
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsEmpty_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToBooleanOr(string.Empty, true), Is.True);
+            Assert.That(StringConvert.ToBooleanOr(string.Empty, false), Is.False);
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsWhiteSpace_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToBooleanOr(" ", true), Is.True);
+            Assert.That(StringConvert.ToBooleanOr(" ", false), Is.False);
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsNotBoolean_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToBooleanOr("QWERT", true), Is.True);
+            Assert.That(StringConvert.ToBooleanOr("QWERT", false), Is.False);
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsZero_ReturnsFalse()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBooleanOr("0", true), Is.False);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsOne_ReturnsTrue()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBooleanOr("1", false), Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsZeroWithTrailing_ReturnsFalse()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBooleanOr(" 0 ", true), Is.False);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsOneWithTrailing_ReturnsTrue()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBooleanOr(" 1 ", false), Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsFalseString_ReturnsFalse()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBooleanOr(bool.FalseString, true), Is.False);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsTrueString_ReturnsTrue()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBooleanOr(bool.TrueString, false), Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsFalseStringWithTrailing_ReturnsFalse()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBooleanOr(" " + bool.FalseString + " ", true), Is.False);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsTrueStringWithTrailing_ReturnsTrue()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToBooleanOr(" " + bool.TrueString + " ", false), Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsNonNegativeIntegerDifferentThanOne_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToBooleanOr("10", true), Is.True);
+            Assert.That(StringConvert.ToBooleanOr("10", false), Is.False);
+        }
+
+        [Test]
+        public void ToBooleanOr_ValueIsNegativeInteger_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToBooleanOr("-1", true), Is.True);
+            Assert.That(StringConvert.ToBooleanOr("-1", false), Is.False);
+        }
+
+        [Test]
+        public void ToBooleanOr_IsCaseInsensitive()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            foreach (var value in new[] { "false", "False", "FALSE", "fAlSe" })
+                Assert.That(StringConvert.ToBooleanOr(value, true), Is.False);
+
+            foreach (var value in new[] { "true", "True", "TRUE", "tRuE" })
+                Assert.That(StringConvert.ToBooleanOr(value, false), Is.True);
+            // ReSharper restore PossibleInvalidOperationException
         }
         #endregion
     }

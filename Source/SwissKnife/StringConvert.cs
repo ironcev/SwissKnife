@@ -1,4 +1,6 @@
-﻿namespace SwissKnife
+﻿using System;
+
+namespace SwissKnife
 {
     /// <summary>
     /// Contains methods that convert a <see cref="string"/> to another base data type. All the methods are guaranteed not to throw exceptions.
@@ -35,10 +37,7 @@
         /// </returns>
         public static int ToInt32Or(Option<string> value, int defaultValue)
         {
-            // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
-            int result;
-            return int.TryParse(value.ValueOrNull, out result) ? result : defaultValue;
+            return ToInt32(value).GetValueOrDefault(defaultValue);
         }
 
         /// <summary>
@@ -84,10 +83,7 @@
         /// </returns>
         public static long ToInt64Or(Option<string> value, long defaultValue)
         {
-            // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
-            long result;
-            return long.TryParse(value.ValueOrNull, out result) ? result : defaultValue;
+            return ToInt64(value).GetValueOrDefault(defaultValue);
         }
 
         /// <summary>
@@ -133,10 +129,7 @@
         /// </returns>
         public static float ToSingleOr(Option<string> value, float defaultValue)
         {
-            // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
-            float result;
-            return float.TryParse(value.ValueOrNull, out result) ? result : defaultValue;
+            return ToSingle(value).GetValueOrDefault(defaultValue);
         }
 
         /// <summary>
@@ -182,10 +175,7 @@
         /// </returns>
         public static double ToDoubleOr(Option<string> value, double defaultValue)
         {
-            // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
-            double result;
-            return double.TryParse(value.ValueOrNull, out result) ? result : defaultValue;
+            return ToDouble(value).GetValueOrDefault(defaultValue);
         }
 
         /// <summary>
@@ -200,6 +190,123 @@
         public static double ToDoubleOrZero(Option<string> value)
         {
             return ToDoubleOr(value, 0d);
+        }
+
+        /// <summary>
+        /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent. The return value indicates whether the conversion succeeded or failed.
+        /// </summary>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// <remarks>
+        /// <para>
+        /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
+        /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
+        /// </para>
+        /// <para>
+        /// <b>Note</b><br/>
+        /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
+        /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
+        /// </para>
+        /// </remarks>
+        /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
+        /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Null if the conversion failed.
+        /// </returns>
+        public static bool? ToBoolean(Option<string> value)
+        {
+            // The TryParse() fails if the string parameter is null.
+            // That means we don't need additional check if the Option is None.
+            bool result;
+            if (bool.TryParse(value.ValueOrNull, out result))
+                return result;
+
+            if (value.IsNone) return null;
+
+            int? intValue = ToInt32(value.Value.Trim());
+
+            if (!intValue.HasValue) return null;
+
+            if (intValue.Value == 1) return true;
+
+            if (intValue.Value == 0) return false;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or specified default value if the conversion does not succeed.
+        /// </summary>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <returns>
+        /// <remarks>
+        /// <para>
+        /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
+        /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
+        /// </para>
+        /// <para>
+        /// <b>Note</b><br/>
+        /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
+        /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
+        /// </para>
+        /// </remarks>
+        /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
+        /// </returns>
+        public static bool ToBooleanOr(Option<string> value, bool defaultValue)
+        {
+            return ToBoolean(value).GetValueOrDefault(defaultValue);
+        }
+
+        /// <summary>
+        /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or false if the conversion does not succeed.
+        /// </summary>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// <remarks>
+        /// <para>
+        /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
+        /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
+        /// </para>
+        /// <para>
+        /// <b>Note</b><br/>
+        /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
+        /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
+        /// </para>
+        /// </remarks>
+        /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
+        /// <br/>-or-<br/>false if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>false if the conversion failed.
+        /// </returns>
+        public static bool ToBooleanOrFalse(Option<string> value)
+        {
+            return ToBooleanOr(value, false);
+        }
+
+        /// <summary>
+        /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or true if the conversion does not succeed.
+        /// </summary>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// <remarks>
+        /// <para>
+        /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
+        /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
+        /// </para>
+        /// <para>
+        /// <b>Note</b><br/>
+        /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
+        /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
+        /// </para>
+        /// </remarks>
+        /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
+        /// <br/>-or-<br/>true if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>true if the conversion failed.
+        /// </returns>
+        public static bool ToBooleanOrTrue(Option<string> value)
+        {
+            return ToBooleanOr(value, true);
         }
     }
 }
