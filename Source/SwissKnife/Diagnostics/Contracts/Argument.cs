@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace SwissKnife.Diagnostics.Contracts
+namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Contract.EndContractblock() in all of the Contracts methods.
 {
     /// <summary>
     /// Contains static contract methods that validate preconditions on method arguments.
@@ -86,9 +86,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// <exception cref="ArgumentException"><paramref name="parameterValue"/> cannot be assigned to an instance of the <paramref name="type"/>.</exception>
         public static void Is(Option<object> parameterValue, Type type, Option<string> parameterName)
         {
-            #region Preconditions
             IsNotNull(type, "type");
-            #endregion
 
             if (parameterValue.IsNone) return;
 
