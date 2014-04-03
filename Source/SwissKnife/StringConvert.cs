@@ -308,5 +308,64 @@ namespace SwissKnife
         {
             return ToBooleanOr(value, true);
         }
+
+        /// <summary>
+        /// Converts the string representation of a GUID to the equivalent <see cref="Guid"/> structure. The return value indicates whether the conversion succeeded or failed.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// <b>Note</b><br/>
+        /// This method has different semantic than <see cref="Guid.Parse"/>.
+        /// It accepts not only GUIDs formated with format parameters "N", "D", "B", "P", or "X" as a valid input for conversion 
+        /// but also strings that are short string representations of GUIDs.
+        /// <para>
+        /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
+        /// </para>
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Null if the conversion failed.
+        /// </returns>
+        public static Guid? ToGuid(Option<string> value)
+        {
+            // The TryParse() fails if the string parameter is null.
+            // That means we don't need additional check if the Option is None.
+            Guid result;
+            if (Guid.TryParse(value.ValueOrNull, out result)) return result;
+
+            return GuidUtility.FromShortString(value);
+        }
+
+        /// <summary>
+        /// Converts the string representation of a GUID to the equivalent <see cref="Guid"/> structure or specified default value if the conversion does not succeed.
+        /// </summary>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <returns>
+        /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
+        /// </returns>
+        public static Guid ToGuidOr(Option<string> value, Guid defaultValue)
+        {
+            return ToGuid(value).GetValueOrDefault(defaultValue);
+        }
+
+        /// <summary>
+        /// Converts the string representation of a GUID to the equivalent <see cref="Guid"/> structure or <see cref="Guid.Empty"/> if the conversion does not succeed.
+        /// </summary>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/><see cref="Guid.Empty"/> if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/><see cref="Guid.Empty"/> if the conversion failed.
+        /// </returns>
+        public static Guid ToGuidOrEmpty(Option<string> value)
+        {
+            return ToGuidOr(value, Guid.Empty);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 
 namespace SwissKnife.Tests.Unit
@@ -1147,6 +1148,164 @@ namespace SwissKnife.Tests.Unit
 
             foreach (var value in new[] { "true", "True", "TRUE", "tRuE" })
                 Assert.That(StringConvert.ToBooleanOr(value, false), Is.True);
+            // ReSharper restore PossibleInvalidOperationException
+        }
+        #endregion
+
+        #region ToGuid
+        [Test]
+        public void ToGuid_ValueIsNone_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToGuid(null).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToGuid_ValueIsEmpty_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToGuid(string.Empty).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToGuid_ValueIsWhiteSpace_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToGuid(" ").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToGuid_ValueIsNotGuid_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToGuid("QWERT").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToGuid_ValueIsEmptyGuid_ReturnsEmptyGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuid(Guid.Empty.ToString()).Value, Is.EqualTo(Guid.Empty));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        private static readonly Guid arbitraryGuid = Guid.NewGuid();
+
+        [Test]
+        public void ToGuid_ValueIsArbitraryGuidFormatedWithN_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuid(arbitraryGuid.ToString("N")).Value, Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuid_ValueIsArbitraryGuidFormatedWithD_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuid(arbitraryGuid.ToString("D")).Value, Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuid_ValueIsArbitraryGuidFormatedWithB_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuid(arbitraryGuid.ToString("B")).Value, Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuid_ValueIsArbitraryGuidFormatedWithP_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuid(arbitraryGuid.ToString("P")).Value, Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuid_ValueIsArbitraryGuidFormatedWithX_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuid(arbitraryGuid.ToString("X")).Value, Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuid_ValueIsArbitraryGuidRepresentedAsShortString_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuid(GuidUtility.ToShortString(arbitraryGuid)).Value, Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+        #endregion
+
+        #region ToGuidOr
+        [Test]
+        public void ToGuidOr_ValueIsNone_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToGuidOr(null, arbitraryGuid), Is.EqualTo(arbitraryGuid));
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsEmpty_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToGuidOr(string.Empty, arbitraryGuid), Is.EqualTo(arbitraryGuid));
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsWhiteSpace_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToGuidOr(" ", arbitraryGuid), Is.EqualTo(arbitraryGuid));
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsNotGuid_ReturnsDefaultValue()
+        {
+            Assert.That(StringConvert.ToGuidOr("QWERT", arbitraryGuid), Is.EqualTo(arbitraryGuid));
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsEmptyGuid_ReturnsEmptyGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuidOr(Guid.Empty.ToString(), arbitraryGuid), Is.EqualTo(Guid.Empty));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsArbitraryGuidFormatedWithN_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuidOr(arbitraryGuid.ToString("N"), Guid.Empty), Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsArbitraryGuidFormatedWithD_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuidOr(arbitraryGuid.ToString("D"), Guid.Empty), Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsArbitraryGuidFormatedWithB_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuidOr(arbitraryGuid.ToString("B"), Guid.Empty), Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsArbitraryGuidFormatedWithP_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuidOr(arbitraryGuid.ToString("P"), Guid.Empty), Is.EqualTo(arbitraryGuid));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToGuidOr_ValueIsArbitraryGuidFormatedWithX_ReturnsThatGuid()
+        {
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(StringConvert.ToGuidOr(arbitraryGuid.ToString("X"), Guid.Empty), Is.EqualTo(arbitraryGuid));
             // ReSharper restore PossibleInvalidOperationException
         }
         #endregion
