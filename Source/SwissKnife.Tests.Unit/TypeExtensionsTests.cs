@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace SwissKnife.Tests.Unit
@@ -74,6 +75,49 @@ namespace SwissKnife.Tests.Unit
         private abstract class AbstractClass {}
         private interface IInterface {}
         private struct Struct {}
+        #endregion
+
+        #region IsBitField
+        private enum NonBitFieldEnum { }
+        [Flags]
+        private enum BitFieldEnum { }
+
+        [Test]
+        public void IsBiField_TypeIsNull_ThrowsException()
+        {
+            string parameterName = Assert.Throws<ArgumentNullException>(() => TypeExtensions.IsBitField(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("type"));
+        }
+
+        [Test]
+        public void IsBiField_TypeIsNotEnum_ReturnsFalse()
+        {
+            Assert.That(typeof(object).IsBitField(), Is.False);
+        }
+
+        [Test]
+        public void IsBiField_TypeIsGenericType_ReturnsFalse()
+        {
+            Assert.That(typeof(List<object>).IsBitField(), Is.False);
+        }
+
+        [Test]
+        public void IsBiField_TypeIsOpenGenericType_ReturnsFalse()
+        {
+            Assert.That(typeof(List<>).IsBitField(), Is.False);
+        }
+
+        [Test]
+        public void IsBiField_NonBitFieldEnum_ReturnsFalse()
+        {
+            Assert.That(typeof(NonBitFieldEnum).IsBitField(), Is.False);
+        }
+
+        [Test]
+        public void IsBiField_BitFieldEnum_ReturnsTrue()
+        {
+            Assert.That(typeof(BitFieldEnum).IsBitField(), Is.True);
+        }
         #endregion
     }
     // ReSharper restore InconsistentNaming
