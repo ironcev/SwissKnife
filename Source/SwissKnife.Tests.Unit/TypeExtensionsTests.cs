@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using NUnit.Framework;
 
 namespace SwissKnife.Tests.Unit
@@ -77,46 +79,127 @@ namespace SwissKnife.Tests.Unit
         private struct Struct {}
         #endregion
 
-        #region IsBitField
-        private enum NonBitFieldEnum { }
+        #region IsFlagsEnum
+        private enum NonFlagsEnum { }
         [Flags]
-        private enum BitFieldEnum { }
+        private enum FlagsEnum { }
 
         [Test]
-        public void IsBiField_TypeIsNull_ThrowsException()
+        public void IsFlagsEnum_TypeIsNull_ThrowsException()
         {
-            string parameterName = Assert.Throws<ArgumentNullException>(() => TypeExtensions.IsBitField(null)).ParamName;
+            string parameterName = Assert.Throws<ArgumentNullException>(() => TypeExtensions.IsFlagsEnum(null)).ParamName;
             Assert.That(parameterName, Is.EqualTo("type"));
         }
 
         [Test]
-        public void IsBiField_TypeIsNotEnum_ReturnsFalse()
+        public void IsFlagsEnum_TypeIsNotEnum_ReturnsFalse()
         {
-            Assert.That(typeof(object).IsBitField(), Is.False);
+            Assert.That(typeof(object).IsFlagsEnum(), Is.False);
         }
 
         [Test]
-        public void IsBiField_TypeIsGenericType_ReturnsFalse()
+        public void IsFlagsEnum_TypeIsGenericType_ReturnsFalse()
         {
-            Assert.That(typeof(List<object>).IsBitField(), Is.False);
+            Assert.That(typeof(List<object>).IsFlagsEnum(), Is.False);
         }
 
         [Test]
-        public void IsBiField_TypeIsOpenGenericType_ReturnsFalse()
+        public void IsFlagsEnum_TypeIsOpenGenericType_ReturnsFalse()
         {
-            Assert.That(typeof(List<>).IsBitField(), Is.False);
+            Assert.That(typeof(List<>).IsFlagsEnum(), Is.False);
         }
 
         [Test]
-        public void IsBiField_NonBitFieldEnum_ReturnsFalse()
+        public void IsFlagsEnum_NonFlagsEnum_ReturnsFalse()
         {
-            Assert.That(typeof(NonBitFieldEnum).IsBitField(), Is.False);
+            Assert.That(typeof(NonFlagsEnum).IsFlagsEnum(), Is.False);
         }
 
         [Test]
-        public void IsBiField_BitFieldEnum_ReturnsTrue()
+        public void IsFlagsEnum_FlagsEnum_ReturnsTrue()
         {
-            Assert.That(typeof(BitFieldEnum).IsBitField(), Is.True);
+            Assert.That(typeof(FlagsEnum).IsFlagsEnum(), Is.True);
+        }
+
+        [Test]
+        public void IsFlagsEnum_EmitedNonFlagsEnum_ReturnsFalse()
+        {
+            Type enumType = EmitEnum(new[] { "Zero", "One", "Two" }, new[] { 0, 1, 2 }, false);
+            Assert.That(enumType.IsFlagsEnum(), Is.False);
+        }
+
+        [Test]
+        public void IsFlagsEnum_EmitedNonFlagsEnumWithNonIntegerUnderlyaingType_ReturnsFalse()
+        {
+            Type enumType = EmitEnum(new[] { "Zero", "One", "OnePointOne", "Two", "TwoPointTwo" }, new[] { 0d, 1d, 1.1d, 2d, 2.2d }, false);
+            Assert.That(enumType.IsFlagsEnum(), Is.False);
+        }
+
+        [Test]
+        public void IsFlagsEnum_EmitedFlagsEnum_ReturnsTrue()
+        {
+            Type enumType = EmitEnum(new[] { "None", "One", "Two", "All" }, new[] { 0, 1, 2, 3 }, true);
+            Assert.That(enumType.IsFlagsEnum(), Is.True);
+        }
+
+        [Test]
+        public void IsFlagsEnum_EmitedFlagsEnumWithNonIntegerUnderlyaingType_ReturnsFalse()
+        {
+            Type enumType = EmitEnum(new[] { "Zero", "One", "OnePointOne", "Two", "TwoPointTwo" }, new[] { 0d, 1d, 1.1d, 2d, 2.2d }, true);
+            Assert.That(enumType.IsFlagsEnum(), Is.False);
+        }
+        #endregion
+
+        #region UnderlyingTypesOfFlagsEnums
+        [Test]
+        public void UnderlyingTypesOfFlagsEnums_IsProperlyDefined()
+        {
+            CollectionAssert.AreEquivalent(
+                TypeExtensions.UnderlyingTypesOfFlagsEnums,
+                new[]
+                {
+                    typeof(byte),
+                    typeof(sbyte),
+                    typeof(short),
+                    typeof(ushort),
+                    typeof(int),
+                    typeof(uint),
+                    typeof(long),
+                    typeof(ulong)
+                }
+            );
+        }
+        #endregion
+
+        #region Helper Methods
+        internal static Type EmitEnum<TUnderlyingType>(string[] literals, TUnderlyingType[] values, bool isFlagsEnum)
+        {
+            AssemblyName assemblyName = new AssemblyName("EnumExperimentAssembly_" + typeof(TUnderlyingType).Name);
+            AssemblyBuilder assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+
+            ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name);
+            EnumBuilder enumBuilder = moduleBuilder.DefineEnum("EnumWithUnderlyingType" + typeof(TUnderlyingType).Name, TypeAttributes.Public, typeof(TUnderlyingType));
+
+            for (int i = 0; i < literals.Length; i++)
+                enumBuilder.DefineLiteral(literals[i], values[i]);
+
+            if (isFlagsEnum)
+            {
+                // ReSharper disable AssignNullToNotNullAttribute
+                ConstructorInfo flagsAttributesConstructorInfo = typeof(FlagsAttribute).GetConstructor(new Type[0]);
+                CustomAttributeBuilder customAttributeBuilder = new CustomAttributeBuilder(flagsAttributesConstructorInfo, new object[0]);
+                // ReSharper restore AssignNullToNotNullAttribute
+                enumBuilder.SetCustomAttribute(customAttributeBuilder);
+            }
+
+            Type enumType = enumBuilder.CreateType();
+
+            Assert.That(Enum.GetUnderlyingType(enumType), Is.EqualTo(typeof(TUnderlyingType)));
+
+            if (isFlagsEnum)
+                Assert.That(enumType.GetCustomAttributes(typeof(FlagsAttribute), false).Length, Is.GreaterThanOrEqualTo(1));
+
+            return enumType;
         }
         #endregion
     }

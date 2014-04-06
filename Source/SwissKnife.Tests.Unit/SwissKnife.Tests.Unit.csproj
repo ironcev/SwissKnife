@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,6 +48,7 @@
     <Compile Include="Diagnostics\Contracts\ArgumentTests.cs" />
     <Compile Include="Diagnostics\Contracts\OperationTests.cs" />
     <Compile Include="Diagnostics\Contracts\TypeParameterTests.cs" />
+    <Compile Include="Enumeration\FlagsEnumTests.cs" />
     <Compile Include="GuidUtilityTests.cs" />
     <Compile Include="IdentifierTests.cs" />
     <Compile Include="OptionTests.cs" />

@@ -13,15 +13,17 @@ namespace SwissKnife.Diagnostics.Contracts
         /// Checks if a type parameter represents an enumeration.
         /// </summary>
         /// <param name="typeParameter"><see cref="Type"/> that has to be checked if it represents an enumeration.</param>
-        /// <param name="typeParameterName">The name of the type parameter. E.g. "T", "TInput", "TOutput", or "TResult".</param>
+        /// <param name="typeParameterName">The name of the type parameter. E.g. "T", "TInput", "TOutput", or "TResult"
+        /// in case of generic parameters or e.g. "enumType" in case of method arguments.</param>
         /// <exception cref="ArgumentNullException"><paramref name="typeParameter"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="typeParameter"/> does not represent an enumeration.</exception>
         public static void IsEnum(Type typeParameter, Option<string> typeParameterName)
         {
-            Argument.IsNotNull(typeParameter, "typeParameter");
+            Argument.IsNotNull(typeParameter, typeParameterName);
 
             if (!typeParameter.IsEnum)
-                throw new ArgumentException(string.Format("The type parameter '{0}' does not represent an enumeration.", typeParameter.AssemblyQualifiedName), typeParameterName.ValueOrNull);
+                throw new ArgumentException(string.Format("The type parameter does not represent an enumeration. The type parameter was '{0}'.", typeParameter.AssemblyQualifiedName),
+                                            typeParameterName.ValueOrNull);
         }
 
         /// <summary>

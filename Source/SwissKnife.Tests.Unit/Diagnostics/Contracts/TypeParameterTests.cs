@@ -27,10 +27,24 @@ namespace SwissKnife.Tests.Unit.Diagnostics.Contracts
         }
 
         [Test]
-        public void IsEnum_TypeParameterIsNull_ThrowsException()
+        public void IsEnum__TypeParameterIsNull_TypeParameterNameIsNone__ThrowsExceptionWithNullParameterName()
         {
             var parameterName = Assert.Throws<ArgumentNullException>(() => TypeParameter.IsEnum(null, Option<string>.None)).ParamName;
-            Assert.That(parameterName, Is.EqualTo("typeParameter"));
+            Assert.That(parameterName, Is.EqualTo(null));
+        }
+
+        [Test]
+        public void IsEnum__TypeParameterIsNull_TypeParameterNameIsEmptyString__ThrowsExceptionWithEmptyParameterName()
+        {
+            var parameterName = Assert.Throws<ArgumentNullException>(() => TypeParameter.IsEnum(null, string.Empty)).ParamName;
+            Assert.That(parameterName, Is.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public void IsEnum__TypeParameterIsNull_TypeParameterNameIsSomeString__ThrowsExceptionWithThatStringAsParameterName()
+        {
+            var parameterName = Assert.Throws<ArgumentNullException>(() => TypeParameter.IsEnum(null, "someParameterName")).ParamName;
+            Assert.That(parameterName, Is.EqualTo("someParameterName"));
         }
 
         [Test]

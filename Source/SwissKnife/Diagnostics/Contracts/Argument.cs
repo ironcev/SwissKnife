@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Contract.EndContractblock() in all of the Contracts methods.
+namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Contract.EndContractblock() and the ContractArgumentValidator in all of the Contracts methods. Sometimes they are used and sometimes not.
 {
     /// <summary>
     /// Contains static contract methods that validate preconditions on method arguments.
@@ -87,10 +87,7 @@ namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Cont
         public static void Is(Option<object> parameterValue, Type type, Option<string> parameterName)
         {
             IsNotNull(type, "type");
-
-            if (parameterValue.IsNone) return;
-
-            if (!type.IsInstanceOfType(parameterValue.Value))
+            if (parameterValue.IsSome && !type.IsInstanceOfType(parameterValue.Value))
                 throw new ArgumentException(string.Format("Parameter is not compatible with the type '{0}'. The type of the parameter was '{1}'.", type.AssemblyQualifiedName, parameterValue.Value.GetType().AssemblyQualifiedName), parameterName.ValueOrNull);
         }
 
