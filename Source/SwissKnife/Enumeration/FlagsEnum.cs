@@ -27,9 +27,7 @@ namespace SwissKnife.Enumeration
         /// <exception cref="ArgumentException"><typeparamref name="TEnum"/>> is not an <see cref="Enum"/> type.</exception>
         public static bool IsFlagsEnum<TEnum>() where TEnum : struct
         {
-            #region Preconditions
             TypeParameter.IsEnum<TEnum>("TEnum");
-            #endregion
 
             return typeof(TEnum).IsFlagsEnum();
         }
@@ -49,9 +47,7 @@ namespace SwissKnife.Enumeration
         /// <exception cref="ArgumentException"><paramref name="enumType"/> is not an <see cref="Enum"/> type.</exception>
         public static bool IsFlagsEnum(Type enumType)
         {
-            #region Preconditions
             TypeParameter.IsEnum(enumType, "enumType");
-            #endregion
 
             return enumType.IsFlagsEnum();
         }

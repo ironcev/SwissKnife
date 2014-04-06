@@ -78,9 +78,7 @@ namespace SwissKnife.Time
             }
             set
             {
-                #region Preconditions
-                Argument.IsNotNull(value, "value");                
-                #endregion
+                Argument.IsNotNull(value, "value");
 
                 lock (syncLock)
                 {                    

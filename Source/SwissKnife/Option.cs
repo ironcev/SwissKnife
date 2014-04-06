@@ -39,9 +39,7 @@ namespace SwissKnife
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         public static Option<T> Some(T value)
         {
-            #region Preconditions
             if (value == null) throw new ArgumentNullException("value");
-            #endregion
 
             return new Option<T>(value);
         }
@@ -128,9 +126,7 @@ namespace SwissKnife
         /// <exception cref="ArgumentNullException"><paramref name="binder"/> is null.</exception>
         public Option<TOutput> Bind<TOutput>(Func<T, Option<TOutput>> binder) where TOutput : class
         {
-            #region Preconditions
             if (binder == null) throw new ArgumentNullException("binder");
-            #endregion
 
             return IsNone ? Option<TOutput>.None : binder(value);
         }
@@ -148,9 +144,7 @@ namespace SwissKnife
         /// <exception cref="ArgumentNullException"><paramref name="binder"/> is null.</exception>
         public TOutput? Bind<TOutput>(Func<T, TOutput?> binder) where TOutput : struct
         {
-            #region Preconditions
             if (binder == null) throw new ArgumentNullException("binder");
-            #endregion
 
             return IsNone ? null : binder(value);
         }
@@ -168,9 +162,7 @@ namespace SwissKnife
         /// <exception cref="ArgumentNullException"><paramref name="mapper"/> is null.</exception>
         public Option<TOutput> MapToOption<TOutput>(Func<T, TOutput> mapper) where TOutput : class
         {
-            #region Preconditions
             if (mapper == null) throw new ArgumentNullException("mapper");
-            #endregion
 
             return IsNone ? Option<TOutput>.None : Option<TOutput>.From(mapper(value));
         }
@@ -188,9 +180,7 @@ namespace SwissKnife
         /// <exception cref="ArgumentNullException"><paramref name="mapper"/> is null.</exception>
         public TOutput? MapToNullable<TOutput>(Func<T, TOutput> mapper) where TOutput : struct
         {
-            #region Preconditions
             if (mapper == null) throw new ArgumentNullException("mapper");
-            #endregion
 
             return IsNone ? null : (TOutput?)mapper(value);
         }

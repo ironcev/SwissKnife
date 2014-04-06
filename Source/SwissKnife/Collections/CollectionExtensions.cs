@@ -27,10 +27,8 @@ namespace SwissKnife.Collections
         /// <exception cref="NotSupportedException"><paramref name="collection"/> is read-only.</exception>
         public static void AddMany<T>(this ICollection<T> collection, IEnumerable<T> itemsToAdd)
         {
-            #region Preconditions
             Argument.IsNotNull(collection, "collection");
             Argument.IsNotNull(itemsToAdd, "itemsToAdd");
-            #endregion
 
             foreach (T item in itemsToAdd)
                 collection.Add(item);
@@ -65,11 +63,9 @@ namespace SwissKnife.Collections
         /// <exception cref="NotSupportedException"><paramref name="dictionary"/> is read-only.</exception>
         public static TValue GetValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> getValueToAdd)
         {
-            #region Preconditions
             Argument.IsNotNull(dictionary, "dictionary");
             Argument.IsNotNull(key, "key");
             Argument.IsNotNull(getValueToAdd, "getValueToAdd");
-            #endregion
 
             if (!dictionary.ContainsKey(key))
                 dictionary.Add(key, getValueToAdd());
@@ -101,10 +97,8 @@ namespace SwissKnife.Collections
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="groupSize"/> is not greater than zero.</exception>
         public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int groupSize)
         {
-            #region Preconditions
             Argument.IsNotNull(source, "source");
             Argument.IsGreaterThanZero(groupSize, "groupSize");
-            #endregion
 
             // The source is implicitly captured in a closure. This is exactly what we want, because we want to have method implemented by using deferred execution.
             // The method actually enumerates the source several times, first time to get the first element in each group and later on to take the members of each group.
@@ -135,10 +129,8 @@ namespace SwissKnife.Collections
         /// <returns>Randomized <see cref="IEnumerable{T}"/>.</returns>
         public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
         {
-            #region Preconditions
             Argument.IsNotNull(source, "source");
-            #endregion
-            
+
             return source.OrderBy(x => random.Value.Next());
         }
 
@@ -171,10 +163,8 @@ namespace SwissKnife.Collections
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="numberOfGroups"/> is not greater than zero.</exception>
         public static IEnumerable<IEnumerable<T>> SplitByNumberOfGroups<T>(this IEnumerable<T> source, int numberOfGroups)
         {
-            #region Preconditions
             Argument.IsNotNull(source, "source");
-            Argument.IsGreaterThanZero(numberOfGroups, "numberOfGroups");            
-            #endregion
+            Argument.IsGreaterThanZero(numberOfGroups, "numberOfGroups");
 
             List<T> sourceAsList = source.ToList();
             int numberOfElements = sourceAsList.Count;
@@ -214,9 +204,7 @@ namespace SwissKnife.Collections
         /// <exception cref="InvalidOperationException">The collection was modified after the <paramref name="enumerator"/> was created.</exception>
         public static IEnumerable<T> ToEnumerable<T>(this IEnumerator<T> enumerator)
         {
-            #region Preconditions
             Argument.IsNotNull(enumerator, "enumerator");
-            #endregion
 
             List<T> result = new List<T>();
 
@@ -247,9 +235,7 @@ namespace SwissKnife.Collections
         /// <exception cref="InvalidOperationException">The collection was modified after the <paramref name="enumerator"/> was created.</exception>
         public static IEnumerable ToEnumerable(this IEnumerator enumerator)
         {
-            #region Preconditions
             Argument.IsNotNull(enumerator, "enumerator");
-            #endregion
 
             ArrayList result = new ArrayList();
 

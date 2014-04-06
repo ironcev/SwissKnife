@@ -63,9 +63,7 @@ namespace SwissKnife
         /// <exception cref="ArgumentNullException"><paramref name="type"/> is null.</exception>
         public static bool IsStatic(this Type type)
         {
-            #region Preconditions
             Argument.IsNotNull(type, "type");
-            #endregion
 
             return type.IsAbstract && type.IsSealed;
         }
@@ -85,9 +83,7 @@ namespace SwissKnife
         /// <exception cref="InvalidOperationException">The <paramref name="type"/> is loaded into the reflection-only context.</exception>        
         public static bool IsFlagsEnum(this Type type)
         {
-            #region Preconditions
             Argument.IsNotNull(type, "type");
-            #endregion
 
             return type.IsEnum && 
                    type.GetCustomAttributes(typeof(FlagsAttribute), false).Length > 0 &&

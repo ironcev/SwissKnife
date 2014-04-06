@@ -37,9 +37,7 @@ namespace SwissKnife
         /// <exception cref="ArgumentException">If the <paramref name="identifierExpression"/> is not a valid identifier expression. For example: 'someInstance.IdentifierAsString(x => 0)'.</exception>
         public static string ToString<T, TResult>(Expression<Func<T, TResult>> identifierExpression, Option<ConversionOptions> identifierOptions)
         {
-            #region Preconditions
             Argument.IsNotNull(identifierExpression, "identifierExpression");
-            #endregion
 
             StringBuilder sb = new StringBuilder();
             bool expressionCanBeConverted = ConvertExpression(sb, identifierExpression.Body, identifierOptions.ValueOr(new ConversionOptions()));
@@ -59,9 +57,7 @@ namespace SwissKnife
 
         public static string ToString<TResult>(Expression<Func<TResult>> identifierExpression, Option<ConversionOptions> identifierOptions) // TODO-IG: Remove duplicated code.
         {
-            #region Preconditions
-          Argument.IsNotNull(identifierExpression, "identifierExpression");
-          #endregion
+            Argument.IsNotNull(identifierExpression, "identifierExpression");
 
             StringBuilder sb = new StringBuilder();
             bool expressionCanBeConverted = ConvertExpression(sb, identifierExpression.Body, identifierOptions.ValueOr(new ConversionOptions()));

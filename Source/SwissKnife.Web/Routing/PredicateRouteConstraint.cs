@@ -23,9 +23,7 @@ namespace SwissKnife.Web.Routing
         /// <exception cref="ArgumentNullException"><paramref name="constraint"/> is null.</exception>
         public PredicateRouteConstraint(Predicate<object> constraint)
         {
-            #region Preconditions
             Argument.IsNotNull(constraint, "constraint");
-            #endregion
 
             predicate = constraint;
         }
@@ -45,7 +43,6 @@ namespace SwissKnife.Web.Routing
         /// <exception cref="ArgumentNullException"><paramref name="values"/> or <paramref name="parameterName"/> is null.</exception>
         public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
         {
-            #region Preconditions
             Argument.IsNotNullOrWhitespace(parameterName, "parameterName");
             Argument.IsNotNull(values, "values");
             Argument.IsValid(values.ContainsKey(parameterName),
@@ -57,7 +54,6 @@ namespace SwissKnife.Web.Routing
                                                               values.Keys.Count <= 0 ? "<Values do not contain any parameters.>" + Environment.NewLine
                                                                                        : values.Keys.Aggregate(string.Empty, (result, current) => result + current + Environment.NewLine)),
                                                 "values");
-            #endregion
 
             return predicate(values[parameterName]);
         }

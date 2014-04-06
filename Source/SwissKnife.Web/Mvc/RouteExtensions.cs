@@ -31,11 +31,9 @@ namespace SwissKnife.Web.Mvc
         /// <exception cref="ArgumentException"><paramref name="urlParameter"/> is empty string.<br/>-or-<br/><paramref name="urlParameter"/> is white space.</exception>
         public static Route SetDefault(this Route route, string urlParameter, object defaultValue)
         {
-            #region Preconditions
             Argument.IsNotNull(route, "route");
             Argument.IsNotNullOrWhitespace(urlParameter, "urlParameter");
             Argument.IsNotNull(defaultValue, "defaultValue");
-            #endregion
 
             if (route.Defaults == null) route.Defaults = new RouteValueDictionary();
 
@@ -65,10 +63,8 @@ namespace SwissKnife.Web.Mvc
         /// <exception cref="ArgumentException">The calculated default value is null.</exception>
         public static Route SetDefault(this Route route, Func<object, object> urlParameterAndDefaultValue)
         {
-            #region Preconditions
             Argument.IsNotNull(route, "route");
             Argument.IsNotNull(urlParameterAndDefaultValue, "urlParameterAndDefaultValue");
-            #endregion
 
             if (route.Defaults == null) route.Defaults = new RouteValueDictionary();
 
@@ -106,11 +102,9 @@ namespace SwissKnife.Web.Mvc
         /// <exception cref="ArgumentException"><paramref name="urlParametersAndDefaultValues"/> is empty.</exception>
         public static Route SetDefaults(this Route route, params Func<object, object>[] urlParametersAndDefaultValues)
         {
-            #region Preconditions
             Argument.IsNotNull(route, "route");
             Argument.IsNotNull(urlParametersAndDefaultValues, "urlParametersAndDefaultValues");
             Argument.IsValid(urlParametersAndDefaultValues.Length > 0, "The array of URL parameters and their default values is empty. The array must contain at least one URL parameter with its default value specified.", "urlParametersAndDefaultValues");
-            #endregion
 
             if (route.Defaults == null) route.Defaults = new RouteValueDictionary();
 
@@ -151,10 +145,8 @@ namespace SwissKnife.Web.Mvc
         /// <exception cref="ArgumentException"><paramref name="urlParameter"/> is empty string.<br/>-or-<br/><paramref name="urlParameter"/> is white space.</exception>
         public static Route SetConstraint(this Route route, string urlParameter, Predicate<object> predicate)
         {
-            #region Preconditions
             // Other preconditions will be checked in the calling method.
             Argument.IsNotNull(predicate, "predicate");
-            #endregion
 
             return route.SetConstraint(urlParameter, new PredicateRouteConstraint(predicate));
         }
@@ -183,11 +175,9 @@ namespace SwissKnife.Web.Mvc
         /// <exception cref="ArgumentException"><paramref name="urlParameter"/> is empty string.<br/>-or-<br/><paramref name="urlParameter"/> is white space.</exception>
         public static Route SetConstraint(this Route route, string urlParameter, IRouteConstraint constraint)
         {
-            #region Preconditions
             Argument.IsNotNull(route, "route");
             Argument.IsNotNullOrWhitespace(urlParameter, "urlParameter");
-            Argument.IsNotNull(constraint, "predicate");            
-            #endregion
+            Argument.IsNotNull(constraint, "predicate");
 
             if (route.Constraints == null) route.Constraints = new RouteValueDictionary();
 
@@ -214,11 +204,9 @@ namespace SwissKnife.Web.Mvc
         /// </exception>
         public static Route SetConstraint(this Route route, string urlParameter, string regularExpression)
         {
-            #region Preconditions
             Argument.IsNotNull(route, "route");
             Argument.IsNotNullOrWhitespace(urlParameter, "urlParameter");
             Argument.IsNotNull(regularExpression, "regularExpression");
-            #endregion
 
             if (route.Constraints == null) route.Constraints = new RouteValueDictionary();
 
