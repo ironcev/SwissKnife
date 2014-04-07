@@ -17,9 +17,10 @@ namespace SwissKnife.Enumeration
         /// Gets a value indicating whether an enumeration type represents a flags enumeration.
         /// </summary>
         /// <remarks>
-        /// <b>Note</b><br/>
+        /// <note>
         /// This method throws exception if the <typeparamref name="TEnum"/> is not an <see cref="Enum"/> type.
         /// If you want to check if an arbitrary type is a flags enumeration, use the <see cref="TypeExtensions.IsFlagsEnum"/> method instead.
+        /// </note>
         /// </remarks>
         /// <returns>
         /// true if the <typeparamref name="TEnum"/> is a flags enumeration; otherwise false.
@@ -36,9 +37,10 @@ namespace SwissKnife.Enumeration
         /// Gets a value indicating whether an enumeration type represents a flags enumeration.
         /// </summary>
         /// <remarks>
-        /// <b>Note</b><br/>
+        /// <note>
         /// This method throws exception if the <paramref name="enumType"/> is not an <see cref="Enum"/> type.
         /// If you want to check if an arbitrary type is a flags enumeration, use the <see cref="TypeExtensions.IsFlagsEnum"/> method instead.
+        /// </note>
         /// </remarks>
         /// <returns>
         /// true if the <paramref name="enumType"/> is a flags enumeration; otherwise false.

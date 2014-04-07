@@ -61,10 +61,9 @@ namespace SwissKnife.Time
         /// <para>
         /// This delegate is never null. By default, it returns the current date and time on the current computer.
         /// </para>
-        /// <para>
-        /// <b>Note</b>
+        /// <note type="caution">
         /// If the delegate throws an exception, that exception will be propagated to the caller.
-        /// </para>
+        /// </note>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
         public static Func<DateTimeOffset> GetLocalNow
@@ -92,8 +91,9 @@ namespace SwissKnife.Time
         /// The current data and time is calculated by using the <see cref="GetLocalNow"/> delegate.
         /// </summary>
         /// <remarks>
-        /// <b>Note</b>
+        /// <note type="caution">
         /// If the <see cref="GetLocalNow"/> delegate throws an exception, that exception will be propagated to the caller.
+        /// </note>
         /// </remarks>
         /// <returns>
         /// An object whose date and time is the current Coordinated Universal Time (UTC) and whose offset is <see cref="TimeSpan.Zero"/>.
@@ -108,8 +108,9 @@ namespace SwissKnife.Time
         /// The current data is calculated by using the <see cref="GetLocalNow"/> delegate.
         /// </summary>
         /// <remarks>
-        /// <b>Note</b>
+        /// <note type="caution">
         /// If the <see cref="GetLocalNow"/> delegate throws any exception, that exception will be propagated to the caller.
+        /// </note>
         /// </remarks>
         /// <returns>
         /// An object that is set to today's date, with the time component set to 00:00:00.

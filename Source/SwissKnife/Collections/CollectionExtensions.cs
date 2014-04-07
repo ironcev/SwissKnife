@@ -43,10 +43,9 @@ namespace SwissKnife.Collections
         /// The key and the value of that new <see cref="KeyValuePair{TKey,TValue}"/> will be set to <paramref name="key"/> and the result of the <paramref name="getValueToAdd"/> respectively.
         /// The <paramref name="getValueToAdd"/> is called only if the <paramref name="dictionary"/> does not already contain the <paramref name="key"/>.
         /// </para>
-        /// <para>
-        /// <b>Note</b>
+        /// <note type="caution">
         /// If the <paramref name="getValueToAdd"/> throws an exception, that exception will be propagated to the caller.
-        /// </para>
+        /// </note>
         /// </remarks>
         /// <typeparam name="TKey">The type of keys in the <paramref name="dictionary"/>.</typeparam>
         /// <typeparam name="TValue">The type of values in the <paramref name="dictionary"/>.</typeparam>
@@ -252,10 +251,7 @@ namespace SwissKnife.Collections
         /// Returns a random element from a sequence that satisfies a condition or <see cref="Option{T}.None"/> if no such element is found.
         /// </summary>
         /// <remarks>
-        /// <para>
-        /// <b>Note</b>
-        /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
-        /// </para>
+        /// <note type="caution">If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.</note>
         /// </remarks>
         /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
         /// <param name="predicate">A <see cref="Predicate{T}"/> to test each element for a condition.</param>
@@ -296,10 +292,9 @@ namespace SwissKnife.Collections
         /// Returns a random value type element from a sequence that satisfies a condition or null if no such element is found.
         /// </summary>
         /// <remarks>
-        /// <para>
-        /// <b>Note</b>
+        /// <note type="caution">
         /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
-        /// </para>
+        /// </note>
         /// </remarks>
         /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
         /// <param name="predicate">A <see cref="Predicate{T}"/> to test each element for a condition.</param>

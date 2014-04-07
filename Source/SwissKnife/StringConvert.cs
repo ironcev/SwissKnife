@@ -202,11 +202,10 @@ namespace SwissKnife
         /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
         /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
         /// </para>
-        /// <para>
-        /// <b>Note</b><br/>
+        /// <note>
         /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
         /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
-        /// </para>
+        /// </note>
         /// </remarks>
         /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
@@ -244,11 +243,10 @@ namespace SwissKnife
         /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
         /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
         /// </para>
-        /// <para>
-        /// <b>Note</b><br/>
+        /// <note>
         /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
         /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
-        /// </para>
+        /// </note>
         /// </remarks>
         /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
@@ -269,11 +267,10 @@ namespace SwissKnife
         /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
         /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
         /// </para>
-        /// <para>
-        /// <b>Note</b><br/>
+        /// <note>
         /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
         /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
-        /// </para>
+        /// </note>
         /// </remarks>
         /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
         /// <br/>-or-<br/>false if the <paramref name="value"/> is None option.
@@ -294,11 +291,10 @@ namespace SwissKnife
         /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
         /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
         /// </para>
-        /// <para>
-        /// <b>Note</b><br/>
+        /// <note>
         /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
         /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
-        /// </para>
+        /// </note>
         /// </remarks>
         /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
         /// <br/>-or-<br/>true if the <paramref name="value"/> is None option.
@@ -313,14 +309,13 @@ namespace SwissKnife
         /// Converts the string representation of a GUID to the equivalent <see cref="Guid"/> structure. The return value indicates whether the conversion succeeded or failed.
         /// </summary>
         /// <remarks>
-        /// <para>
-        /// <b>Note</b><br/>
+        /// <note>
         /// This method has different semantic than <see cref="Guid.Parse"/>.
         /// It accepts not only GUIDs formated with format parameters "N", "D", "B", "P", or "X" as a valid input for conversion 
         /// but also strings that are short string representations of GUIDs.
+        /// </note>
         /// <para>
         /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
-        /// </para>
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
