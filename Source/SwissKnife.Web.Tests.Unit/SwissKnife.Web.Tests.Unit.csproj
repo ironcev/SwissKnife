@@ -85,7 +85,7 @@
     <Compile Include="Mvc\HtmlExtensionsTests.cs" />
     <Compile Include="Mvc\RouteExtensionsTests.cs" />
     <Compile Include="Mvc\MvcTestHelper.cs" />
-    <Compile Include="Mvc\UrlExtensionsTests.cs" />
+    <Compile Include="Mvc\UrlHelperExtensionsTests.cs" />
     <Compile Include="Routing\PredicateRouteConstraintTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 {
     // ReSharper disable InconsistentNaming
     [TestFixture]
-    public class UrlExtensionsTests
+    public class UrlHelperExtensionsTests
     {
         [Test]
         public void RouteAbsoluteUrl_RouteWithoutParameters_ReturnsAbsoluteRoute()
