@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -83,7 +84,8 @@
   <ItemGroup>
     <Compile Include="Mvc\HtmlExtensionsTests.cs" />
     <Compile Include="Mvc\RouteExtensionsTests.cs" />
-    <Compile Include="Mvc\TestHelper.cs" />
+    <Compile Include="Mvc\MvcTestHelper.cs" />
+    <Compile Include="Mvc\UrlExtensionsTests.cs" />
     <Compile Include="Routing\PredicateRouteConstraintTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +95,10 @@
     <ProjectReference Include="..\SwissKnife.Web\SwissKnife.Web.csproj">
       <Project>{563b6d5f-1747-471c-8ae8-d6abc9529056}</Project>
       <Name>SwissKnife.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SwissKnife\SwissKnife.csproj">
+      <Project>{2c883ba3-421c-4996-89cb-7e2769f38286}</Project>
+      <Name>SwissKnife</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -50,7 +50,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_ExpressionRepresentValueTypeProperty_ReturnsInputTag()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty).ToString(),
                         Is.EqualTo(@"<input id=""ValueTypeProperty"" name=""ValueTypeProperty"" type=""text"" value="""" />"));
@@ -73,7 +73,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_AttributeDefined_RendersAttribute()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, accesskey => "a").ToString()
                         .Contains(@" accesskey=""a"" "));
@@ -85,7 +85,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_DataAttributeDefined_ReturnsRenderedDataAttribute()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, dataCustom => "custom data").ToString()
                         .Contains(@" data-custom=""custom data"" "));
@@ -97,7 +97,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_CamelCaseAttributeDefined_ReturnsRenderedAttribute()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, camelCaseAttributeName => 101).ToString()
                         .Contains(@" camel-case-attribute-name=""101"" "));
@@ -106,7 +106,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_PascalCaseAttributeDefined_ReturnsRenderedAttribute()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, PascalCaseAttributeName => 101).ToString()
                         .Contains(@" pascal-case-attribute-name=""101"" "));
@@ -115,7 +115,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_AttributeNameHasSingleUpperCaseCharacter_ReturnsRenderedAttribute()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, A => 101).ToString()
                         .Contains(@" a=""101"" "));
@@ -124,7 +124,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_AttributeNameHasSingleLoweCaseCharacter_ReturnsRenderedAttribute()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, a => 101).ToString()
                         .Contains(@" a=""101"" "));
@@ -133,7 +133,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_AttributeNameHasOnlyCapitalCharacter_ReturnsRenderedAttribute()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             Assert.That(htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null, CAPITALS => 101).ToString()
                         .Contains(@" c-a-p-i-t-a-l-s=""101"" "));
@@ -142,7 +142,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void TextBoxFor_SeveralAttributesDefined_ReturnsRenderedAttributes()
         {
-            HtmlHelper htmlHelper = TestHelper.GetHtmlHelper();
+            HtmlHelper htmlHelper = MvcTestHelper.GetHtmlHelper();
 
             var result = htmlHelper.TextBoxFor<TestClass>(x => x.ValueTypeProperty, null,
                                                           accesskey => "a",

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>SwissKnife.Web</id>
-        <version>0.5.2.35220</version>
+        <version>0.5.3.30059</version>
         <title>SwissKnife.Web</title>
         <authors>Igor Rončević</authors>
         <projectUrl>http://github.com/ironcev/swissknife</projectUrl>
@@ -13,7 +13,7 @@
             <group targetFramework=".NETFramework4.5.1">
                 <dependency id="Microsoft.AspNet.Mvc" version="5.1.1" />
                 <dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
-                <dependency id="SwissKnife" version="0.5.2.35220" />
+                <dependency id="SwissKnife" version="0.5.3.30059" />
             </group>
         </dependencies>
     </metadata>

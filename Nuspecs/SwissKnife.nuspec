@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>SwissKnife</id>
-        <version>0.5.2.35220</version>
+        <version>0.5.3.30059</version>
         <title>SwissKnife</title>
         <authors>Igor Rončević</authors>
         <projectUrl>http://github.com/ironcev/swissknife</projectUrl>

@@ -82,6 +82,7 @@
     <Compile Include="Mvc\ControllerExtensions.cs" />
     <Compile Include="Mvc\ControllerHelper.cs" />
     <Compile Include="Mvc\HtmlExtensions.cs" />
+    <Compile Include="Mvc\Protocol.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mvc\RouteCollectionExtensions.cs" />
     <Compile Include="Mvc\RouteExtensions.cs" />
