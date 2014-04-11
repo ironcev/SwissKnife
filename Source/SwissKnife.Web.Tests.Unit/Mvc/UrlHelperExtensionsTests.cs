@@ -181,6 +181,133 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR").ToString(), Is.EqualTo("http://localhost/hr-HR/1999"));
         }
         #endregion
+
+        #region ToAbsoluteUrl // TODO-IG: Restructure all these tests. This is a temporary implementation just to make sure that the method works in the typical scenarios.
+        [Test]
+        public void ToAbsoluteUrl_IsAbsoluteUrlNotBelongingToTheWebSite_ReturnsSameUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            Assert.That(urlHelper.ToAbsoluteUrl("http://WWW.AbsoluteUrl.COM"), Is.EqualTo("http://WWW.AbsoluteUrl.COM"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl__IsAbsoluteUrlNotBelongingToTheWebSite_WithQuery__ReturnsSameUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            Assert.That(urlHelper.ToAbsoluteUrl("http://WWW.AbsoluteUrl.COM?a=1&B=2"), Is.EqualTo("http://WWW.AbsoluteUrl.COM?a=1&B=2"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl__IsAbsoluteUrlNotBelongingToTheWebSite_WithRelativePath__ReturnsSameUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            Assert.That(urlHelper.ToAbsoluteUrl("http://WWW.AbsoluteUrl.COM/Some/Relative/Path"), Is.EqualTo("http://WWW.AbsoluteUrl.COM/Some/Relative/Path"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl__IsAbsoluteUrlNotBelongingToTheWebSite_WithRelativePathAndQuery__ReturnsSameUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            Assert.That(urlHelper.ToAbsoluteUrl("http://WWW.AbsoluteUrl.COM/Some/Relative/Path?a=1&B=2"), Is.EqualTo("http://WWW.AbsoluteUrl.COM/Some/Relative/Path?a=1&B=2"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_IsAbsoluteUrlBelongingToTheWebSite_ReturnsSameUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.ToAbsoluteUrl("http://localhost"), Is.EqualTo("http://localhost"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl__IsAbsoluteUrlBelongingToTheWebSite_WithQuery__ReturnsSameUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+
+            Assert.That(urlHelper.ToAbsoluteUrl("http://localhost?a=1&B=2"), Is.EqualTo("http://localhost?a=1&B=2"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl__IsAbsoluteUrlBelongingToTheWebSite_WithRelativePath__ReturnsSameUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+
+            Assert.That(urlHelper.ToAbsoluteUrl("http://localhost/Some/Relative/Path"), Is.EqualTo("http://localhost/Some/Relative/Path"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl__IsAbsoluteUrlBelongingToTheWebSite_WithRelativePathAndQuery__ReturnsSameUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+
+            Assert.That(urlHelper.ToAbsoluteUrl("http://localhost/Some/Relative/Path?a=1&B=2"), Is.EqualTo("http://localhost/Some/Relative/Path?a=1&B=2"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_RelativeUrl_ReturnsAbsoluteUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.ToAbsoluteUrl("relative/url"), Is.EqualTo("http://localhost/relative/url"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_RelativeUrlBeginsWithSlash_ReturnsAbsoluteUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.ToAbsoluteUrl("/relative/url"), Is.EqualTo("http://localhost/relative/url"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl__RelativeUrl_WithQuery__ReturnsAbsoluteUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+
+            Assert.That(urlHelper.ToAbsoluteUrl("relative/url?a=1&B=2"), Is.EqualTo("http://localhost/relative/url?a=1&B=2"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl__RelativeUrlBeginsWithSlash_WithQuery__ReturnsAbsoluteUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+
+            Assert.That(urlHelper.ToAbsoluteUrl("/relative/url?a=1&B=2"), Is.EqualTo("http://localhost/relative/url?a=1&B=2"));
+        }
+        #endregion
     }
     // ReSharper restore InconsistentNaming
 }

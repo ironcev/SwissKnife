@@ -11,6 +11,11 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 {
     public static class HtmlExtensions
     {
+        public static UrlHelper GetUrlHelper(this HtmlHelper htmlHelper)
+        {
+            return new UrlHelper(htmlHelper.ViewContext.RequestContext);
+        }
+
         public static IHtmlString Or(this HtmlHelper htmlHelper, Func<string> firstHtmlFunction, Func<string> secondHtmlFunction, bool condition)
         {
             var result = condition ? (firstHtmlFunction != null ? firstHtmlFunction() : null) : (secondHtmlFunction != null ? secondHtmlFunction() : null);

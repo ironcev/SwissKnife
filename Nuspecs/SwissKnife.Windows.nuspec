@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>SwissKnife.Windows</id>
-        <version>0.5.3.30059</version>
+        <version>0.5.4.18972</version>
         <title>SwissKnife.Windows</title>
         <authors>Igor Rončević</authors>
         <projectUrl>http://github.com/ironcev/swissknife</projectUrl>
@@ -11,7 +11,7 @@
         <copyright>Copyright © 2013 - 2014 Igor Rončević</copyright>
         <dependencies>
             <group targetFramework=".NETFramework4">
-                <dependency id="SwissKnife" version="0.5.3.30059" />
+                <dependency id="SwissKnife" version="0.5.4.18972" />
             </group>
         </dependencies>
     </metadata>

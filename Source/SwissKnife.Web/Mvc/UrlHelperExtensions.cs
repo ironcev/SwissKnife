@@ -12,6 +12,17 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
     /// </summary>
     public static class UrlHelperExtensions
     {
+        public static string ToAbsoluteUrl(this UrlHelper urlHelper, string relativeOrAbsoluteUrl)
+        {
+            // Try using urlHelper.IsLocalUrl(...)
+
+            Uri result;
+            if (!Uri.TryCreate(relativeOrAbsoluteUrl, UriKind.RelativeOrAbsolute, out result))
+                throw new ArgumentException("Relative or absolute URL does not represent a valid relative or absolute URL.", "relativeOrAbsoluteUrl");
+
+            return result.IsAbsoluteUri ? relativeOrAbsoluteUrl : new Uri(urlHelper.RequestContext.HttpContext.Request.Url, relativeOrAbsoluteUrl).ToString();
+        }
+
         public static MvcHtmlString CurrentUrl(this UrlHelper urlHelper, params Func<object, object>[] urlParametersAndDefaultValues)
         {
             return new MvcHtmlString(urlHelper.RouteUrl(ReplaceValuesInRouteData(urlHelper, urlParametersAndDefaultValues)));
