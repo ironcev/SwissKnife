@@ -92,24 +92,17 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
         internal static UrlHelper GetUrlHelper()
         {
-            return GetUrlHelper(httpContext: null,
-                                routeData: null,
-                                routeCollection: null);
+            return GetUrlHelper(GetHttpContext(), new RouteData(), new RouteCollection());
         }
 
         internal static UrlHelper GetUrlHelper(RouteData routeData, RouteCollection routeCollection)
         {
-            return GetUrlHelper(httpContext: null,
-                                routeData: routeData,
-                                routeCollection: routeCollection);            
+            return GetUrlHelper(GetHttpContext(), routeData, routeCollection);            
         }
 
         internal static UrlHelper GetUrlHelper(HttpContextBase httpContext, RouteData routeData, RouteCollection routeCollection)
         {
-            httpContext = httpContext ?? GetHttpContext();
-
-            UrlHelper urlHelper = new UrlHelper(new RequestContext(httpContext, routeData ?? new RouteData()), routeCollection ?? new RouteCollection());
-            return urlHelper;
+            return new UrlHelper(new RequestContext(httpContext, routeData), routeCollection);
         }
     }
 }

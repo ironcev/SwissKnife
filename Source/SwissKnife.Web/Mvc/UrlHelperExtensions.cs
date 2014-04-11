@@ -7,6 +7,9 @@ using SwissKnife.Diagnostics.Contracts;
 
 namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all methods. Properly implement Current() and Action() methods.
 {
+    /// <summary>
+    /// Contains extension methods to build URLs based on routes, controllers and actions.
+    /// </summary>
     public static class UrlHelperExtensions
     {
         public static MvcHtmlString CurrentUrl(this UrlHelper urlHelper, params Func<object, object>[] urlParametersAndDefaultValues)
@@ -81,6 +84,37 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
             return urlHelper.RouteAbsoluteUrl(routeName, routeValues, Protocol.Http);
         }
 
+        /// <summary>
+        /// Generates a fully qualified absolute URL for the specified route, its values and the protocol.
+        /// </summary>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
+        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
+        /// <param name="protocol"><see cref="Protocol"/> used as URI schema in the absolute URL.</param>
+        /// <returns>
+        /// Generated fully qualified absolute URL for the specified route.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(RouteValueDictionary)"/> method.
+        /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
+        /// </para>
+        /// <para>
+        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
+        /// <paramref name="routeName"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="routeName"/> is empty or white space.<br/>-or-<br/>
+        /// A route with the name <paramref name="routeName"/> does not exist in the <paramref name="urlHelper.RouteCollection"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">Not all of the parameters defined in the <see cref="Route.Url"/> are provided in the <paramref name="routeValues"/>.</exception>
         public static string RouteAbsoluteUrl(this UrlHelper urlHelper, string routeName, Option<RouteValueDictionary> routeValues, Protocol protocol)
         {
             Argument.IsNotNull(urlHelper, "urlHelper");
@@ -105,20 +139,29 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
                 throw new InvalidOperationException(string.Format("The absolute URL for the route '{1}' and the protocol '{2}' cannot be generated.{0}" +
                                                                   "The route URL was: '{3}'.{0}" +
                                                                   "The route values were:{0}" +
-                                                                  "{4}",
+                                                                  "{4}{0}" +
+                                                                  "The route data values were:{0}" +
+                                                                  "{5}{0}" +
+                                                                  "Make sure that the route values are supplied for all the parameters defined in the route URL.",
                                                                   Environment.NewLine,
                                                                   routeName,
                                                                   protocol,
                                                                   urlHelper.RouteCollection[routeName] as Route == null ? "<unable to detect route URL>" : ((Route)urlHelper.RouteCollection[routeName]).Url,
-                                                                  routeValues.IsNone ? "<null>" :
-                                                                                        routeValues.Value.Count <= 0 ? "<empty>" :
-                                                                                                          routeValues.Value.Aggregate(
-                                                                                                            string.Empty,
-                                                                                                            (output, value) => output + string.Format("\t{1}: {2}{0}", Environment.NewLine, value.Key, value.Value))
+                                                                  RouteValueDictionaryToString(routeValues),
+                                                                  RouteValueDictionaryToString(urlHelper.RequestContext.RouteData == null ? null : urlHelper.RequestContext.RouteData.Values)
                                                                   )
                                                 );
 
             return result;
+        }
+
+        private static string RouteValueDictionaryToString(Option<RouteValueDictionary> routeValueDictionary)
+        {
+            return (routeValueDictionary.IsNone ? "<null>" :
+                                                  routeValueDictionary.Value.Count <= 0 ? "<empty>" :
+                                                        routeValueDictionary.Value.Aggregate(
+                                                        string.Empty,
+                                                        (output, value) => output + string.Format("\t{1}: {2}{0}", Environment.NewLine, value.Key, value.Value))).TrimEnd();
         }
 
         public static string Action<TController>(this UrlHelper helper, Expression<Func<TController, ActionResult>> action) where TController : Controller
