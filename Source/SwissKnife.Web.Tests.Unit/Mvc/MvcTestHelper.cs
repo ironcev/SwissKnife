@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -29,51 +28,36 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
         internal static HttpContextBase GetHttpContext(string webSiteUrl)
         {
-            return GetHttpContext(protocol: null,
-                                  webSiteUrl: webSiteUrl,
-                                  port: null,
-                                  applicationPath: null,
-                                  requestPath: null,
-                                  httpMethod: null);
+            return GetHttpContext(new TestHttpContextDefinition { WebSiteUrl = webSiteUrl });
         }
 
         internal static HttpContextBase GetHttpContext()
         {
-            return GetHttpContext(protocol: null,
-                                  webSiteUrl: null,
-                                  port: null,
-                                  applicationPath: null,
-                                  requestPath: null,
-                                  httpMethod: null);
+            return GetHttpContext(new TestHttpContextDefinition());
         }
 
-        internal static HttpContextBase GetHttpContext(string protocol, string webSiteUrl, int? port, string applicationPath, string requestPath, string httpMethod)
+        internal static HttpContextBase GetHttpContext(TestHttpContextDefinition testHttpContextDefinition)
         {
             Mock<HttpContextBase> mockHttpContext = new Mock<HttpContextBase>();
 
-            if (!string.IsNullOrEmpty(applicationPath))
+            if (testHttpContextDefinition.HasApplicationPath)
             {
-                mockHttpContext.Setup(o => o.Request.ApplicationPath).Returns(applicationPath);
-                mockHttpContext.Setup(o => o.Request.RawUrl).Returns(applicationPath);
+                mockHttpContext.Setup(o => o.Request.ApplicationPath).Returns(testHttpContextDefinition.ApplicationPath);
+                mockHttpContext.Setup(o => o.Request.RawUrl).Returns(testHttpContextDefinition.ApplicationPath);
             }
 
-            if (!string.IsNullOrEmpty(requestPath))
+            if (testHttpContextDefinition.HasRequestPath)
             {
-                mockHttpContext.Setup(o => o.Request.AppRelativeCurrentExecutionFilePath).Returns(requestPath);
+                mockHttpContext.Setup(o => o.Request.AppRelativeCurrentExecutionFilePath).Returns(testHttpContextDefinition.RequestPath);
             }
 
-            protocol = string.IsNullOrEmpty(protocol) ? "http" : protocol;            
-            webSiteUrl = string.IsNullOrEmpty(webSiteUrl) ? "localhost" : webSiteUrl;
-            string portAsString = port.HasValue ? ":" + port : string.Empty;
 
-            Uri uri = new Uri(string.Format("{0}://{1}{2}", protocol, webSiteUrl, portAsString));
-
-            mockHttpContext.Setup(o => o.Request.Url).Returns(uri);
+            mockHttpContext.Setup(o => o.Request.Url).Returns(testHttpContextDefinition.RequestUrl);
 
             mockHttpContext.Setup(o => o.Request.PathInfo).Returns(string.Empty);
-            if (!string.IsNullOrEmpty(httpMethod))
+            if (testHttpContextDefinition.HttpMethod.HasValue)
             {
-                mockHttpContext.Setup(o => o.Request.HttpMethod).Returns(httpMethod);
+                mockHttpContext.Setup(o => o.Request.HttpMethod).Returns(testHttpContextDefinition.HttpMethod.Value.ToString().ToUpperInvariant());
             }
 
             mockHttpContext.Setup(o => o.Session).Returns((HttpSessionStateBase)null);

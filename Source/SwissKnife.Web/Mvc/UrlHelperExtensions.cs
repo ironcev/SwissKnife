@@ -23,7 +23,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
             return result.IsAbsoluteUri ? relativeOrAbsoluteUrl : new Uri(urlHelper.RequestContext.HttpContext.Request.Url, relativeOrAbsoluteUrl).ToString();
         }
 
-        public static MvcHtmlString CurrentUrl(this UrlHelper urlHelper, params Func<object, object>[] urlParametersAndDefaultValues)
+        public static MvcHtmlString CurrentUrl(this UrlHelper urlHelper, params Func<object, object>[] urlParametersAndDefaultValues) // TODO-IG: String instead of MvcHtmlString.
         {
             return new MvcHtmlString(urlHelper.RouteUrl(ReplaceValuesInRouteData(urlHelper, urlParametersAndDefaultValues)));
         }
