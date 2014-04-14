@@ -73,23 +73,143 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
             return result;
         }
 
+        /// <summary>
+        /// Generates a fully qualified absolute URL for the specified parameterless route and the HTTP protocol.
+        /// </summary>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
+        /// <returns>
+        /// Generated fully qualified absolute URL for the specified route.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(string)"/> method.
+        /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
+        /// </para>
+        /// <para>
+        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
+        /// <paramref name="routeName"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="routeName"/> is empty or white space.<br/>-or-<br/>
+        /// A route with the name <paramref name="routeName"/> does not exist in the <paramref name="urlHelper.RouteCollection"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">The route has parameters but they are not provided.</exception>
         public static string RouteAbsoluteUrl(this UrlHelper urlHelper, string routeName)
         {
             return urlHelper.RouteAbsoluteUrl(routeName, new RouteValueDictionary(), Protocol.Http);            
         }
 
+        /// <summary>
+        /// Generates a fully qualified absolute URL for the specified route, its values and the HTTP protocol.
+        /// </summary>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
+        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
+        /// <returns>
+        /// Generated fully qualified absolute URL for the specified route.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(string, RouteValueDictionary)"/> method.
+        /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
+        /// </para>
+        /// <para>
+        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
+        /// <paramref name="routeName"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="routeName"/> is empty or white space.<br/>-or-<br/>
+        /// A route with the name <paramref name="routeName"/> does not exist in the <paramref name="urlHelper.RouteCollection"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">Not all of the parameters defined in the <see cref="Route.Url"/> are provided in the <paramref name="routeValues"/>.</exception>
         public static string RouteAbsoluteUrl(this UrlHelper urlHelper, string routeName, Option<object> routeValues)
         {
-            // The constructor of the RouteValueDictionary class accepts null as a valid argument!
+            // The constructor of the RouteValueDictionary class accepts null as a valid argument.
             return urlHelper.RouteAbsoluteUrl(routeName, new RouteValueDictionary(routeValues.ValueOrNull), Protocol.Http);            
         }
 
+        /// <summary>
+        /// Generates a fully qualified absolute URL for the specified route, its values and the protocol.
+        /// </summary>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
+        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
+        /// <param name="protocol"><see cref="Protocol"/> used as URI schema in the absolute URL.</param>
+        /// <returns>
+        /// Generated fully qualified absolute URL for the specified route.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(string, object)"/> method.
+        /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
+        /// </para>
+        /// <para>
+        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
+        /// <paramref name="routeName"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="routeName"/> is empty or white space.<br/>-or-<br/>
+        /// A route with the name <paramref name="routeName"/> does not exist in the <paramref name="urlHelper.RouteCollection"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">Not all of the parameters defined in the <see cref="Route.Url"/> are provided in the <paramref name="routeValues"/>.</exception>
         public static string RouteAbsoluteUrl(this UrlHelper urlHelper, string routeName, Option<object> routeValues, Protocol protocol)
         {
-            // The constructor of the RouteValueDictionary class accepts null as a valid argument!
+            // The constructor of the RouteValueDictionary class accepts null as a valid argument.
             return urlHelper.RouteAbsoluteUrl(routeName, new RouteValueDictionary(routeValues.ValueOrNull), protocol);
         }
 
+        /// <summary>
+        /// Generates a fully qualified absolute URL for the specified route, its values and the HTTP protocol.
+        /// </summary>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
+        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
+        /// <returns>
+        /// Generated fully qualified absolute URL for the specified route.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(string, RouteValueDictionary)"/> method.
+        /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
+        /// </para>
+        /// <para>
+        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
+        /// <paramref name="routeName"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="routeName"/> is empty or white space.<br/>-or-<br/>
+        /// A route with the name <paramref name="routeName"/> does not exist in the <paramref name="urlHelper.RouteCollection"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">Not all of the parameters defined in the <see cref="Route.Url"/> are provided in the <paramref name="routeValues"/>.</exception>
         public static string RouteAbsoluteUrl(this UrlHelper urlHelper, string routeName, Option<RouteValueDictionary> routeValues)
         {
             return urlHelper.RouteAbsoluteUrl(routeName, routeValues, Protocol.Http);
@@ -107,7 +227,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
         /// </returns>
         /// <remarks>
         /// <para>
-        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(RouteValueDictionary)"/> method.
+        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(string, RouteValueDictionary)"/> method.
         /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
         /// </para>
         /// <para>

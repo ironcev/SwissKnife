@@ -66,12 +66,15 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             return mockHttpContext.Object;
         }
 
+        /// <summary>
+        /// Gets the route data for the default "{controller}/{action}" route. That default route is "home/index".
+        /// </summary>
         internal static RouteData GetDefaultRouteData()
         {
-            RouteData rd = new RouteData();
-            rd.Values.Add("controller", "home");
-            rd.Values.Add("action", "index");
-            return rd;
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("controller", "home");
+            routeData.Values.Add("action", "index");
+            return routeData;
         }
 
         internal static UrlHelper GetUrlHelper()

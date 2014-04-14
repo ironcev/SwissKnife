@@ -65,7 +65,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
-        public void RouteAbsoluteUrl_RouteWithoutParameters_ReturnsAbsoluteRoute()
+        public void RouteAbsoluteUrl_RouteWithoutParameters_ReturnsAbsoluteRouteUrl()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithoutParameters", "route-without-parameters");
@@ -73,6 +73,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
 
             Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithoutParameters"), Is.EqualTo("http://localhost/route-without-parameters"));
+            Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithoutParameters").EndsWith(urlHelper.RouteUrl("RouteWithoutParameters")));
         }
 
         [Test]
@@ -83,7 +84,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
 
-            Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", new { language = "en-US", year = 2000}), Is.EqualTo("http://localhost/en-US/2000"));
+            Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", new { language = "en-US", year = 2000 }), Is.EqualTo("http://localhost/en-US/2000"));
+            Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", new { language = "en-US", year = 2000 }).EndsWith(urlHelper.RouteUrl("RouteWithParameters", new { language = "en-US", year = 2000 })));
         }
 
         [Test]
@@ -95,6 +97,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(MvcTestHelper.GetDefaultRouteData(), routeCollection);
 
             Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", new { language = "en-US", year = 2000 }), Is.EqualTo("http://localhost/en-US/2000"));
+            Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", new { language = "en-US", year = 2000 }).EndsWith(urlHelper.RouteUrl("RouteWithParameters", new { language = "en-US", year = 2000 })));
         }
 
         [Test]
@@ -110,6 +113,9 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             routeValues.Add("year", 2000);
 
             Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", routeValues), Is.EqualTo("http://localhost/en-US/2000"));
+            // ReSharper disable AssignNullToNotNullAttribute
+            Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", routeValues).EndsWith(urlHelper.RouteUrl("RouteWithParameters", routeValues)));
+            // ReSharper restore AssignNullToNotNullAttribute
         }
 
         [Test]
@@ -121,6 +127,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
 
             Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", new { language = "en-US", year = 2000 }, Protocol.Https), Is.EqualTo("https://localhost/en-US/2000"));
+            Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithParameters", new { language = "en-US", year = 2000 }, Protocol.Http), Is.EqualTo("http://localhost/en-US/2000"));
         }
 
         [Test]
@@ -132,6 +139,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
 
             var exception = Assert.Throws<InvalidOperationException>(() => urlHelper.RouteAbsoluteUrl("RouteWithParameters"));
+            Assert.That(exception.Message.Contains("cannot be generated"));
+            Assert.That(exception.Message.Contains("'RouteWithParameters'"));
             Console.WriteLine(exception.Message);
         }
 
@@ -148,9 +157,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             routeValues.Add("year", 2000);
 
             var exception = Assert.Throws<InvalidOperationException>(() => urlHelper.RouteAbsoluteUrl("RouteWithParameters", routeValues));
+            Assert.That(exception.Message.Contains("cannot be generated"));
+            Assert.That(exception.Message.Contains("'RouteWithParameters'"));
             Console.WriteLine(exception.Message);
         }
+        #endregion
 
+        #region CurrentUrl
         [Test]
         public void CurrentUrl()
         {
@@ -163,9 +176,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(language => "hr-HR").ToString(), Is.EqualTo("/hr-HR/1999"));            
-        }
+            Assert.That(urlHelper.CurrentUrl(language => "hr-HR").ToString(), Is.EqualTo("/hr-HR/1999"));
+        }        
+        #endregion
 
+        #region CurrentAbsoluteUrl
         [Test]
         public void CurrentAbsoluteUrl()
         {
@@ -179,7 +194,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
 
             Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR").ToString(), Is.EqualTo("http://localhost/hr-HR/1999"));
-        }
+        }        
         #endregion
 
         #region ToAbsoluteUrl // TODO-IG: Restructure all these tests. This is a temporary implementation just to make sure that the method works in the typical scenarios.
