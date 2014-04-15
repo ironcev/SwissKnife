@@ -51,18 +51,21 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
                 mockHttpContext.Setup(o => o.Request.AppRelativeCurrentExecutionFilePath).Returns(testHttpContextDefinition.RequestPath);
             }
 
-
             mockHttpContext.Setup(o => o.Request.Url).Returns(testHttpContextDefinition.RequestUrl);
 
             mockHttpContext.Setup(o => o.Request.PathInfo).Returns(string.Empty);
+
             if (testHttpContextDefinition.HttpMethod.HasValue)
             {
                 mockHttpContext.Setup(o => o.Request.HttpMethod).Returns(testHttpContextDefinition.HttpMethod.Value.ToString().ToUpperInvariant());
             }
 
+            mockHttpContext.Setup(o => o.Request.QueryString).Returns(testHttpContextDefinition.QueryString);
+
             mockHttpContext.Setup(o => o.Session).Returns((HttpSessionStateBase)null);
             mockHttpContext.Setup(o => o.Response.ApplyAppPathModifier(It.IsAny<string>())).Returns<string>(r => r);
             mockHttpContext.Setup(o => o.Items).Returns(new Hashtable());
+
             return mockHttpContext.Object;
         }
 
@@ -77,9 +80,22 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             return routeData;
         }
 
+        /// <summary>
+        /// Gets the URL helper for standard HTTP context and empty route data and route collection.
+        /// </summary>
+        /// <returns></returns>
         internal static UrlHelper GetUrlHelper()
         {
             return GetUrlHelper(GetHttpContext(), new RouteData(), new RouteCollection());
+        }
+
+        /// <summary>
+        /// Gets the URL helper for specified HTTP context and empty route data and route collection.
+        /// </summary>
+        /// <returns></returns>
+        internal static UrlHelper GetUrlHelper(HttpContextBase httpContext)
+        {
+            return GetUrlHelper(httpContext, new RouteData(), new RouteCollection());
         }
 
         internal static UrlHelper GetUrlHelper(RouteData routeData, RouteCollection routeCollection)

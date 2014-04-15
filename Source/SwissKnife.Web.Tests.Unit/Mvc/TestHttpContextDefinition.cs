@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using SwissKnife.Web.Mvc;
 
 namespace SwissKnife.Web.Tests.Unit.Mvc
@@ -11,6 +12,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         internal string ApplicationPath { get; set; }
         internal string RequestPath { get; set; }
         internal HttpMethod? HttpMethod { get; set; }
+        internal NameValueCollection QueryString { get; set; }
 
         internal bool HasApplicationPath { get { return !string.IsNullOrEmpty(ApplicationPath); } }
         internal bool HasRequestPath { get { return !string.IsNullOrEmpty(RequestPath); } }
@@ -25,6 +27,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             ApplicationPath = string.Empty;
             RequestPath = string.Empty;
             HttpMethod = Mvc.HttpMethod.Get;
+            QueryString = new NameValueCollection();
         }
     }
 }

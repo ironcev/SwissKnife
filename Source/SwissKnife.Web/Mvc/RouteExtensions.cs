@@ -54,7 +54,7 @@ namespace SwissKnife.Web.Mvc
         /// </note>
         /// </remarks>
         /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Defaults"/> will be set.</param>
-        /// <param name="urlParameterAndDefaultValue">URL parameter and its values defined as lambda expressions.</param>
+        /// <param name="urlParameterAndDefaultValue">URL parameter and its value defined as lambda expressions.</param>
         /// <returns>
         /// The original <paramref name="route"/>.
         /// </returns>

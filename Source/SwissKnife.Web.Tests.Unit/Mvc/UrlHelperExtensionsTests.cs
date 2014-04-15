@@ -165,7 +165,55 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
         #region CurrentUrl
         [Test]
-        public void CurrentUrl()
+        public void CurrentUrl_UrlHelperIsNull_ThrowsException()
+        {
+            var parameterName = Assert.Throws<ArgumentNullException>(() => UrlHelperExtensions.CurrentUrl(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper"));
+        }
+
+        [Test]
+        public void CurrentUrl_UrlHelperRequestContextIsNull_ThrowsException()
+        {
+            var urlHelper = new UrlHelper();
+            // It is not possible to set UrlHelper.RequestContext to null and at the same time to have RouteCollection being not null.
+            // Therefor this little trick to pass the null check for the urlHelper.RouteCollection.
+
+            urlHelper.GetType().GetProperty("RouteCollection").GetSetMethod(true).Invoke(urlHelper, new object[] { new RouteCollection() });
+            Assert.That(urlHelper.RouteCollection, Is.Not.Null);
+
+            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentUrl(new Func<object, object>[0])).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper.RequestContext"));
+        }
+
+        [Test]
+        public void CurrentUrl_NewRouteParametersIsNull_ThrowsException()
+        {
+            var urlHelper = new UrlHelper(new RequestContext(), new RouteCollection());
+
+            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentUrl(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("newRouteParameters"));
+        }
+
+        [Test]
+        public void CurrentUrl_EmptyRoute_ReturnsEmptyString()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            Assert.That(urlHelper.CurrentUrl(), Is.Empty);
+        }
+
+        [Test]
+        public void CurrentUrl__RouteWithoutParameters_NoNewRouteParameters__ReturnsOriginalRoute()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "route-without-parameters");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/route-without-parameters"));
+        }
+
+        [Test]
+        public void CurrentUrl__RouteWithParameters_NoNewRouteParameters__ReturnsOriginalRoute()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
@@ -176,8 +224,68 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(language => "hr-HR").ToString(), Is.EqualTo("/hr-HR/1999"));
-        }        
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999"));
+        }
+
+        [Test]
+        public void CurrentUrl__RouteWithoutParameters_NewRouteParameters__ParametersAddedToQueryString()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "route-without-parameters");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("/route-without-parameters?p1=p1&p2=1&p3=1.23"));
+        }
+
+        [Test]
+        public void CurrentUrl__RouteWithParameters_NewRouteParametersThatDoNotExist__ParametersAddedToQueryString()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData rd = new RouteData();
+            rd.Values.Add("language", "en-US");
+            rd.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("/en-US/1999?p1=p1&p2=1&p3=1.23"));
+        }
+
+        [Test]
+        public void CurrentUrl__RouteWithParameters_NewRouteParametersThatAlreadyExist__ParametersOverriddenInTheUrl()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData rd = new RouteData();
+            rd.Values.Add("language", "en-US");
+            rd.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(language => "hr-HR"), Is.EqualTo("/hr-HR/1999"));
+
+            Assert.That(urlHelper.CurrentUrl(year => 2000), Is.EqualTo("/en-US/2000"));
+
+            Assert.That(urlHelper.CurrentUrl(language => "hr-HR", year => 2000), Is.EqualTo("/hr-HR/2000"));
+        }
+
+        [Test]
+        public void CurrentUrl__RouteWithParameters_NewRouteParametersThatAlreadyExistAndThatDoNotExist__ExistingParametersOverriddenInTheUrl_NonExistingParametersAddedToQueryString()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData rd = new RouteData();
+            rd.Values.Add("language", "en-US");
+            rd.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(language => "hr-HR", year => 2000, p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("/hr-HR/2000?p1=p1&p2=1&p3=1.23"));
+        }
         #endregion
 
         #region CurrentAbsoluteUrl
