@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Web.Mvc;
 using System.Web.Routing;
 using NUnit.Framework;
@@ -218,11 +219,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
 
-            RouteData rd = new RouteData();
-            rd.Values.Add("language", "en-US");
-            rd.Values.Add("year", "1999");
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
 
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999"));
         }
@@ -244,11 +245,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
 
-            RouteData rd = new RouteData();
-            rd.Values.Add("language", "en-US");
-            rd.Values.Add("year", "1999");
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
 
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("/en-US/1999?p1=p1&p2=1&p3=1.23"));
         }
@@ -259,11 +260,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
 
-            RouteData rd = new RouteData();
-            rd.Values.Add("language", "en-US");
-            rd.Values.Add("year", "1999");
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
 
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(language => "hr-HR"), Is.EqualTo("/hr-HR/1999"));
 
@@ -278,13 +279,95 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
 
-            RouteData rd = new RouteData();
-            rd.Values.Add("language", "en-US");
-            rd.Values.Add("year", "1999");
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
 
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(language => "hr-HR", year => 2000, p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("/hr-HR/2000?p1=p1&p2=1&p3=1.23"));
+        }
+
+        [Test]
+        public void CurrentUrl__RouteWithParameters_ParameterWithSameNameInQueryString__ParametersOverriddenInTheUrl()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection {{"language", "hr-HR"}}
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/hr-HR/1999"));
+        }
+
+        [Test]
+        public void CurrentUrl__RouteWithParameters_ParameterWithSameNameInQueryStringAndInNewRouteParameters__ParametersOverriddenInTheUrl_NewRouteParametersWin()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "language", "hr-HR" }, { "year", "2000" } }
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(language => "fr-FR"), Is.EqualTo("/fr-FR/2000"));
+        }
+
+        [Test]
+        public void CurrentUrl_NewRouteParametersAreCaseInsensitive()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(language => "hr-HR"), Is.EqualTo("/hr-HR"));
+            Assert.That(urlHelper.CurrentUrl(LANGUAGE => "hr-HR"), Is.EqualTo("/hr-HR"));
+            Assert.That(urlHelper.CurrentUrl(LaNgUaGe => "hr-HR"), Is.EqualTo("/hr-HR"));
+        }
+
+        [Test]
+        public void CurrentUrl_ParametersInTheQueryStringAreCaseInsensitive()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "LANGUAGE", "hr-HR" } }
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/hr-HR/1999"));
         }
         #endregion
 
@@ -295,11 +378,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
 
-            RouteData rd = new RouteData();
-            rd.Values.Add("language", "en-US");
-            rd.Values.Add("year", "1999");
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
 
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(rd, routeCollection);
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR").ToString(), Is.EqualTo("http://localhost/hr-HR/1999"));
         }        

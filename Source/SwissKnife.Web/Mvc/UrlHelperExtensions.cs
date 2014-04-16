@@ -110,21 +110,16 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
         private static RouteValueDictionary ReplaceValuesInRouteData(UrlHelper urlHelper, params Func<object, object>[] newRouteParameters)
         {
             var result = new RouteValueDictionary(urlHelper.RequestContext.RouteData.Values);
-            var qs = urlHelper.RequestContext.HttpContext.Request.QueryString;
+            var queryString = urlHelper.RequestContext.HttpContext.Request.QueryString;
 
-            if (qs != null)
-                foreach (var param in qs.Cast<string>().Where(param => !string.IsNullOrEmpty(qs[param])))
-                {
-                    result[param] = qs[param];
-                }
+            // Replace existing parameters using the values from the query string if there are parameters with the same name.
+            if (queryString != null)
+                foreach (var param in queryString.Cast<string>().Where(param => !string.IsNullOrEmpty(queryString[param])))
+                    result[param] = queryString[param];
 
-            if (newRouteParameters != null)
-            {
-                foreach (var function in newRouteParameters)
-                {
-                    result[function.Method.GetParameters()[0].Name] = function(null);
-                }
-            }
+            // Replace existing parameters with new ones.
+            foreach (var function in newRouteParameters)
+                result[function.Method.GetParameters()[0].Name] = function(null);
 
             return result;
         }
