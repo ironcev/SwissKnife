@@ -45,7 +45,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
         }
 
         /// <summary>
-        /// Gets the current URL as defined in the request context and replaces existing route parameters with provided new route parameters.
+        /// Generates a new URL by taking the current URL as defined in the request context and replacing existing route parameters with provided new route parameters.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -84,27 +84,54 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
             return urlHelper.RouteUrl(ReplaceValuesInRouteData(urlHelper, newRouteParameters)) ?? string.Empty;
         }
 
-        public static MvcHtmlString CurrentAbsoluteUrl(this UrlHelper urlHelper, params Func<object, object>[] newRouteParameters)
+        public static string CurrentAbsoluteUrl(this UrlHelper urlHelper)
         {
+            return CurrentAbsoluteUrl(urlHelper, new Func<object, object>[0]);
+        }
+
+        public static string CurrentAbsoluteUrl(this UrlHelper urlHelper, params Func<object, object>[] newRouteParameters)
+        {
+            // TODO-IG: Get the protocol out of the current http context.
             return CurrentAbsoluteUrl(urlHelper, Protocol.Http, newRouteParameters);
         }
 
-        public static MvcHtmlString CurrentAbsoluteUrl(this UrlHelper urlHelper, Protocol protocol, params Func<object, object>[] newRouteParameters)
+        public static string CurrentAbsoluteUrl(this UrlHelper urlHelper, Protocol protocol, params Func<object, object>[] newRouteParameters)
         {
+            Argument.IsNotNull(urlHelper, "urlHelper");
+            Argument.IsNotNull(urlHelper.RouteCollection, "urlHelper.RouteCollection");
+            Argument.IsNotNull(urlHelper.RequestContext, "urlHelper.RequestContext");
+            Argument.IsNotNull(newRouteParameters, "newRouteParameters");
+            // TODO-IG: Check that protocol is in range.
+
             string result = UrlHelper.GenerateUrl(null, // routeName
                                       null, // actionName
                                       null, // controllerName
                                       protocol.ToString().ToLowerInvariant(),
                                       null, // hostName,
                                       null, // fragment
-                                      //routeValues.ValueOrNull,
                                       ReplaceValuesInRouteData(urlHelper, newRouteParameters),
                                       urlHelper.RouteCollection,
                                       urlHelper.RequestContext,
                                       false // includeImplicitMvcValues
                                       );
 
-            return new MvcHtmlString(result);
+            if (string.IsNullOrWhiteSpace(result))
+                throw new InvalidOperationException(string.Format("The absolute URL for the current route and the protocol '{1}' cannot be generated.{0}" +
+                                                                  "The route URL was: '{2}'.{0}" +
+                                                                  "The route data values were:{0}" +
+                                                                  "{3}{0}" +
+                                                                  "The new route parameters were:{0}" +
+                                                                  "{4}{0}" +
+                                                                  "Make sure that the route values are supplied for all the parameters defined in the route URL.",
+                                                                  Environment.NewLine,
+                                                                  protocol,
+                                                                  urlHelper.RequestContext.RouteData.Route as Route == null ? "<unable to detect route URL>" : ((Route)urlHelper.RequestContext.RouteData.Route).Url,
+                                                                  RouteValueDictionaryToString(urlHelper.RequestContext.RouteData.Values),
+                                                                  RouteValueDictionaryToString(new RouteValueDictionary(newRouteParameters.ToDictionary(function => function.Method.GetParameters()[0].Name, function => function(null))))
+                                                                  )
+                                                );
+
+            return result;
         }
 
         private static RouteValueDictionary ReplaceValuesInRouteData(UrlHelper urlHelper, params Func<object, object>[] newRouteParameters)

@@ -156,6 +156,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             var routeValues = new RouteValueDictionary();
             routeValues.Add("language", "en-US");
             routeValues.Add("year", 2000);
+            // "month" parameter is missing.
 
             var exception = Assert.Throws<InvalidOperationException>(() => urlHelper.RouteAbsoluteUrl("RouteWithParameters", routeValues));
             Assert.That(exception.Message.Contains("cannot be generated"));
@@ -372,6 +373,64 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         #endregion
 
         #region CurrentAbsoluteUrl
+        [Test]
+        public void CurrentAbsoluteUrl_UrlHelperIsNull_ThrowsException()
+        {
+            var parameterName = Assert.Throws<ArgumentNullException>(() => UrlHelperExtensions.CurrentAbsoluteUrl(null, Protocol.Http, new Func<object, object>[0])).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl_UrlHelperRouteCollectionIsNull_ThrowsException()
+        {
+            var urlHelper = new UrlHelper();
+
+            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentAbsoluteUrl(Protocol.Http, new Func<object, object>[0])).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper.RouteCollection"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl_UrlHelperRequestContextIsNull_ThrowsException()
+        {
+            var urlHelper = new UrlHelper();
+            // It is not possible to set UrlHelper.RequestContext to null and at the same time to have RouteCollection being not null.
+            // Therefor this little trick to pass the null check for the urlHelper.RouteCollection.
+
+            urlHelper.GetType().GetProperty("RouteCollection").GetSetMethod(true).Invoke(urlHelper, new object[] { new RouteCollection() });
+            Assert.That(urlHelper.RouteCollection, Is.Not.Null);
+
+            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentAbsoluteUrl(Protocol.Http, new Func<object, object>[0])).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper.RequestContext"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl_NewRouteParametersIsNull_ThrowsException()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentAbsoluteUrl(Protocol.Http, null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("newRouteParameters"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl_RouteWithParametersRouteValuesNotAllDefined_ThrowsException()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}/{month}");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            var routeValues = new RouteValueDictionary();
+            routeValues.Add("language", "en-US");
+            routeValues.Add("year", 2000);
+            // "month" parameter is missing.
+
+            var exception = Assert.Throws<InvalidOperationException>(() => urlHelper.CurrentAbsoluteUrl());
+            Assert.That(exception.Message.Contains("cannot be generated"));
+            Assert.That(exception.Message.Contains("current route"));
+            Console.WriteLine(exception.Message);
+        }
+
         [Test]
         public void CurrentAbsoluteUrl()
         {
