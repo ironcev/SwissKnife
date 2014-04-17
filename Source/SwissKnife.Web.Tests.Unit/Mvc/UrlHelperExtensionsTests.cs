@@ -132,6 +132,17 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
+        public void RouteAbsoluteUrl_ReturnsAbsoluteRouteWithEncodedParameters()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithEncodedParameter", "{parameter}");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.RouteAbsoluteUrl("RouteWithEncodedParameter", new { parameter = " &?!.,:" }), Is.EqualTo("http://localhost/%20%26%3f!.%2c%3a"));
+        }
+
+        [Test]
         public void RouteAbsoluteUrl_RouteWithParametersRouteValuesEmpty_ThrowsException()
         {
             RouteCollection routeCollection = new RouteCollection();
@@ -369,6 +380,17 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/hr-HR/1999"));
+        }
+
+        [Test]
+        public void CurrentUrl_ReturnsCurrentUrlWithEncodedParameters()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithEncodedParameter", "{parameter}");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(parameter => " &?!.,:"), Is.EqualTo("/%20%26%3f!.%2c%3a"));
         }
         #endregion
 
