@@ -54,12 +54,12 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
         /// If there is a parameter in the current URL query string that has the same name as one of the current route parameters, the existing parameter in the current route will be replaced by the value of the parameter in the query string.
         /// </para>
         /// <para>
-        /// For example, let us assume that the current route is defined as "{language}/{year}" and that the current URL is "/en-US/1999".<br/>
+        /// For example, let us assume that the current route is defined as "<i>{language}/{year}</i>" and that the current URL is "<i>/en-US/1999</i>".<br/>
         /// The following call:<br/>
         /// <code>
         /// urlHelper.CurrentUrl(language => "hr-HR", year => 2000, p1 => "firstParameter", p2 => 1, p3 => 1.23);
         /// </code>
-        /// will return "/hr-HR/2000?p1=firstParameter&amp;p2=1&amp;p3=1.23".
+        /// will return "<i>/hr-HR/2000?p1=firstParameter&amp;p2=1&amp;p3=1.23</i>".
         /// </para>        
         /// <note type="caution">
         /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.

@@ -8,8 +8,8 @@ namespace SwissKnife
 {
     /// <summary>
     /// Contains methods for converting identifier expressions into their string representations.
-    /// For example, the identifier expression 'x => x.Property.SubProperty' will be converted into 'Property.SubProperty' and
-    /// identifier expression '() => Property' into 'Property'.
+    /// For example, the identifier expression 'x => x.Property.SubProperty' will be converted into "Property.SubProperty" and
+    /// identifier expression '() => Property' into "Property".
     /// </summary>
     public static class Identifier // TODO-IG: Implement the class fully! This is just a temporary version needed for internal projects!
     {

@@ -40,15 +40,20 @@
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
     <Compile Include="Collections\CollectionExtensions.cs" />
+    <Compile Include="Collections\NamespaceDoc.cs" />
     <Compile Include="Diagnostics\Contracts\ContractExtensions.cs" />
     <Compile Include="Diagnostics\Contracts\Argument.cs" />
+    <Compile Include="Diagnostics\Contracts\NamespaceDoc.cs" />
     <Compile Include="Diagnostics\Contracts\Operation.cs" />
     <Compile Include="Diagnostics\Contracts\TypeParameter.cs" />
     <Compile Include="Enumeration\FlagsEnum.cs" />
+    <Compile Include="Enumeration\NamespaceDoc.cs" />
     <Compile Include="GuidUtility.cs" />
     <Compile Include="Identifier.cs" />
     <Compile Include="IdentifierConversion\ConversionOptions.cs" />
+    <Compile Include="IdentifierConversion\NamespaceDoc.cs" />
     <Compile Include="IdentifierConversion\StaticMemberConversion.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\Cryptography\EncryptionHelper.cs" />
@@ -56,10 +61,12 @@
     <Compile Include="Security\Cryptography\HashingHelper.cs" />
     <Compile Include="Security\Cryptography\HashingProvider.cs" />
     <Compile Include="Security\Cryptography\HashingResult.cs" />
+    <Compile Include="Security\Cryptography\NamespaceDoc.cs" />
     <Compile Include="Security\Cryptography\StringFormat.cs" />
     <Compile Include="Security\Cryptography\Util.cs" />
     <Compile Include="StringConvert.cs" />
     <Compile Include="Time\ConstantTimeGenerator.cs" />
+    <Compile Include="Time\NamespaceDoc.cs" />
     <Compile Include="Time\SystemTimeGenerator.cs" />
     <Compile Include="Time\TimeGenerator.cs" />
     <Compile Include="TypeExtensions.cs" />

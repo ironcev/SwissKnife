@@ -19,7 +19,7 @@
     <Language>en-US</Language>
     <DocumentationSources>
       <DocumentationSource sourceFile="SwissKnife\SwissKnife.csproj" />
-    </DocumentationSources>
+<DocumentationSource sourceFile="SwissKnife.Web\SwissKnife.Web.csproj" /></DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
