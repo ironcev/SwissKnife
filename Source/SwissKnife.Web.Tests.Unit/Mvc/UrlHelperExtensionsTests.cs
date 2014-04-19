@@ -454,7 +454,28 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
-        public void CurrentAbsoluteUrl()
+        public void CurrentAbsoluteUrl_EmptyRoute_ReturnsSiteRootUrl()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("SiteRoot", "");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl__RouteWithoutParameters_NoNewRouteParameters__ReturnsOriginalAbsolutRoute()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "route-without-parameters");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/route-without-parameters"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl__RouteWithParameters_NoNewRouteParameters__ReturnsOriginalAbsoluteRoute()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
@@ -465,8 +486,193 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
-            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR").ToString(), Is.EqualTo("http://localhost/hr-HR/1999"));
-        }        
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl__RouteWithoutParameters_NewRouteParameters__ParametersAddedToQueryString()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "route-without-parameters");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/route-without-parameters?p1=p1&p2=1&p3=1.23"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatDoNotExist__ParametersAddedToQueryString()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/en-US/1999?p1=p1&p2=1&p3=1.23"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatAlreadyExist__ParametersOverriddenInTheUrl()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR"), Is.EqualTo("http://localhost/hr-HR/1999"));
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(year => 2000), Is.EqualTo("http://localhost/en-US/2000"));
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR", year => 2000), Is.EqualTo("http://localhost/hr-HR/2000"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatAlreadyExistAndThatDoNotExist__ExistingParametersOverriddenInTheUrl_NonExistingParametersAddedToQueryString()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR", year => 2000, p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/hr-HR/2000?p1=p1&p2=1&p3=1.23"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl__RouteWithParameters_ParameterWithSameNameInQueryString__ParametersOverriddenInTheUrl()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "language", "hr-HR" } }
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/hr-HR/1999"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl__RouteWithParameters_ParameterWithSameNameInQueryStringAndInNewRouteParameters__ParametersOverriddenInTheUrl_NewRouteParametersWin()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "language", "hr-HR" }, { "year", "2000" } }
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "fr-FR"), Is.EqualTo("http://localhost/fr-FR/2000"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl_NewRouteParametersAreCaseInsensitive()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(LANGUAGE => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(LaNgUaGe => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl_ParametersInTheQueryStringAreCaseInsensitive()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "LANGUAGE", "hr-HR" } }
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/hr-HR/1999"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl_ReturnsCurrentUrlWithEncodedParameters()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithEncodedParameter", "{parameter}");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(parameter => " &?!.,:"), Is.EqualTo("http://localhost/%20%26%3f!.%2c%3a"));
+        }
+
+        [Test]
+        public void CurrentAbsoluteUrl_ProtocolDefined_OverridesTheOriginalProtocol()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("SiteRoot", "");
+
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                Protocol = Protocol.Http
+            };
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(MvcTestHelper.GetHttpContext(httpContextDefinition), new RouteData(), routeCollection);
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.Scheme, Is.EqualTo("http"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(Protocol.Https), Is.EqualTo("https://localhost/"));
+
+
+            httpContextDefinition = new TestHttpContextDefinition
+            {
+                Protocol = Protocol.Https
+            };
+
+            urlHelper = MvcTestHelper.GetUrlHelper(MvcTestHelper.GetHttpContext(httpContextDefinition), new RouteData(), routeCollection);
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.Scheme, Is.EqualTo("https"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(Protocol.Http), Is.EqualTo("http://localhost/"));
+        }
         #endregion
 
         #region ToAbsoluteUrl // TODO-IG: Restructure all these tests. This is a temporary implementation just to make sure that the method works in the typical scenarios.

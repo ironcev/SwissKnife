@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mvc\HtmlExtensionsTests.cs" />
+    <Compile Include="Mvc\ProtocolHelperTests.cs" />
     <Compile Include="Mvc\RouteExtensionsTests.cs" />
     <Compile Include="Mvc\MvcTestHelper.cs" />
     <Compile Include="Mvc\TestHttpContextDefinition.cs" />

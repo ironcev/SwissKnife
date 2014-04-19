@@ -1,4 +1,8 @@
-﻿// ReSharper disable CheckNamespace
+﻿using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("SwissKnife.Web.Tests.Unit")]
+
+// ReSharper disable CheckNamespace
 internal static partial class AssemblyDescription
 {
     public const string Title = Product + " for ASP.NET MVC";
