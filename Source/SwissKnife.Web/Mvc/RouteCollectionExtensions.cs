@@ -7,6 +7,7 @@ using SwissKnife.Diagnostics.Contracts;
 
 namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
 {
+    /// <threadsafety static="true"/>
     public static class RouteCollectionExtensions
     {
         public static Route MapRoute<TController>(this RouteCollection routes, string name, string url, Expression<Func<TController, ActionResult>> action) where TController : Controller

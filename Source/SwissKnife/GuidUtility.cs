@@ -6,6 +6,7 @@ namespace SwissKnife
     /// <summary>
     /// Contains utility methods for working with globally unique identifiers (GUIDs).
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class GuidUtility
     {
         /// <summary>

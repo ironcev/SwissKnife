@@ -8,6 +8,7 @@ namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Cont
     /// Contains static contract methods that validate preconditions on method arguments.
     /// Each static method of the <see cref="Argument"/> class throws an exception if a certain precondition is not fulfilled.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class Argument
     {
         /// <summary>

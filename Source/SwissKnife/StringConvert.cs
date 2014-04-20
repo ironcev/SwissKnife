@@ -6,6 +6,7 @@ namespace SwissKnife
     /// Contains methods that convert a <see cref="string"/> to another base data type. All the methods are guaranteed not to throw exceptions.
     /// If the conversion is not possible, either a fall-back value defined by the caller is returned or an option that indicates whether the conversion succeeded or not.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class StringConvert
     {
         /// <summary>

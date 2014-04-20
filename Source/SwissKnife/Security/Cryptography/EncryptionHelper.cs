@@ -13,6 +13,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
     /// <summary>
     /// Helper class for encrypting/decrypting data.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class EncryptionHelper
     {
         private static readonly Encoding defaultEncoding = Encoding.UTF8;

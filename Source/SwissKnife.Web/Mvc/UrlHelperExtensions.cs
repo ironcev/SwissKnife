@@ -10,6 +10,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
     /// <summary>
     /// Contains extension methods to build URLs based on routes, controllers and actions.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class UrlHelperExtensions
     {
         public static string ToAbsoluteUrl(this UrlHelper urlHelper, string relativeOrAbsoluteUrl)

@@ -11,7 +11,8 @@ namespace SwissKnife.Enums
     /// A flag enumeration is an enumeration (see <see cref="Enum"/>) with the <see cref="FlagsAttribute"/> applied.
     /// In addition, the underlying type of the enumeration must be one of the types defined in <see cref="TypeExtensions.UnderlyingTypesOfFlagsEnums"/>.
     /// </remarks>
-    public class FlagsEnum
+    /// <threadsafety static="true"/>
+    public static class FlagsEnum
     {
         /// <summary>
         /// Gets a value indicating whether an enumeration type represents a flags enumeration.

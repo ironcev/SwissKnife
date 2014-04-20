@@ -6,6 +6,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
     /// <summary>
     /// Represents hashed data result.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public sealed class HashingResult
     {
         private string asHex;

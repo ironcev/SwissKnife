@@ -8,6 +8,7 @@ namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespa
     /// <summary>
     /// Helper class for hashing and verifying hashed data.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class HashingHelper
     {
         internal static readonly Encoding DefaultEncoding = Encoding.UTF8;

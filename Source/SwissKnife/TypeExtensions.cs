@@ -7,6 +7,7 @@ namespace SwissKnife
     /// <summary>
     /// Contains extension methods for <see cref="System.Type"/>.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class TypeExtensions
     {
         /// <summary>

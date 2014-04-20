@@ -8,6 +8,7 @@ namespace SwissKnife.Diagnostics.Contracts
     /// Contains static contract methods that validate operations done by methods.
     /// Each static method of the <see cref="Operation"/> class throws an exception if a certain precondition is not fulfilled.
     /// </summary>
+    /// <threadsafety static="true"/>
     public class Operation
     {
         /// <summary>

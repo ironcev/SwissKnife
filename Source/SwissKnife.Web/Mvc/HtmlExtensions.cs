@@ -9,6 +9,7 @@ using System.Web.Routing;
 
 namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
 {
+    /// <threadsafety static="true"/>
     public static class HtmlExtensions
     {
         public static UrlHelper GetUrlHelper(this HtmlHelper htmlHelper)

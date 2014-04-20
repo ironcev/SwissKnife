@@ -15,6 +15,7 @@ namespace SwissKnife.Time
     /// Typical example would be mocking date and time generation for testing purposes.
     /// </para>
     /// </remarks>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public abstract class TimeGenerator
     {

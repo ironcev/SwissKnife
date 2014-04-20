@@ -11,6 +11,7 @@ namespace SwissKnife.Web.Mvc
     /// <summary>
     /// Contains extension methods for the <see cref="Route"/> class that enable defining routes by using fluent interface.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class RouteExtensions
     {
         /// <summary>

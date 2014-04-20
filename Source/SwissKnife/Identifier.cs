@@ -11,6 +11,7 @@ namespace SwissKnife
     /// For example, the identifier expression 'x => x.Property.SubProperty' will be converted into "Property.SubProperty" and
     /// identifier expression '() => Property' into "Property".
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class Identifier // TODO-IG: Implement the class fully! This is just a temporary version needed for internal projects!
     {
         public static string ToString<T>(Expression<Func<T, object>> identifierExpression) // TODO-IG: Explain in the implementation why this method, if we already have an input of the type Expression<Func<T, Something>> implicite cast to Func<T, object> not possible.

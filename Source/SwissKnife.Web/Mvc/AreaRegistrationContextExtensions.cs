@@ -5,6 +5,7 @@ using System.Web.Routing;
 
 namespace SwissKnife.Web.Mvc
 {
+    /// <threadsafety static="true"/>
     public static class AreaRegistrationContextExtensions // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
     {
         public static Route MapRoute<TController>(this AreaRegistrationContext context, string name, string url, Expression<Func<TController, ActionResult>> action)

@@ -7,6 +7,7 @@ namespace SwissKnife.Diagnostics.Contracts
     /// Contains static contract methods that validate preconditions on type parameters.
     /// Each static method of the <see cref="TypeParameter"/> class throws an exception if a certain precondition is not fulfilled.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class TypeParameter
     {
         /// <summary>

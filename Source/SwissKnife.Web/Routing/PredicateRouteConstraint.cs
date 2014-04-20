@@ -1,5 +1,5 @@
 ﻿/*
- * Original version of this class was developed by Marin Rončević (http://github.com/mroncev).
+ * Original proposal for this class comes from Marin Rončević (http://github.com/mroncev).
  */
 using System;
 using System.Linq;
@@ -12,6 +12,7 @@ namespace SwissKnife.Web.Routing
     /// <summary>
     /// <see cref="IRouteConstraint"/> implementation which uses an arbitrary predicate that checks whether a URL parameter value is valid.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     public class PredicateRouteConstraint : IRouteConstraint
     {
         private readonly Predicate<object> predicate; 

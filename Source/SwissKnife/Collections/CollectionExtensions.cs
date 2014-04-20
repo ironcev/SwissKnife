@@ -10,6 +10,7 @@ namespace SwissKnife.Collections
     /// <summary>
     /// Contains extension methods that can be applied on different types of collections.
     /// </summary>
+    /// <threadsafety static="true"/>
     public static class CollectionExtensions
     {
         // Random generator used in the Randomize<T> and Random<T> methods.

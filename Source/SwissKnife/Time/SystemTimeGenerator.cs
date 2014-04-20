@@ -5,6 +5,7 @@ namespace SwissKnife.Time
     /// <summary>
     /// <see cref="TimeGenerator"/> that uses local system's clock to generate time.
     /// </summary>
+    /// <threadsafety static="true" instance="false"/>
     [Serializable]
     public class SystemTimeGenerator : TimeGenerator
     {
