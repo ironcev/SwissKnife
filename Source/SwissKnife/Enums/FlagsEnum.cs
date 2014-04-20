@@ -1,7 +1,7 @@
 ﻿using System;
 using SwissKnife.Diagnostics.Contracts;
 
-namespace SwissKnife.Enumeration
+namespace SwissKnife.Enums
 {
     /// <summary>
     /// Contains utility methods for working with flags enumerations; 

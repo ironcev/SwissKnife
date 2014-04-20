@@ -46,8 +46,8 @@
     <Compile Include="Diagnostics\Contracts\NamespaceDoc.cs" />
     <Compile Include="Diagnostics\Contracts\Operation.cs" />
     <Compile Include="Diagnostics\Contracts\TypeParameter.cs" />
-    <Compile Include="Enumeration\FlagsEnum.cs" />
-    <Compile Include="Enumeration\NamespaceDoc.cs" />
+    <Compile Include="Enums\FlagsEnum.cs" />
+    <Compile Include="Enums\NamespaceDoc.cs" />
     <Compile Include="GuidUtility.cs" />
     <Compile Include="Identifier.cs" />
     <Compile Include="IdentifierConversion\ConversionOptions.cs" />

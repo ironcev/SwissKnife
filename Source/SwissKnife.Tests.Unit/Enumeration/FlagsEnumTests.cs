@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using SwissKnife.Enumeration;
+using SwissKnife.Enums;
 
 namespace SwissKnife.Tests.Unit.Enumeration
 {
