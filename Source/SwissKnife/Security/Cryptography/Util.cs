@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SwissKnife.Diagnostics.Contracts;
 
-namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
+namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
 {
     internal static class Util
     {

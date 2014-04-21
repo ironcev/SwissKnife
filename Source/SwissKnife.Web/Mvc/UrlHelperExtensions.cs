@@ -1,4 +1,7 @@
-﻿using System;
+﻿/*
+ * Original proposal for this class comes from Marin Rončević (http://github.com/mroncev).
+ */
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;

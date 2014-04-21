@@ -1,4 +1,7 @@
-﻿using System;
+﻿/*
+ * Original implementation of this class comes from Marin Rončević (http://github.com/mroncev).
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -8,7 +11,7 @@ using System.Text;
 using SwissKnife.Diagnostics.Contracts;
 
 // TODO-IG: Originally inspired by http://www.codeproject.com/Articles/10154/NET-Encryption-Simplified 
-namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
+namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
 {
     /// <summary>
     /// Helper class for encrypting/decrypting data.

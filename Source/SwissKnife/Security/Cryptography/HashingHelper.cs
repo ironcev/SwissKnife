@@ -1,9 +1,12 @@
-﻿using System.ComponentModel;
+﻿/*
+ * Original implementation of this class comes from Marin Rončević (http://github.com/mroncev).
+ */
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed. Originally developed by Marin Roncevic.
+namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
 {
     /// <summary>
     /// Helper class for hashing and verifying hashed data.
