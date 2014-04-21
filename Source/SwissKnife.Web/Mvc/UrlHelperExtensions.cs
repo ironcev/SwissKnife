@@ -18,13 +18,23 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
     {
         public static string ToAbsoluteUrl(this UrlHelper urlHelper, string relativeOrAbsoluteUrl)
         {
-            // Try using urlHelper.IsLocalUrl(...)
+            Argument.IsNotNull(urlHelper, "urlHelper");
+            Argument.IsNotNullOrWhitespace(relativeOrAbsoluteUrl, "relativeOrAbsoluteUrl");
 
             Uri result;
             if (!Uri.TryCreate(relativeOrAbsoluteUrl, UriKind.RelativeOrAbsolute, out result))
                 throw new ArgumentException("Relative or absolute URL does not represent a valid relative or absolute URL.", "relativeOrAbsoluteUrl");
 
-            return result.IsAbsoluteUri ? relativeOrAbsoluteUrl : new Uri(urlHelper.RequestContext.HttpContext.Request.Url, relativeOrAbsoluteUrl).ToString();
+            if (result.IsAbsoluteUri) return result.ToString();
+
+            Uri requestUrl = urlHelper.RequestContext.HttpContext.Request.Url;
+
+            Operation.IsValid(requestUrl != null, "The HTTP request has no URL defined.");
+
+            // We checked that the requestUrl is not null.
+            // ReSharper disable AssignNullToNotNullAttribute
+            return new Uri(requestUrl, result).ToString();
+            // ReSharper restore AssignNullToNotNullAttribute
         }
 
         /// <summary>
@@ -437,7 +447,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
             Argument.IsNotNull(urlHelper.RouteCollection, "urlHelper.RouteCollection");
             Argument.IsNotNull(urlHelper.RequestContext, "urlHelper.RequestContext");
             Argument.IsNotNullOrWhitespace(routeName, "routeName");
-            // TODO-IG: Check that protocol is in range.
+            // TODO-IG: Check that the protocol is in range.
 
             string result = UrlHelper.GenerateUrl(routeName,
                                                   null, // actionName
