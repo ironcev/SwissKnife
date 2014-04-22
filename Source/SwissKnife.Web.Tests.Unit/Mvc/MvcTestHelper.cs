@@ -83,7 +83,6 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         /// <summary>
         /// Gets the URL helper for standard HTTP context and empty route data and route collection.
         /// </summary>
-        /// <returns></returns>
         internal static UrlHelper GetUrlHelper()
         {
             return GetUrlHelper(GetHttpContext(), new RouteData(), new RouteCollection());
@@ -92,10 +91,17 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         /// <summary>
         /// Gets the URL helper for specified HTTP context and empty route data and route collection.
         /// </summary>
-        /// <returns></returns>
         internal static UrlHelper GetUrlHelper(HttpContextBase httpContext)
         {
             return GetUrlHelper(httpContext, new RouteData(), new RouteCollection());
+        }
+
+        /// <summary>
+        /// Gets the URL helper for specified HTTP context definition and empty route data and route collection.
+        /// </summary>
+        internal static UrlHelper GetUrlHelper(TestHttpContextDefinition testHttpContextDefinition)
+        {
+            return GetUrlHelper(GetHttpContext(testHttpContextDefinition), new RouteData(), new RouteCollection());
         }
 
         internal static UrlHelper GetUrlHelper(RouteData routeData, RouteCollection routeCollection)
@@ -106,6 +112,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         internal static UrlHelper GetUrlHelper(HttpContextBase httpContext, RouteData routeData, RouteCollection routeCollection)
         {
             return new UrlHelper(new RequestContext(httpContext, routeData), routeCollection);
+        }
+
+        internal static UrlHelper GetUrlHelper(TestHttpContextDefinition testHttpContextDefinition, RouteData routeData, RouteCollection routeCollection)
+        {
+            return new UrlHelper(new RequestContext(GetHttpContext(testHttpContextDefinition), routeData), routeCollection);
         }
     }
 }

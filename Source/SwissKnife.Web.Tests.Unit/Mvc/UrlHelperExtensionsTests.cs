@@ -675,7 +675,54 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
         #endregion
 
-        #region ToAbsoluteUrl // TODO-IG: Restructure all these tests. This is a temporary implementation just to make sure that the method works in the typical scenarios.
+        #region ToAbsoluteUrl
+        [Test]
+        public void ToAbsoluteUrl_UrlHelperIsNull_ThrowsException()
+        {
+            var parameterName = Assert.Throws<ArgumentNullException>(() => UrlHelperExtensions.ToAbsoluteUrl(null, "/some/relative/url")).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_RelativeOrAbsoluteUrlIsNull_ThrowsException()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.ToAbsoluteUrl(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("relativeOrAbsoluteUrl"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_RelativeOrAbsoluteUrlIsEmpty_ThrowsException()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.ToAbsoluteUrl(string.Empty));
+            Assert.That(exception.ParamName, Is.EqualTo("relativeOrAbsoluteUrl"));
+            Assert.That(exception.Message.Contains("empty"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_RelativeOrAbsoluteUrlIsWhiteSpace_ThrowsException()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.ToAbsoluteUrl(" "));
+            Assert.That(exception.ParamName, Is.EqualTo("relativeOrAbsoluteUrl"));
+            Assert.That(exception.Message.Contains("white space"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_RelativeOrAbsoluteUrlIsNotValidUrl_ThrowsException()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.ToAbsoluteUrl("http://invalid-uri:12ab/"));
+            Assert.That(exception.ParamName, Is.EqualTo("relativeOrAbsoluteUrl"));
+            Assert.That(exception.Message.Contains("Relative or absolute URL does not represent a valid relative or absolute URL."));
+            Console.WriteLine(exception.Message);
+        }
+
         [Test]
         public void ToAbsoluteUrl_IsAbsoluteUrlNotBelongingToTheWebSite_ReturnsCanonicalUrl()
         {
@@ -737,7 +784,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
-        public void ToAbsoluteUrl__IsAbsoluteUrlBelongingToTheWebSite_WithRelativePath__ReturnsSameUrl()
+        public void ToAbsoluteUrl__IsAbsoluteUrlBelongingToTheWebSite_WithRelativePath__ReturnsCanonicalUrl()
         {
             var urlHelper = MvcTestHelper.GetUrlHelper();
             // ReSharper disable PossibleNullReferenceException
@@ -746,10 +793,12 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
 
             Assert.That(urlHelper.ToAbsoluteUrl("http://localhost/Some/Relative/Path"), Is.EqualTo("http://localhost/Some/Relative/Path"));
+            Assert.That(urlHelper.ToAbsoluteUrl("HTTP://loCalhosT/Some/Relative/Path"), Is.EqualTo("http://localhost/Some/Relative/Path"));
+            Assert.That(urlHelper.ToAbsoluteUrl("http://localhost/Some/Relative/Path/"), Is.EqualTo("http://localhost/Some/Relative/Path/"));
         }
 
         [Test]
-        public void ToAbsoluteUrl__IsAbsoluteUrlBelongingToTheWebSite_WithRelativePathAndQuery__ReturnsSameUrl()
+        public void ToAbsoluteUrl__IsAbsoluteUrlBelongingToTheWebSite_WithRelativePathAndQuery__ReturnsCanonicalUrl()
         {
             var urlHelper = MvcTestHelper.GetUrlHelper();
             // ReSharper disable PossibleNullReferenceException
@@ -758,6 +807,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
 
             Assert.That(urlHelper.ToAbsoluteUrl("http://localhost/Some/Relative/Path?a=1&B=2"), Is.EqualTo("http://localhost/Some/Relative/Path?a=1&B=2"));
+            Assert.That(urlHelper.ToAbsoluteUrl("HTTP://loCalhosT/Some/Relative/Path?a=1&B=2"), Is.EqualTo("http://localhost/Some/Relative/Path?a=1&B=2"));
+            Assert.That(urlHelper.ToAbsoluteUrl("http://localhost/Some/Relative/Path/?a=1&B=2"), Is.EqualTo("http://localhost/Some/Relative/Path/?a=1&B=2"));
         }
 
         [Test]
@@ -804,6 +855,20 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
 
             Assert.That(urlHelper.ToAbsoluteUrl("/relative/url?a=1&B=2"), Is.EqualTo("http://localhost/relative/url?a=1&B=2"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_HttpRequestHasNoUrlDefined_ThrowsException()
+        {
+            var httpRequestDefinition = new TestHttpContextDefinition
+            {
+                SetRequestUrlToNull = true
+            };
+
+            var urlHelper = MvcTestHelper.GetUrlHelper(httpRequestDefinition);
+
+            var exception = Assert.Throws<InvalidOperationException>(() => urlHelper.ToAbsoluteUrl("/some/url"));
+            Assert.That(exception.Message.Contains("The HTTP request has no URL defined."));
         }
         #endregion
     }

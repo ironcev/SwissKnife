@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using SwissKnife.Diagnostics.Contracts;
 
-namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all methods. Properly implement Current() and Action() methods.
+namespace SwissKnife.Web.Mvc
 {
     /// <summary>
     /// Contains extension methods to build URLs based on routes, controllers and actions.
@@ -16,14 +16,46 @@ namespace SwissKnife.Web.Mvc // TODO-IG: Write comments and tests for all method
     /// <threadsafety static="true"/>
     public static class UrlHelperExtensions
     {
+        /// <summary>
+        /// Converts a relative or absolute URL to an absolute URL presented in the unescaped canonical representation.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// If the <paramref name="relativeOrAbsoluteUrl"/> is already an absolute URL it unescaped canonical representation will be returned.<br/>
+        /// For example for the absolute URL <a href="http://www.thehumbleprogrammer.com/about">HTTP://WWW.TheHumbleProgramer.COM/About</a> the
+        /// <a href="http://www.thehumbleprogrammer.com/about">http://www.thehumbleprogrammer.com/About</a> will be return.
+        /// </para>
+        /// <para>
+        /// If the <paramref name="relativeOrAbsoluteUrl"/> is a relative URL it will be combined with the current absolute URL.<br/>
+        /// For example for the current URL <i>HTTP://Localhost/current/url/</i> and the relative URL <i>/relative/url</i>
+        /// <i>http://localhost/current/url/relative/url</i> will be return.
+        /// </para>
+        /// </remarks>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
+        /// <param name="relativeOrAbsoluteUrl">Relative or absolute URL to convert to an absolute URL.</param>
+        /// <returns>
+        /// An absolute URL presented in the unescaped canonical representation. All characters are unescaped except #, ?, and %.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
+        /// <paramref name="relativeOrAbsoluteUrl"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="relativeOrAbsoluteUrl"/> does not represent a valid relative or absolute URL.</exception>
+        /// <exception cref="InvalidOperationException">The current HTTP request has no URL defined.</exception>
         public static string ToAbsoluteUrl(this UrlHelper urlHelper, string relativeOrAbsoluteUrl)
         {
             Argument.IsNotNull(urlHelper, "urlHelper");
+            Argument.IsNotNull(urlHelper.RequestContext, "urlHelper.RequestContext");
             Argument.IsNotNullOrWhitespace(relativeOrAbsoluteUrl, "relativeOrAbsoluteUrl");
 
             Uri result;
             if (!Uri.TryCreate(relativeOrAbsoluteUrl, UriKind.RelativeOrAbsolute, out result))
-                throw new ArgumentException("Relative or absolute URL does not represent a valid relative or absolute URL.", "relativeOrAbsoluteUrl");
+                throw new ArgumentException(string.Format("Relative or absolute URL does not represent a valid relative or absolute URL.{0}" +
+                                                          "The relative or absolute URL was: '{1}'.",
+                                                          Environment.NewLine,
+                                                          relativeOrAbsoluteUrl),
+                                           "relativeOrAbsoluteUrl");
 
             if (result.IsAbsoluteUri) return result.ToString();
 
