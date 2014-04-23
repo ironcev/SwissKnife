@@ -684,6 +684,20 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
+        public void ToAbsoluteUrl_UrlHelperRequestContextIsNull_ThrowsException()
+        {
+            var urlHelper = new UrlHelper();
+            // It is not possible to set UrlHelper.RequestContext to null and at the same time to have RouteCollection being not null.
+            // Therefor this little trick to pass the null check for the urlHelper.RouteCollection.
+
+            urlHelper.GetType().GetProperty("RouteCollection").GetSetMethod(true).Invoke(urlHelper, new object[] { new RouteCollection() });
+            Assert.That(urlHelper.RouteCollection, Is.Not.Null);
+
+            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.ToAbsoluteUrl("/some/relative/url")).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper.RequestContext"));
+        }
+
+        [Test]
         public void ToAbsoluteUrl_RelativeOrAbsoluteUrlIsNull_ThrowsException()
         {
             var urlHelper = MvcTestHelper.GetUrlHelper();
@@ -823,7 +837,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
-        public void ToAbsoluteUrl_RelativeUrlBeginsWithSlash_ReturnsAbsoluteUrl()
+        public void ToAbsoluteUrl_RelativeUrlBeginsWithSlashOrBackslash_ReturnsAbsoluteUrl()
         {
             var urlHelper = MvcTestHelper.GetUrlHelper();
             // ReSharper disable PossibleNullReferenceException
@@ -831,6 +845,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             // ReSharper restore PossibleNullReferenceException
 
             Assert.That(urlHelper.ToAbsoluteUrl("/relative/url"), Is.EqualTo("http://localhost/relative/url"));
+            Assert.That(urlHelper.ToAbsoluteUrl("\\relative/url"), Is.EqualTo("http://localhost/relative/url"));
+            Assert.That(urlHelper.ToAbsoluteUrl("\\relative\\url"), Is.EqualTo("http://localhost/relative/url"));
         }
 
         [Test]
@@ -841,12 +857,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
             // ReSharper restore PossibleNullReferenceException
 
-
             Assert.That(urlHelper.ToAbsoluteUrl("relative/url?a=1&B=2"), Is.EqualTo("http://localhost/relative/url?a=1&B=2"));
         }
 
         [Test]
-        public void ToAbsoluteUrl__RelativeUrlBeginsWithSlash_WithQuery__ReturnsAbsoluteUrl()
+        public void ToAbsoluteUrl__RelativeUrlBeginsWithSlashOrBackslash_WithQuery__ReturnsAbsoluteUrl()
         {
             var urlHelper = MvcTestHelper.GetUrlHelper();
             // ReSharper disable PossibleNullReferenceException
@@ -855,6 +870,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
 
             Assert.That(urlHelper.ToAbsoluteUrl("/relative/url?a=1&B=2"), Is.EqualTo("http://localhost/relative/url?a=1&B=2"));
+            Assert.That(urlHelper.ToAbsoluteUrl("\\relative/url?a=1&B=2"), Is.EqualTo("http://localhost/relative/url?a=1&B=2"));
+            Assert.That(urlHelper.ToAbsoluteUrl("\\relative\\url?a=1&B=2"), Is.EqualTo("http://localhost/relative/url?a=1&B=2"));
         }
 
         [Test]
@@ -869,6 +886,38 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             var exception = Assert.Throws<InvalidOperationException>(() => urlHelper.ToAbsoluteUrl("/some/url"));
             Assert.That(exception.Message.Contains("The HTTP request has no URL defined."));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_ReturnsUnescapedUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString().StartsWith("http://localhost"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.ToAbsoluteUrl("/path with spaces, and commas"), Is.EqualTo("http://localhost/path with spaces, and commas"));
+            Assert.That(urlHelper.ToAbsoluteUrl("path with spaces, and commas"), Is.EqualTo("http://localhost/path with spaces, and commas"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_CurrentUrlendsWithSlash_ReturnsAbsoluteUrl()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                RequestPath = "/some/url/"
+            };
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", "some/url");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContextDefinition, new RouteData(), routeCollection);
+
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString(), Is.EqualTo("http://localhost/some/url/"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.ToAbsoluteUrl("relative/url"), Is.EqualTo("http://localhost/some/url/relative/url"));
         }
         #endregion
     }

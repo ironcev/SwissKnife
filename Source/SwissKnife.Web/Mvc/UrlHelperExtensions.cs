@@ -27,14 +27,14 @@ namespace SwissKnife.Web.Mvc
         /// </para>
         /// <para>
         /// If the <paramref name="relativeOrAbsoluteUrl"/> is a relative URL it will be combined with the current absolute URL.<br/>
-        /// For example for the current URL <i>HTTP://Localhost/current/url/</i> and the relative URL <i>/relative/url</i>
+        /// For example for the current URL <i>HTTP://Localhost/current/url/</i> and the relative URL <i>relative/url</i>
         /// <i>http://localhost/current/url/relative/url</i> will be return.
         /// </para>
         /// </remarks>
         /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
         /// <param name="relativeOrAbsoluteUrl">Relative or absolute URL to convert to an absolute URL.</param>
         /// <returns>
-        /// An absolute URL presented in the unescaped canonical representation. All characters are unescaped except #, ?, and %.
+        /// An absolute URL presented in the unescaped canonical representation.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
@@ -49,15 +49,15 @@ namespace SwissKnife.Web.Mvc
             Argument.IsNotNull(urlHelper.RequestContext, "urlHelper.RequestContext");
             Argument.IsNotNullOrWhitespace(relativeOrAbsoluteUrl, "relativeOrAbsoluteUrl");
 
-            Uri result;
-            if (!Uri.TryCreate(relativeOrAbsoluteUrl, UriKind.RelativeOrAbsolute, out result))
+            Uri relativeOrAbsoluteUrlAsUri;
+            if (!Uri.TryCreate(relativeOrAbsoluteUrl, UriKind.RelativeOrAbsolute, out relativeOrAbsoluteUrlAsUri))
                 throw new ArgumentException(string.Format("Relative or absolute URL does not represent a valid relative or absolute URL.{0}" +
                                                           "The relative or absolute URL was: '{1}'.",
                                                           Environment.NewLine,
                                                           relativeOrAbsoluteUrl),
                                            "relativeOrAbsoluteUrl");
 
-            if (result.IsAbsoluteUri) return result.ToString();
+            if (relativeOrAbsoluteUrlAsUri.IsAbsoluteUri) return relativeOrAbsoluteUrlAsUri.ToString();
 
             Uri requestUrl = urlHelper.RequestContext.HttpContext.Request.Url;
 
@@ -65,7 +65,7 @@ namespace SwissKnife.Web.Mvc
 
             // We checked that the requestUrl is not null.
             // ReSharper disable AssignNullToNotNullAttribute
-            return new Uri(requestUrl, result).ToString();
+            return new Uri(requestUrl, relativeOrAbsoluteUrlAsUri).ToString();
             // ReSharper restore AssignNullToNotNullAttribute
         }
 
