@@ -363,7 +363,7 @@ namespace SwissKnife.Web.Mvc
         /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
         /// </para>
         /// <para>
-        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Implicit MVC values "actionExpression" and "controller" are not automatically included. 
         /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
         /// </para>
         /// </remarks>
@@ -400,7 +400,7 @@ namespace SwissKnife.Web.Mvc
         /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
         /// </para>
         /// <para>
-        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Implicit MVC values "actionExpression" and "controller" are not automatically included. 
         /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
         /// </para>
         /// </remarks>
@@ -436,7 +436,7 @@ namespace SwissKnife.Web.Mvc
         /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
         /// </para>
         /// <para>
-        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Implicit MVC values "actionExpression" and "controller" are not automatically included. 
         /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
         /// </para>
         /// </remarks>
@@ -472,7 +472,7 @@ namespace SwissKnife.Web.Mvc
         /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
         /// </para>
         /// <para>
-        /// Implicit MVC values "action" and "controller" are not automatically included. 
+        /// Implicit MVC values "actionExpression" and "controller" are not automatically included. 
         /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
         /// </para>
         /// </remarks>
@@ -536,22 +536,26 @@ namespace SwissKnife.Web.Mvc
                                                         (output, value) => output + string.Format("\t{1}: {2}{0}", Environment.NewLine, value.Key, value.Value))).TrimEnd();
         }
 
-        public static string Action<TController>(this UrlHelper helper, Expression<Func<TController, ActionResult>> action) where TController : Controller
+        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
         {
-            return helper.Action(action, (object)null);
+            return urlHelper.Action(actionExpression, new RouteValueDictionary());
         }
 
-        public static string Action<TController>(this UrlHelper helper, Expression<Func<TController, ActionResult>> action, object routeValues) where TController : Controller
+        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<object> routeValues) where TController : Controller
         {
-            return helper.Action(action, new RouteValueDictionary(routeValues));
+            // The constructor of the RouteValueDictionary class accepts null as a valid argument.
+            return urlHelper.Action(actionExpression, new RouteValueDictionary(routeValues.ValueOrNull));
         }
 
-        public static string Action<TController>(this UrlHelper helper, Expression<Func<TController, ActionResult>> action, RouteValueDictionary routeValues) where TController : Controller
+        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<RouteValueDictionary> routeValues) where TController : Controller
         {
-            var actionName = ControllerHelper.GetActionNameFromActionExpression(action.Body);
+            Argument.IsNotNull(urlHelper, "urlHelper");
+            Argument.IsNotNull(actionExpression, "actionExpression");
+
+            var actionName = ControllerHelper.GetActionNameFromActionExpression(actionExpression);
             var controllerName = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
 
-            return helper.Action(actionName, controllerName, routeValues);
+            return urlHelper.Action(actionName, controllerName, routeValues.ValueOrNull);
         }
     }
 }

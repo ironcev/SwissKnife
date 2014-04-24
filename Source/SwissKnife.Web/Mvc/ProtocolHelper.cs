@@ -9,6 +9,8 @@ namespace SwissKnife.Web.Mvc
     {
         internal static Protocol GetProtocolFromHttpRequest(HttpRequestBase httpRequest)
         {
+            System.Diagnostics.Debug.Assert(httpRequest != null);
+
             Operation.IsValid(httpRequest.Url != null, "The HTTP request has no URL defined.");
 
             // TODO-IG: Use StringConvert.ToEnum() once when it is implemented.

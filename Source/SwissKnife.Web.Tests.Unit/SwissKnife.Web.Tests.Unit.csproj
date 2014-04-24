@@ -82,6 +82,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mvc\ControllerHelperTests.cs" />
     <Compile Include="Mvc\HtmlExtensionsTests.cs" />
     <Compile Include="Mvc\ProtocolHelperTests.cs" />
     <Compile Include="Mvc\RouteExtensionsTests.cs" />
