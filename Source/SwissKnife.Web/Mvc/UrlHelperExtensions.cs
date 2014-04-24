@@ -26,9 +26,14 @@ namespace SwissKnife.Web.Mvc
         /// <a href="http://www.thehumbleprogrammer.com/about">http://www.thehumbleprogrammer.com/About</a> will be return.
         /// </para>
         /// <para>
-        /// If the <paramref name="relativeOrAbsoluteUrl"/> is a relative URL it will be combined with the current absolute URL.<br/>
-        /// For example for the current URL <i>HTTP://Localhost/current/url/</i> and the relative URL <i>relative/url</i>
-        /// <i>http://localhost/current/url/relative/url</i> will be return.
+        /// If the <paramref name="relativeOrAbsoluteUrl"/> is a relative URL it will be appended to the authority (see <see cref="Uri.Authority"/>) of the current absolute URL.<br/>
+        /// For example for the current URL <i>http://Localhost/current/url/</i> and the relative URL <i>relative/url</i>
+        /// <i>http://localhost/relative/url</i> will be return. (Because <i>http://Localhost/</i> is the authority of the current URL.)
+        /// </para>
+        /// <para>
+        /// The relative URL can both start with '/' (or '\') or not. In both cases, the relative URL will be appended to the authority of the current absolute URL.<br/>
+        /// For example for the current URL <i>http://Localhost/current/url/</i> all of the following relative URL-s <i>relative/url</i>, <i><b>/</b>relative/url</i>, and <i><b>\</b>relative/url</i>
+        /// will produce the same output: <i>http://localhost/relative/url</i>.
         /// </para>
         /// </remarks>
         /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
@@ -59,13 +64,22 @@ namespace SwissKnife.Web.Mvc
 
             if (relativeOrAbsoluteUrlAsUri.IsAbsoluteUri) return relativeOrAbsoluteUrlAsUri.ToString();
 
+
+            // We have a relative URL and we want to append it to the authority of the request URL.
             Uri requestUrl = urlHelper.RequestContext.HttpContext.Request.Url;
 
             Operation.IsValid(requestUrl != null, "The HTTP request has no URL defined.");
 
+            // We want to append the relative URL to the authority no matter if it starts with '/' (or '\') or if it doesn't.
+            // The Uri class constructor will do that automatically if the relative URL starts with '/' (or '\').
+            // Therefore, we will form the relative URL to always start with with '/' (or '\').
+            string relativeUrl = relativeOrAbsoluteUrlAsUri.ToString();
+            if (!(relativeUrl.StartsWith("/") || relativeUrl.StartsWith("\\")))
+                relativeUrl = '/' + relativeUrl;
+
             // We checked that the requestUrl is not null.
             // ReSharper disable AssignNullToNotNullAttribute
-            return new Uri(requestUrl, relativeOrAbsoluteUrlAsUri).ToString();
+            return new Uri(requestUrl, relativeUrl).ToString();
             // ReSharper restore AssignNullToNotNullAttribute
         }
 

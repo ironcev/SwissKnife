@@ -32,11 +32,14 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             get
             {
                 return SetRequestUrlToNull ? null :                    
-                                             new Uri(string.Format("{0}://{1}{2}/{3}",
+                                             new Uri(string.Format("{0}://{1}{2}{3}{4}", // {protocol}:://{web-site-url}{port}{/application-path}{/request-path}
                                                                     string.IsNullOrEmpty(ArbitraryProtocol) ? Protocol.ToString().ToLowerInvariant() : ArbitraryProtocol,
                                                                     WebSiteUrl,
                                                                     Port.HasValue ? ":" + Port : string.Empty,
-                                                                    RequestPath.StartsWith("/") ? RequestPath.Substring(1) : RequestPath));
+                                                                    string.IsNullOrWhiteSpace(ApplicationPath) ? string.Empty :
+                                                                                                             '/' + ApplicationPath.Trim(new[] { '/', '\\' }),
+                                                                    string.IsNullOrWhiteSpace(RequestPath) ? string.Empty :
+                                                                                                             '/' + RequestPath.TrimStart(new[] { '/', '\\' })));
             }
         }
 

@@ -901,7 +901,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
-        public void ToAbsoluteUrl_CurrentUrlendsWithSlash_ReturnsAbsoluteUrl()
+        public void ToAbsoluteUrl_RelativeUrlStartsWithSlash_ReturnsAbsoluteUrl()
         {
             var httpContextDefinition = new TestHttpContextDefinition
             {
@@ -917,7 +917,50 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString(), Is.EqualTo("http://localhost/some/url/"));
             // ReSharper restore PossibleNullReferenceException
 
-            Assert.That(urlHelper.ToAbsoluteUrl("relative/url"), Is.EqualTo("http://localhost/some/url/relative/url"));
+            Assert.That(urlHelper.ToAbsoluteUrl("/relative/url"), Is.EqualTo("http://localhost/relative/url"));
+            Assert.That(urlHelper.ToAbsoluteUrl("/relative\\url"), Is.EqualTo("http://localhost/relative/url"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_RelativeUrlStartsWithBackslash_ReturnsAbsoluteUrl()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                RequestPath = "/some/url/"
+            };
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", "some/url");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContextDefinition, new RouteData(), routeCollection);
+
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString(), Is.EqualTo("http://localhost/some/url/"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.ToAbsoluteUrl("\\relative/url"), Is.EqualTo("http://localhost/relative/url"));
+            Assert.That(urlHelper.ToAbsoluteUrl("\\relative\\url"), Is.EqualTo("http://localhost/relative/url"));
+        }
+
+        [Test]
+        public void ToAbsoluteUrl_RelativeUrlStartsWithotSlashOrBackslash_ReturnsAbsoluteUrl()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                RequestPath = "/some/url/"
+            };
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", "some/url");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContextDefinition, new RouteData(), routeCollection);
+
+            // ReSharper disable PossibleNullReferenceException
+            Assert.That(urlHelper.RequestContext.HttpContext.Request.Url.ToString(), Is.EqualTo("http://localhost/some/url/"));
+            // ReSharper restore PossibleNullReferenceException
+
+            Assert.That(urlHelper.ToAbsoluteUrl("relative/url"), Is.EqualTo("http://localhost/relative/url"));
+            Assert.That(urlHelper.ToAbsoluteUrl("relative\\url"), Is.EqualTo("http://localhost/relative/url"));
         }
         #endregion
     }
