@@ -536,17 +536,97 @@ namespace SwissKnife.Web.Mvc
                                                         (output, value) => output + string.Format("\t{1}: {2}{0}", Environment.NewLine, value.Key, value.Value))).TrimEnd();
         }
 
+        /// <summary>
+        /// Generates a fully qualified URL to an action method by using the specified action name and controller name.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// A valid <paramref name="actionExpression"/> consists of a single controller method call. For example '<i>userController => userController.EditUser(0)</i>'.
+        /// The action name is then taken from the method name ('<i>EditUser</i>' in the above example).
+        /// If the controller method specified in the <paramref name="actionExpression"/> has the <see cref="ActionNameAttribute"/> applied,
+        /// the action name is then taken from the <see cref="ActionNameAttribute.Name"/>.
+        /// </para>
+        /// <para>
+        /// The controller name is taken from the name of the controller type which is provided through <typeparamref name="TController"/>
+        /// using the standard MVC convention. For example, if the controller type name is <i>UserController</i>, the controller name will be <i>User</i>.
+        /// </para>
+        /// </remarks>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the action URL.</param>
+        /// <param name="actionExpression">Action expression that returns the action name.</param>
+        /// <typeparam name="TController">The controller type.</typeparam>
+        /// <returns>
+        /// The fully qualified URL to an action method.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="actionExpression"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="actionExpression"/> is not a valid action expression.</exception>
         public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
         {
             return urlHelper.Action(actionExpression, new RouteValueDictionary());
         }
 
+        /// <summary>
+        /// Generates a fully qualified URL to an action method by using the specified action name, controller name, and route values.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// A valid <paramref name="actionExpression"/> consists of a single controller method call. For example '<i>userController => userController.EditUser(0)</i>'.
+        /// The action name is then taken from the method name ('<i>EditUser</i>' in the above example).
+        /// If the controller method specified in the <paramref name="actionExpression"/> has the <see cref="ActionNameAttribute"/> applied,
+        /// the action name is then taken from the <see cref="ActionNameAttribute.Name"/>.
+        /// </para>
+        /// <para>
+        /// The controller name is taken from the name of the controller type which is provided through <typeparamref name="TController"/>
+        /// using the standard MVC convention. For example, if the controller type name is <i>UserController</i>, the controller name will be <i>User</i>.
+        /// </para>
+        /// </remarks>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the action URL.</param>
+        /// <param name="actionExpression">Action expression that returns the action name.</param>
+        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
+        /// <typeparam name="TController">The controller type.</typeparam>
+        /// <returns>
+        /// The fully qualified URL to an action method.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="actionExpression"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="actionExpression"/> is not a valid action expression.</exception>
         public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<object> routeValues) where TController : Controller
         {
             // The constructor of the RouteValueDictionary class accepts null as a valid argument.
             return urlHelper.Action(actionExpression, new RouteValueDictionary(routeValues.ValueOrNull));
         }
 
+        /// <summary>
+        /// Generates a fully qualified URL to an action method by using the specified action name, controller name, and route values.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// A valid <paramref name="actionExpression"/> consists of a single controller method call. For example '<i>userController => userController.EditUser(0)</i>'.
+        /// The action name is then taken from the method name ('<i>EditUser</i>' in the above example).
+        /// If the controller method specified in the <paramref name="actionExpression"/> has the <see cref="ActionNameAttribute"/> applied,
+        /// the action name is then taken from the <see cref="ActionNameAttribute.Name"/>.
+        /// </para>
+        /// <para>
+        /// The controller name is taken from the name of the controller type which is provided through <typeparamref name="TController"/>
+        /// using the standard MVC convention. For example, if the controller type name is <i>UserController</i>, the controller name will be <i>User</i>.
+        /// </para>
+        /// </remarks>
+        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the action URL.</param>
+        /// <param name="actionExpression">Action expression that returns the action name.</param>
+        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
+        /// <typeparam name="TController">The controller type.</typeparam>
+        /// <returns>
+        /// The fully qualified URL to an action method.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
+        /// <paramref name="actionExpression"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException"><paramref name="actionExpression"/> is not a valid action expression.</exception>
         public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<RouteValueDictionary> routeValues) where TController : Controller
         {
             Argument.IsNotNull(urlHelper, "urlHelper");

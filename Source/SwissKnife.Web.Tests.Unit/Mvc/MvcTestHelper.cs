@@ -80,6 +80,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             return routeData;
         }
 
+        internal static RouteCollection GetDefaultRouteCollection()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.Add(new Route("{controller}/{action}", new MvcRouteHandler()));
+            return routeCollection;
+        }
+
         /// <summary>
         /// Gets the URL helper for standard HTTP context and empty route data and route collection.
         /// </summary>

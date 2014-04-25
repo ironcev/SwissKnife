@@ -963,6 +963,59 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Assert.That(urlHelper.ToAbsoluteUrl("relative\\url"), Is.EqualTo("http://localhost/relative/url"));
         }
         #endregion
+
+        #region Action
+        [Test]
+        public void Action_UrlHelperIsNull_ThrowsException()
+        {
+            var parameterName = Assert.Throws<ArgumentNullException>(() => UrlHelperExtensions.Action<TestController>(null, c => c.ActionWithoutParameters())).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper"));
+        }
+
+        [Test]
+        public void Action_ActionExpressionIsNull_ThrowsException()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.Action<TestController>(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("actionExpression"));
+        }
+
+        [Test]
+        public void Action_ActionExpressionNotValid_ThrowsException()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.Action<TestController>(c => new EmptyResult()));
+            Assert.That(exception.ParamName, Is.EqualTo("actionExpression"));
+            Assert.That(exception.Message.Contains("Action expression is not a valid action expression."));
+            Assert.That(exception.Message.Contains("'new EmptyResult()'"));
+            Console.WriteLine(exception.Message);
+        }
+
+        [Test]
+        public void Action_ValidActionExpression_ReturnsActionUrl()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper(MvcTestHelper.GetDefaultRouteData(), MvcTestHelper.GetDefaultRouteCollection());
+
+            Assert.That(urlHelper.Action<TestController>(c => c.ActionWithoutParameters()), Is.EqualTo("/Test/ActionWithoutParameters"));
+        }
+
+        [Test]
+        public void Action__ValidActionExpression_RouteValues__ReturnsActionUrlWithQueryString()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper(MvcTestHelper.GetDefaultRouteData(), MvcTestHelper.GetDefaultRouteCollection());
+
+            Assert.That(urlHelper.Action<TestController>(c => c.ActionWithoutParameters(), new { p1 = "firstValue", p2 = 1, p3 = 1.23 }), Is.EqualTo("/Test/ActionWithoutParameters?p1=firstValue&p2=1&p3=1.23"));
+        }
+
+        class TestController : Controller
+        {
+            // ReSharper disable MemberCanBeMadeStatic.Local
+            public ActionResult ActionWithoutParameters() { return null; }
+            // ReSharper restore MemberCanBeMadeStatic.Local
+        }
+        #endregion
     }
     // ReSharper restore InconsistentNaming
 }
