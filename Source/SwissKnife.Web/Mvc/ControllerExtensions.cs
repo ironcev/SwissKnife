@@ -13,40 +13,39 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
     /// <threadsafety static="true"/>
     public static class ControllerExtensions // TODO-IG: Should this be extension one day? Base class? Both?
     {
-        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, ActionResult>> action) where TController : Controller
+        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
         {
-            return RedirectToAction(controller, action, (object)null);
+            return RedirectToAction(controller, actionExpression, (object)null);
         }
 
-        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, Task<ActionResult>>> action) where TController : Controller
+        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, Task<ActionResult>>> actionExpression) where TController : Controller
         {
-            return RedirectToAction(controller, action, (object)null);
+            return RedirectToAction(controller, actionExpression, (object)null);
         }
 
-        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, ActionResult>> action, object routeValues) where TController : Controller
+        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, ActionResult>> actionExpression, object routeValues) where TController : Controller
         {
-            return RedirectToAction(controller, action, new RouteValueDictionary(routeValues));
+            return RedirectToAction(controller, actionExpression, new RouteValueDictionary(routeValues));
         }
 
-        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, Task<ActionResult>>> action, object routeValues) where TController : Controller
+        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, Task<ActionResult>>> actionExpression, object routeValues) where TController : Controller
         {
-            return RedirectToAction(controller, action, new RouteValueDictionary(routeValues));
+            return RedirectToAction(controller, actionExpression, new RouteValueDictionary(routeValues));
         }
 
-        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, ActionResult>> action, RouteValueDictionary routeValues) where TController : Controller
+        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, ActionResult>> actionExpression, RouteValueDictionary routeValues) where TController : Controller
         {
-            return RedirectToAction<TController>(controller, action.Body, routeValues);
+            return RedirectToActionCore<TController>(controller, ControllerHelper.GetActionName(actionExpression), routeValues);
         }
 
-        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, Task<ActionResult>>> action, RouteValueDictionary routeValues) where TController : Controller
+        public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, Task<ActionResult>>> actionExpression, RouteValueDictionary routeValues) where TController : Controller
         {
-            return RedirectToAction<TController>(controller, action.Body, routeValues);
+            return RedirectToActionCore<TController>(controller, ControllerHelper.GetActionName(actionExpression), routeValues);
         }
 
-        private static RedirectToRouteResult RedirectToAction<TController>(Controller controller, Expression actionBody, RouteValueDictionary routeValues) where TController : Controller
+        private static RedirectToRouteResult RedirectToActionCore<TController>(Controller controller, string actionName, RouteValueDictionary routeValues) where TController : Controller
         {
-            var actionName = ControllerHelper.GetActionNameFromActionExpression(actionBody);
-            var controllerName = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
+            var controllerName = ControllerHelper.GetControllerName(typeof(TController));
 
             var methodInfo = typeof(TController).GetMethod("RedirectToAction", BindingFlags.NonPublic | BindingFlags.Instance, null, new[]
                                                                        {

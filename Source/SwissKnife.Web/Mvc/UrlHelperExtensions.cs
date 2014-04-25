@@ -552,8 +552,8 @@ namespace SwissKnife.Web.Mvc
             Argument.IsNotNull(urlHelper, "urlHelper");
             Argument.IsNotNull(actionExpression, "actionExpression");
 
-            var actionName = ControllerHelper.GetActionNameFromActionExpression(actionExpression);
-            var controllerName = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
+            var actionName = ControllerHelper.GetActionName(actionExpression);
+            var controllerName = ControllerHelper.GetControllerName(typeof(TController));
 
             return urlHelper.Action(actionName, controllerName, routeValues.ValueOrNull);
         }

@@ -9,41 +9,41 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
     [TestFixture]
     public class ControllerHelperTests
     {
-        #region GetControllerNameFromControllerType
+        #region GetControllerName
         [Test]
-        public void GetControllerNameFromControllerType_ControllerTypeNameEndsWithControler_ReturnsControllerName()
+        public void GetControllerName_ControllerTypeNameEndsWithControler_ReturnsControllerName()
         {
-            Assert.That(ControllerHelper.GetControllerNameFromControllerType(typeof(ControllerNameController)), Is.EqualTo("ControllerName"));
+            Assert.That(ControllerHelper.GetControllerName(typeof(ControllerNameController)), Is.EqualTo("ControllerName"));
         }
 
         [Test]
-        public void GetControllerNameFromControllerType_ControllerTypeNameEndsWithControlerCaseSensitive_ReturnsControllerName()
+        public void GetControllerName_ControllerTypeNameEndsWithControlerCaseSensitive_ReturnsControllerName()
         {
-            Assert.That(ControllerHelper.GetControllerNameFromControllerType(typeof(ControllerNameCoNtRoLlEr)), Is.EqualTo("ControllerName"));
+            Assert.That(ControllerHelper.GetControllerName(typeof(ControllerNameCoNtRoLlEr)), Is.EqualTo("ControllerName"));
         }
 
         [Test]
-        public void GetControllerNameFromControllerType_ControllerTypeNameEndsWithControler_ReturnsControllerNameCaseSensitive()
+        public void GetControllerName_ControllerTypeNameEndsWithControler_ReturnsControllerNameCaseSensitive()
         {
-            Assert.That(ControllerHelper.GetControllerNameFromControllerType(typeof(CONTROLLERNAMEController)), Is.EqualTo("CONTROLLERNAME"));
+            Assert.That(ControllerHelper.GetControllerName(typeof(CONTROLLERNAMEController)), Is.EqualTo("CONTROLLERNAME"));
         }
 
         [Test]
-        public void GetControllerNameFromControllerType_ControllerTypeNameDoesNoteEndWithControler_ReturnsTypeName()
+        public void GetControllerName_ControllerTypeNameDoesNoteEndWithControler_ReturnsTypeName()
         {
-            Assert.That(ControllerHelper.GetControllerNameFromControllerType(typeof(TyPeNaMe)), Is.EqualTo("TyPeNaMe"));
+            Assert.That(ControllerHelper.GetControllerName(typeof(TyPeNaMe)), Is.EqualTo("TyPeNaMe"));
         }
 
         [Test]
-        public void GetControllerNameFromControllerType_ControllerTypeNameIsControler_ReturnsControler()
+        public void GetControllerName_ControllerTypeNameIsControler_ReturnsControler()
         {
-            Assert.That(ControllerHelper.GetControllerNameFromControllerType(typeof(Controller)), Is.EqualTo("Controller"));
+            Assert.That(ControllerHelper.GetControllerName(typeof(Controller)), Is.EqualTo("Controller"));
         }
 
         [Test]
-        public void GetControllerNameFromControllerType_ControllerTypeNameIsControlerCaseSensitive_ReturnsTypeName()
+        public void GetControllerName_ControllerTypeNameIsControlerCaseSensitive_ReturnsTypeName()
         {
-            Assert.That(ControllerHelper.GetControllerNameFromControllerType(typeof(CoNtRoLlEr)), Is.EqualTo("CoNtRoLlEr"));
+            Assert.That(ControllerHelper.GetControllerName(typeof(CoNtRoLlEr)), Is.EqualTo("CoNtRoLlEr"));
         }
 
         class ControllerNameController { }
@@ -54,43 +54,70 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         class CoNtRoLlEr { }
         #endregion
 
-        #region GetActionNameFromActionExpression
+        #region GetActionName
         [Test]
-        public void GetActionNameFromActionExpression_ActionExpressionNotValid_ThrowsException()
+        public void GetActionName_ActionExpressionNotValid_ThrowsException()
         {
-            var exception = Assert.Throws<ArgumentException>(() => ControllerHelper.GetActionNameFromActionExpression<TestController>(c => new EmptyResult()));
+            var exception = Assert.Throws<ArgumentException>(() => ControllerHelper.GetActionName<TestController>(c => new EmptyResult()));
             Assert.That(exception.ParamName, Is.EqualTo("actionExpression"));
             Assert.That(exception.Message.Contains("Action expression is not a valid action expression."));
-            Assert.That(exception.Message.Contains("'c => new EmptyResult()'"));
+            Assert.That(exception.Message.Contains("'new EmptyResult()'"));
             Console.WriteLine(exception.Message);
         }
 
         [Test]
-        public void GetActionNameFromActionExpression_ActionWithoutParameters_ReturnsActionName()
+        public void GetActionName_StaticActionWithoutParameters_ReturnsActionName()
         {
-            Assert.That(ControllerHelper.GetActionNameFromActionExpression<TestController>(c => TestController.ActionWithoutParameters()), Is.EqualTo("ActionWithoutParameters"));
+            Assert.That(ControllerHelper.GetActionName<TestController>(c => TestController.StaticActionWithoutParameters()), Is.EqualTo("StaticActionWithoutParameters"));
         }
 
         [Test]
-        public void GetActionNameFromActionExpression_ActionWithParameters_ReturnsActionName()
+        public void GetActionName_StaticActionWithParameters_ReturnsActionName()
         {
-            Assert.That(ControllerHelper.GetActionNameFromActionExpression<TestController>(c => TestController.ActionWithParameters(0, null, null)), Is.EqualTo("ActionWithParameters"));
+            Assert.That(ControllerHelper.GetActionName<TestController>(c => TestController.StaticActionWithParameters(0, null, null)), Is.EqualTo("StaticActionWithParameters"));
         }
 
         [Test]
-        public void GetActionNameFromActionExpression_ActionWithActionNameAttribute_ReturnsActionNameFromTheAttribute()
+        public void GetActionName_StaticActionWithActionNameAttribute_ReturnsActionNameFromTheAttribute()
         {
-            Assert.That(ControllerHelper.GetActionNameFromActionExpression<TestController>(c => TestController.ActionWithActionNameAttribute()), Is.EqualTo("ActionNameFromTheAttribute"));
+            Assert.That(ControllerHelper.GetActionName<TestController>(c => TestController.StaticActionWithActionNameAttribute()), Is.EqualTo("ActionNameFromTheAttribute"));
+        }
+
+        [Test]
+        public void GetActionName_ActionWithoutParameters_ReturnsActionName()
+        {
+            Assert.That(ControllerHelper.GetActionName<TestController>(c => c.ActionWithoutParameters()), Is.EqualTo("ActionWithoutParameters"));
+        }
+
+        [Test]
+        public void GetActionName_ActionWithParameters_ReturnsActionName()
+        {
+            Assert.That(ControllerHelper.GetActionName<TestController>(c => c.ActionWithParameters(0, null, null)), Is.EqualTo("ActionWithParameters"));
+        }
+
+        [Test]
+        public void GetActionName_ActionWithActionNameAttribute_ReturnsActionNameFromTheAttribute()
+        {
+            Assert.That(ControllerHelper.GetActionName<TestController>(c => c.ActionWithActionNameAttribute()), Is.EqualTo("ActionNameFromTheAttribute"));
         }
 
         class TestController : System.Web.Mvc.Controller
         {
-            public static ActionResult ActionWithoutParameters() { return null; }
+            public static ActionResult StaticActionWithoutParameters() { return null; }
             // ReSharper disable UnusedParameter.Local
-            public static ActionResult ActionWithParameters(int a, string b, object c) { return null; }
+            public static ActionResult StaticActionWithParameters(int a, string b, object c) { return null; }
             // ReSharper restore UnusedParameter.Local
             [ActionName("ActionNameFromTheAttribute")]
-            public static ActionResult ActionWithActionNameAttribute() { return null; }
+            public static ActionResult StaticActionWithActionNameAttribute() { return null; }
+
+            // ReSharper disable MemberCanBeMadeStatic.Local
+            public ActionResult ActionWithoutParameters() { return null; }
+            // ReSharper disable UnusedParameter.Local
+            public ActionResult ActionWithParameters(int a, string b, object c) { return null; }
+            // ReSharper restore UnusedParameter.Local
+            [ActionName("ActionNameFromTheAttribute")]
+            public ActionResult ActionWithActionNameAttribute() { return null; }
+            // ReSharper restore MemberCanBeMadeStatic.Local
         }
         #endregion
     }

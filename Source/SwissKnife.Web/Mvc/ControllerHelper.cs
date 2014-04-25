@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using SwissKnife.Diagnostics.Contracts;
 
@@ -10,7 +11,7 @@ namespace SwissKnife.Web.Mvc
     {
         private const string DefaultControllerNameSuffix = "Controller";
 
-        internal static string GetControllerNameFromControllerType(Type controllerType)
+        internal static string GetControllerName(Type controllerType)
         {
             System.Diagnostics.Debug.Assert(controllerType != null);
 
@@ -25,19 +26,31 @@ namespace SwissKnife.Web.Mvc
             return controllerName;
         }
 
-        internal static string GetActionNameFromActionExpression<TController>(Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
+        internal static string GetActionName<TController>(Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
         {
             System.Diagnostics.Debug.Assert(actionExpression != null);
 
-            Argument.IsValid(actionExpression.Body is MethodCallExpression,
+            return GetActionNameFromActionExpressionCore(actionExpression.Body);
+        }
+
+        internal static string GetActionName<TController>(Expression<Func<TController, Task<ActionResult>>> actionExpression) where TController : Controller
+        {
+            System.Diagnostics.Debug.Assert(actionExpression != null);
+
+            return GetActionNameFromActionExpressionCore(actionExpression.Body);
+        }
+
+        private static string GetActionNameFromActionExpressionCore(Expression actionExpression)
+        {
+            Argument.IsValid(actionExpression is MethodCallExpression,
                              string.Format("Action expression is not a valid action expression.{0}" +
                                            "The body of a valid action expression must consist of a single method call (e.g. 'userController => userController.EditUser(0)').{0}" +
-                                           "The action expression was: '{1}'.",
+                                           "The body of the action expression was: '{1}'.",
                                            Environment.NewLine,
                                            actionExpression),
                              "actionExpression");
 
-            MethodInfo actionMethodInfo = ((MethodCallExpression)actionExpression.Body).Method;
+            MethodInfo actionMethodInfo = ((MethodCallExpression)actionExpression).Method;
 
             // By default, the action name is the name of the controller action method.
             string actionName = actionMethodInfo.Name;
@@ -48,23 +61,7 @@ namespace SwissKnife.Web.Mvc
             if (actionNameAttributes.Length > 0)
                 actionName = actionNameAttributes[0].Name; // ActionNameAttribute can be applied only once.
 
-            return actionName;
-        }
-
-        internal static string GetActionNameFromActionExpression(Expression actionBody)
-        {
-            System.Diagnostics.Debug.Assert(actionBody != null);
-
-            var methodInfo = ((MethodCallExpression)actionBody).Method;
-
-            var actionName = methodInfo.Name;
-
-            ActionNameAttribute[] actionNameAttributes = (ActionNameAttribute[])methodInfo.GetCustomAttributes(typeof(ActionNameAttribute), false);
-
-            if (actionNameAttributes.Length > 0)
-                actionName = actionNameAttributes[0].Name; // ActionNameAttribute can be applied only once.
-
-            return actionName;
+            return actionName;            
         }
     }
 }

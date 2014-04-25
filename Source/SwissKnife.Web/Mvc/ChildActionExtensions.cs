@@ -12,20 +12,20 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
     /// <threadsafety static="true"/>
     public static class ChildActionExtensions
     {
-        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> action) where TController : Controller
+        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
         {
-            RenderAction(htmlHelper, action, (object)null);
+            RenderAction(htmlHelper, actionExpression, (object)null);
         }
 
-        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> action, object routeValues) where TController : Controller
+        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression, object routeValues) where TController : Controller
         {
-            RenderAction(htmlHelper, action, new RouteValueDictionary(routeValues));
+            RenderAction(htmlHelper, actionExpression, new RouteValueDictionary(routeValues));
         }
 
-        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> action, RouteValueDictionary routeValues) where TController : Controller
+        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression, RouteValueDictionary routeValues) where TController : Controller
         {
-            var actionName = ControllerHelper.GetActionNameFromActionExpression(action.Body);
-            var controllerName = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
+            var actionName = ControllerHelper.GetActionName(actionExpression);
+            var controllerName = ControllerHelper.GetControllerName(typeof(TController));
 
             htmlHelper.RenderAction(actionName, controllerName, routeValues);
         }

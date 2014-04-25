@@ -11,19 +11,19 @@ namespace SwissKnife.Web.Mvc
     /// <threadsafety static="true"/>
     public static class AreaRegistrationContextExtensions // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
     {
-        public static Route MapRoute<TController>(this AreaRegistrationContext context, string name, string url, Expression<Func<TController, ActionResult>> action)
+        public static Route MapRoute<TController>(this AreaRegistrationContext context, string name, string url, Expression<Func<TController, ActionResult>> actionExpression)
             where TController : Controller
         {
-            return context.MapRoute<TController>(name, url, action, null);
+            return context.MapRoute<TController>(name, url, actionExpression, null);
         }
 
-        public static Route MapRoute<TController>(this AreaRegistrationContext context, string name, string url, Expression<Func<TController, ActionResult>> action, object defaults)
+        public static Route MapRoute<TController>(this AreaRegistrationContext context, string name, string url, Expression<Func<TController, ActionResult>> actionExpression, object defaults)
             where TController : Controller
         {
-            return context.MapRoute<TController>(name, url, action, defaults, null);
+            return context.MapRoute<TController>(name, url, actionExpression, defaults, null);
         }
 
-        public static Route MapRoute<TController>(this AreaRegistrationContext context, string name, string url, Expression<Func<TController, ActionResult>> action, object defaults, object constraints)
+        public static Route MapRoute<TController>(this AreaRegistrationContext context, string name, string url, Expression<Func<TController, ActionResult>> actionExpression, object defaults, object constraints)
             where TController : Controller
         {
             if (url == null)
@@ -39,10 +39,10 @@ namespace SwissKnife.Web.Mvc
 
 
             // Add default controller to the route values dictionary.
-            defaultValues["controller"] = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
+            defaultValues["controller"] = ControllerHelper.GetControllerName(typeof(TController));
 
             // Add default action to the route values dictionary.
-            defaultValues["action"] = ControllerHelper.GetActionNameFromActionExpression(action.Body);
+            defaultValues["action"] = ControllerHelper.GetActionName(actionExpression);
 
             // Hack: We cannot pass RouteValueDictionary to the MapRoute method of AreaRegistrationContext. We will set it up later directly on the newly created route.
             Route route = context.MapRoute(name, url, null, constraints, new[] { typeof(TController).Namespace });

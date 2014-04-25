@@ -45,23 +45,24 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
 
         public static Route MapRoute<TController>(this RouteCollection routes, string name, string url, Expression<Func<TController, ActionResult>> action, object defaults, object constraints, IRouteHandler routeHandler) where TController : Controller
         {
-            return routes.MapRoute<TController>(name, url, action.Body, defaults, constraints, routeHandler);
+            return routes.MapRouteCore<TController>(name, url, ControllerHelper.GetActionName(action), defaults, constraints, routeHandler);
         }
 
         public static Route MapRoute<TController>(this RouteCollection routes, string name, string url, Expression<Func<TController, Task<ActionResult>>> action, object defaults, object constraints, IRouteHandler routeHandler) where TController : Controller
         {
-            return routes.MapRoute<TController>(name, url, action.Body, defaults, constraints, routeHandler);
+            return routes.MapRouteCore<TController>(name, url, ControllerHelper.GetActionName(action), defaults, constraints, routeHandler);
         }
 
-        private static Route MapRoute<TController>(this RouteCollection routes, string name, string url, Expression actionBody, object defaults, object constraints, IRouteHandler routeHandler) where TController : Controller
+        // TODO-IG: This implementation method shouldn't be extension method.
+        private static Route MapRouteCore<TController>(this RouteCollection routes, string name, string url, string actionName, object defaults, object constraints, IRouteHandler routeHandler) where TController : Controller
         {
             Argument.IsNotNull(routes, "routes");
             Argument.IsNotNull(url, "url");
 
             var defaultValues = new RouteValueDictionary(defaults);
 
-            defaultValues["controller"] = ControllerHelper.GetControllerNameFromControllerType(typeof(TController));
-            defaultValues["action"] = ControllerHelper.GetActionNameFromActionExpression(actionBody);
+            defaultValues["controller"] = ControllerHelper.GetControllerName(typeof(TController));
+            defaultValues["action"] = actionName;
 
             routeHandler = routeHandler ?? new MvcRouteHandler();
 
