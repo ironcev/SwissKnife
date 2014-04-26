@@ -1,5 +1,6 @@
-namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
+namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are in development. Review and refactoring is needed.
 {
+    /// <preliminary/>
     /// <summary>
     /// Different string formats used for encryption and hashing.
     /// </summary>

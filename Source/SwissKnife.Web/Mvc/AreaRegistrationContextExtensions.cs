@@ -8,8 +8,9 @@ using System.Web.Routing;
 
 namespace SwissKnife.Web.Mvc
 {
+    /// <preliminary/>
     /// <threadsafety static="true"/>
-    public static class AreaRegistrationContextExtensions // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
+    public static class AreaRegistrationContextExtensions // TODO-IG: This type is in development. Review and refactoring is needed.
     {
         public static Route MapRoute<TController>(this AreaRegistrationContext context, string name, string url, Expression<Func<TController, ActionResult>> actionExpression)
             where TController : Controller

@@ -204,6 +204,6 @@ namespace SwissKnife
             return From(valueOrNull);
         }
 
-        // TODO-IG: Think about equality.
+        // TODO-IG: Implement equality.
     }
 }

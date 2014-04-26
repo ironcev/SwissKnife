@@ -7,10 +7,11 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 
-namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
+namespace SwissKnife.Web.Mvc
 {
+    /// <preliminary/>
     /// <threadsafety static="true"/>
-    public static class ChildActionExtensions
+    public static class ChildActionExtensions // TODO-IG: This type is in development. Review and refactoring is needed.
     {
         public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
         {

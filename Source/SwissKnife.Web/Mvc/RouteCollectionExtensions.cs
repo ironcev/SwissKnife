@@ -8,10 +8,11 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using SwissKnife.Diagnostics.Contracts;
 
-namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
+namespace SwissKnife.Web.Mvc
 {
+    /// <preliminary/>
     /// <threadsafety static="true"/>
-    public static class RouteCollectionExtensions
+    public static class RouteCollectionExtensions // TODO-IG: This type is in development. Review and refactoring is needed.
     {
         public static Route MapRoute<TController>(this RouteCollection routes, string name, string url, Expression<Func<TController, ActionResult>> action) where TController : Controller
         {
@@ -53,7 +54,7 @@ namespace SwissKnife.Web.Mvc // TODO-IG: All types in this namespace are added b
             return routes.MapRouteCore<TController>(name, url, ControllerHelper.GetActionName(action), defaults, constraints, routeHandler);
         }
 
-        // TODO-IG: This implementation method shouldn't be extension method.
+        // TODO-IG: This implementation method must not be implemented as extension method.
         private static Route MapRouteCore<TController>(this RouteCollection routes, string name, string url, string actionName, object defaults, object constraints, IRouteHandler routeHandler) where TController : Controller
         {
             Argument.IsNotNull(routes, "routes");

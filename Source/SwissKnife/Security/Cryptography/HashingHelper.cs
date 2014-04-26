@@ -6,8 +6,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
+namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are in development. Review and refactoring is needed.
 {
+    /// <preliminary/>
     /// <summary>
     /// Helper class for hashing and verifying hashed data.
     /// </summary>

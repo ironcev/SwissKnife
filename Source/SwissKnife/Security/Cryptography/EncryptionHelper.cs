@@ -10,9 +10,10 @@ using System.Security.Cryptography;
 using System.Text;
 using SwissKnife.Diagnostics.Contracts;
 
-// TODO-IG: Originally inspired by http://www.codeproject.com/Articles/10154/NET-Encryption-Simplified 
-namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are added because of an urgent need. Review and refactoring is needed.
+// TODO-IG: Add to documentation that this class is originally inspired by http://www.codeproject.com/Articles/10154/NET-Encryption-Simplified 
+namespace SwissKnife.Security.Cryptography // TODO-IG: All types in this namespace are in development. Review and refactoring is needed.
 {
+    /// <preliminary/>
     /// <summary>
     /// Helper class for encrypting/decrypting data.
     /// </summary>
