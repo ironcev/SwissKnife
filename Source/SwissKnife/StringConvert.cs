@@ -22,7 +22,7 @@ namespace SwissKnife
         public static int? ToInt32(Option<string> value)
         {
             // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
+            // That means we don't need additional check if the value is None.
             int result;
             return int.TryParse(value.ValueOrNull, out result) ? result : (int?)null;
         }
@@ -68,7 +68,7 @@ namespace SwissKnife
         public static long? ToInt64(Option<string> value)
         {
             // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
+            // That means we don't need additional check if the value is None.
             long result;
             return long.TryParse(value.ValueOrNull, out result) ? result : (long?)null;
         }
@@ -114,7 +114,7 @@ namespace SwissKnife
         public static float? ToSingle(Option<string> value)
         {
             // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
+            // That means we don't need additional check if the value is None.
             float result;
             return float.TryParse(value.ValueOrNull, out result) ? result : (float?)null;
         }
@@ -160,7 +160,7 @@ namespace SwissKnife
         public static double? ToDouble(Option<string> value)
         {
             // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
+            // That means we don't need additional check if the value is None.
             double result;
             return double.TryParse(value.ValueOrNull, out result) ? result : (double?)null;
         }
@@ -216,7 +216,7 @@ namespace SwissKnife
         public static bool? ToBoolean(Option<string> value)
         {
             // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
+            // That means we don't need additional check if the value is None.
             bool result;
             if (bool.TryParse(value.ValueOrNull, out result))
                 return result;
@@ -329,7 +329,7 @@ namespace SwissKnife
         public static Guid? ToGuid(Option<string> value)
         {
             // The TryParse() fails if the string parameter is null.
-            // That means we don't need additional check if the Option is None.
+            // That means we don't need additional check if the value is None.
             Guid result;
             if (Guid.TryParse(value.ValueOrNull, out result)) return result;
 
@@ -339,6 +339,16 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a GUID to the equivalent <see cref="Guid"/> structure or specified default value if the conversion does not succeed.
         /// </summary>
+        /// <remarks>
+        /// <note>
+        /// This method has different semantic than <see cref="Guid.Parse"/>.
+        /// It accepts not only GUIDs formated with format parameters "N", "D", "B", "P", or "X" as a valid input for conversion 
+        /// but also strings that are short string representations of GUIDs.
+        /// </note>
+        /// <para>
+        /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
+        /// </para>
+        /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
@@ -354,6 +364,16 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a GUID to the equivalent <see cref="Guid"/> structure or <see cref="Guid.Empty"/> if the conversion does not succeed.
         /// </summary>
+        /// <remarks>
+        /// <note>
+        /// This method has different semantic than <see cref="Guid.Parse"/>.
+        /// It accepts not only GUIDs formated with format parameters "N", "D", "B", "P", or "X" as a valid input for conversion 
+        /// but also strings that are short string representations of GUIDs.
+        /// </note>
+        /// <para>
+        /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
+        /// </para>
+        /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
         /// <returns>
         /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
@@ -365,7 +385,7 @@ namespace SwissKnife
             return ToGuidOr(value, Guid.Empty);
         }
 
-
+        // TODO-IG: Test all ToDateTimeXYZ() methods.
         /// <summary>
         /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent.
         /// The return value indicates whether the conversion succeeded or failed.
@@ -463,12 +483,116 @@ namespace SwissKnife
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime? ToDateTime(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
         {
+            // The TryParseExact() fails if the string parameter is null.
+            // That means we don't need additional check if the value is None.
             DateTime result;
             return DateTime.TryParseExact(value.ValueOrNull,
                                           format.IsNone ? StandardDateTimeFormats.AllStandardDateTimeFormats : new [] { format.Value },
                                           formatProvider.ValueOr(CultureInfo.CurrentCulture),
                                           DateTimeStyles.None,
                                           out result) ? result : (DateTime?)null;
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and culture-specific format information.
+        /// If the conversion fails, the specified default value is returned.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format string (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <param name="formatProvider">
+        /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
+        /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
+        /// </param>
+        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOr(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider, DateTime defaultValue)
+        {
+            return ToDateTime(value, format, formatProvider).GetValueOrDefault(defaultValue);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and
+        /// the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// If the conversion fails, the specified default value is returned.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOr(Option<string> value, Option<string> format, DateTime defaultValue)
+        {
+            return ToDateTime(value, format, CultureInfo.CurrentCulture).GetValueOrDefault(defaultValue);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent.
+        /// If the conversion fails, the specified default value is returned.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOr(Option<string> value, DateTime defaultValue)
+        {
+            return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(defaultValue);
         }
     }
 }
