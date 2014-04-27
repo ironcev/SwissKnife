@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using SwissKnife.Time;
 
 namespace SwissKnife
 {
@@ -593,6 +594,348 @@ namespace SwissKnife
         public static DateTime ToDateTimeOr(Option<string> value, DateTime defaultValue)
         {
             return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(defaultValue);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and culture-specific format information.
+        /// If the conversion fails, the method returns the current date and time, with the offset set to the local time's offset from Coordinated Universal Time (UTC).
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date and time is obtained from the <see cref="TimeGenerator.GetLocalNow"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format string (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <param name="formatProvider">
+        /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
+        /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
+        /// </param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrNow(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
+        {
+            return ToDateTime(value, format, formatProvider).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and
+        /// the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// If the conversion fails, the method returns the current date and time, with the offset set to the local time's offset from Coordinated Universal Time (UTC).
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date and time is obtained from the <see cref="TimeGenerator.GetLocalNow"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrNow(Option<string> value, Option<string> format)
+        {
+            return ToDateTime(value, format, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent.
+        /// If the conversion fails, the method returns the current date and time, with the offset set to the local time's offset from Coordinated Universal Time (UTC).
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date and time is obtained from the <see cref="TimeGenerator.GetLocalNow"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// The method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrNow(Option<string> value)
+        {
+            return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and culture-specific format information.
+        /// If the conversion fails, the method returns the current date and time expressed as Coordinated Universal Time (UTC) date and time whose offset is <see cref="TimeSpan.Zero"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date and time is obtained from the <see cref="TimeGenerator.GetUtcNow"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format string (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <param name="formatProvider">
+        /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
+        /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
+        /// </param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrUtcNow(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
+        {
+            return ToDateTime(value, format, formatProvider).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and
+        /// the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// If the conversion fails, the method returns the current date and time expressed as Coordinated Universal Time (UTC) date and time whose offset is <see cref="TimeSpan.Zero"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date and time is obtained from the <see cref="TimeGenerator.GetUtcNow"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrUtcNow(Option<string> value, Option<string> format)
+        {
+            return ToDateTime(value, format, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent.
+        /// If the conversion fails, the method returns the current date and time expressed as Coordinated Universal Time (UTC) date and time whose offset is <see cref="TimeSpan.Zero"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date and time is obtained from the <see cref="TimeGenerator.GetUtcNow"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// The method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrUtcNow(Option<string> value)
+        {
+            return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and culture-specific format information.
+        /// If the conversion fails, the method returns the current date.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date is obtained from the <see cref="TimeGenerator.GetToday"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format string (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <param name="formatProvider">
+        /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
+        /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
+        /// </param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrToday(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
+        {
+            return ToDateTime(value, format, formatProvider).GetValueOrDefault(TimeGenerator.GetToday());
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and
+        /// the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// If the conversion fails, the method returns the current date.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date is obtained from the <see cref="TimeGenerator.GetToday"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrToday(Option<string> value, Option<string> format)
+        {
+            return ToDateTime(value, format, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetToday());
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent.
+        /// If the conversion fails, the method returns the current date.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The current date is obtained from the <see cref="TimeGenerator.GetToday"/>.
+        /// This makes the method suitable for scenarios where taking control over date and time creation is necessary. Typical example would be mocking date and time generation for testing purposes.<br/>
+        /// For more information see the <see cref="TimeGenerator"/> class.
+        /// </para>
+        /// <para>
+        /// The method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>Current date if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime ToDateTimeOrToday(Option<string> value)
+        {
+            return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetToday());
         }
     }
 }
