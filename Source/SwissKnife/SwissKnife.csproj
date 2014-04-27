@@ -64,6 +64,7 @@
     <Compile Include="Security\Cryptography\NamespaceDoc.cs" />
     <Compile Include="Security\Cryptography\StringFormat.cs" />
     <Compile Include="Security\Cryptography\Util.cs" />
+    <Compile Include="StandardDateTimeFormats.cs" />
     <Compile Include="StringConvert.cs" />
     <Compile Include="Time\ConstantTimeGenerator.cs" />
     <Compile Include="Time\NamespaceDoc.cs" />
