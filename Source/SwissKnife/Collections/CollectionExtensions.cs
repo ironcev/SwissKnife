@@ -10,7 +10,7 @@ namespace SwissKnife.Collections
     /// <summary>
     /// Contains extension methods that can be applied on different types of collections.
     /// </summary>
-    /// <threadsafety static="true"/>
+    /// <threadsafety static="false"/> // TODO-IG: Check thread safety on all other classes where we stated that the thread safety is preserved for all static methods.
     public static class CollectionExtensions
     {
         // Random generator used in the Randomize<T> and Random<T> methods.
