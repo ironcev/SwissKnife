@@ -7,6 +7,7 @@ namespace SwissKnife
     /// Provides standard .NET date and time format strings.
     /// For more information on standard date and time formats see <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</a>.
     /// </summary>
+    /// <threadsafety static="true"/>
     /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
     public static class StandardDateTimeFormats
     {
@@ -163,6 +164,10 @@ namespace SwissKnife
         /// <summary>
         /// Gets all standard .NET date and time format strings.
         /// </summary>
+        /// <remarks>
+        /// For more information see: <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</a>.
+        /// </remarks>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         public static readonly string[] AllStandardDateTimeFormats;
 
         static StandardDateTimeFormats()

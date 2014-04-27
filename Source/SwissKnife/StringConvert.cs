@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace SwissKnife
 {
@@ -362,6 +363,112 @@ namespace SwissKnife
         public static Guid ToGuidOrEmpty(Option<string> value)
         {
             return ToGuidOr(value, Guid.Empty);
+        }
+
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent.
+        /// The return value indicates whether the conversion succeeded or failed.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>null if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime? ToDateTime(Option<string> value)
+        {
+            return ToDateTime(value, null, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and
+        /// the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
+        /// The return value indicates whether the conversion succeeded or failed.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>null if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime? ToDateTime(Option<string> value, Option<string> format)
+        {
+            return ToDateTime(value, format, CultureInfo.CurrentCulture);
+        }
+
+        // TODO-IG: Test with format provider set to invariant culture.
+        /// <summary>
+        /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent using the specified format and culture-specific format information.
+        /// The return value indicates whether the conversion succeeded or failed.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// If the <paramref name="format"/> is specified (Some) the <paramref name="value"/> must match the specified format exactly.
+        /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format string (see <see cref="StandardDateTimeFormats"/>).
+        /// </para>
+        /// <para>
+        /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
+        /// </para>
+        /// <para>
+        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// </para>
+        /// </remarks>
+        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="format">
+        /// The required date time format of the <paramref name="value"/>.
+        /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
+        /// </param>
+        /// <param name="formatProvider">
+        /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
+        /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
+        /// </param>
+        /// <returns>
+        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
+        /// <br/>-or-<br/>null if the conversion failed.
+        /// </returns>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
+        /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
+        public static DateTime? ToDateTime(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
+        {
+            DateTime result;
+            return DateTime.TryParseExact(value.ValueOrNull,
+                                          format.IsNone ? StandardDateTimeFormats.AllStandardDateTimeFormats : new [] { format.Value },
+                                          formatProvider.ValueOr(CultureInfo.CurrentCulture),
+                                          DateTimeStyles.None,
+                                          out result) ? result : (DateTime?)null;
         }
     }
 }
