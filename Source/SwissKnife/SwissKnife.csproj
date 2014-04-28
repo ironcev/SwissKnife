@@ -41,6 +41,8 @@
     </Compile>
     <Compile Include="Collections\CollectionExtensions.cs" />
     <Compile Include="Collections\NamespaceDoc.cs" />
+    <Compile Include="DateTimeAssumption.cs" />
+    <Compile Include="DateTimeAssumptionHelper.cs" />
     <Compile Include="Diagnostics\Contracts\ContractExtensions.cs" />
     <Compile Include="Diagnostics\Contracts\Argument.cs" />
     <Compile Include="Diagnostics\Contracts\NamespaceDoc.cs" />

@@ -1309,6 +1309,160 @@ namespace SwissKnife.Tests.Unit
             // ReSharper restore PossibleInvalidOperationException
         }
         #endregion
+
+        #region ToDateTime
+        [Test]
+        public void ToDateTime_ValueIsNone_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDateTime(null).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDateTime_ValueIsEmpty_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDateTime(string.Empty).HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDateTime_ValueIsWhiteSpace_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToDateTime(" ").HasValue, Is.False);
+        }
+
+        [Test]
+        public void ToDateTime_ValueIsNotDateTime_ReturnsNull()
+        {
+            Assert.That(StringConvert.ToGuid("QWERT").HasValue, Is.False);
+        }
+
+        private static readonly DateTime arbitraryUniversalDateTime = new DateTime(DateTime.UtcNow.Ticks, DateTimeKind.Utc);
+        private static readonly DateTime arbitraryLocalDateTime = new DateTime(DateTime.UtcNow.Ticks, DateTimeKind.Local);
+        private static readonly DateTime arbitraryUnspecifiedDateTime = new DateTime(DateTime.UtcNow.Ticks, DateTimeKind.Unspecified);
+
+        [Test]
+        public static void ToDateTime__ValueIsInAnyStandardDateTimeFormat_CurrentCulture__ReturnsDateTimeOfKindUtc()
+        {
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_CurrentCulture__ReturnsDateTimeOfKindUtc(DateTimeAssumption.AssumeUniversal, arbitraryUniversalDateTime);
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_CurrentCulture__ReturnsDateTimeOfKindUtc(DateTimeAssumption.AssumeUniversal, arbitraryLocalDateTime);
+
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_CurrentCulture__ReturnsDateTimeOfKindUtc(DateTimeAssumption.AssumeLocal, arbitraryUniversalDateTime);
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_CurrentCulture__ReturnsDateTimeOfKindUtc(DateTimeAssumption.AssumeLocal, arbitraryLocalDateTime);
+
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_CurrentCulture__ReturnsDateTimeOfKindUtc(DateTimeAssumption.AssumeLocal, arbitraryUnspecifiedDateTime);
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_CurrentCulture__ReturnsDateTimeOfKindUtc(DateTimeAssumption.AssumeLocal, arbitraryUnspecifiedDateTime);
+        }
+
+        // We cannot use TestCase attribute because arbitraryUniversalDateTime and arbitraryLocalDateTime are not compile time constants.
+        private static void ToDateTime__ValueIsInAnyStandardDateTimeFormat_CurrentCulture__ReturnsDateTimeOfKindUtc(DateTimeAssumption dateTimeAssumption, DateTime dateTime)
+        {
+            foreach (string standardDateTimeFormat in StandardDateTimeFormats.AllStandardDateTimeFormats)
+            {
+                DateTime? result = StringConvert.ToDateTime(dateTime.ToString(standardDateTimeFormat), null, CultureInfo.CurrentCulture, dateTimeAssumption);
+                Assert.That(result.HasValue);
+                Assert.That(result.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
+            }
+        }
+
+        [Test]
+        public static void ToDateTime__ValueIsInAnyStandardDateTimeFormat_FormatNotKnow_CurrentCulture__ReturnsBestGuessDateTime()
+        {
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeUniversal, arbitraryUniversalDateTime);
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeUniversal, arbitraryLocalDateTime);
+
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeLocal, arbitraryUniversalDateTime);
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeLocal, arbitraryLocalDateTime);
+
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeLocal, arbitraryUnspecifiedDateTime);
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeLocal, arbitraryUnspecifiedDateTime);
+        }
+
+        // We cannot use TestCase attribute because arbitraryUniversalDateTime, arbitraryLocalDateTime, and arbitraryUnspecifiedDateTime are not compile time constants.
+        private static void AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption dateTimeAssumption, DateTime dateTime)
+        {
+            foreach (string standardDateTimeFormat in StandardDateTimeFormats.AllStandardDateTimeFormats)
+            {
+                DateTime? result = StringConvert.ToDateTime(dateTime.ToString(standardDateTimeFormat), null, CultureInfo.CurrentCulture, dateTimeAssumption);
+                Assert.That(result.HasValue);
+            }
+        }
+
+        [Test]
+        public static void ToDateTime__ValueIsInAnyStandardDateTimeFormat_FormatKnow_ValidAssumption_CurrentCulture__ReturnsEquivalentDateTime()
+        {
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_FormatKnow_ValidAssumption_CurrentCulture__ReturnsEquivalentDateTime(DateTimeAssumption.AssumeUniversal, arbitraryUniversalDateTime);
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_FormatKnow_ValidAssumption_CurrentCulture__ReturnsEquivalentDateTime(DateTimeAssumption.AssumeLocal, arbitraryLocalDateTime);
+            ToDateTime__ValueIsInAnyStandardDateTimeFormat_FormatKnow_ValidAssumption_CurrentCulture__ReturnsEquivalentDateTime(DateTimeAssumption.AssumeLocal, arbitraryUnspecifiedDateTime);
+        }
+
+        // We cannot use TestCase attribute because arbitraryUniversalDateTime, arbitraryLocalDateTime, and arbitraryUnspecifiedDateTime are not compile time constants.
+        private static void ToDateTime__ValueIsInAnyStandardDateTimeFormat_FormatKnow_ValidAssumption_CurrentCulture__ReturnsEquivalentDateTime(DateTimeAssumption dateTimeAssumption, DateTime dateTime)
+        {
+            // JUst to be sure that the calling test is properly written.
+            Assert.That(dateTimeAssumption == DateTimeAssumption.AssumeLocal && dateTime.Kind == DateTimeKind.Local ||
+                        dateTimeAssumption == DateTimeAssumption.AssumeUniversal && dateTime.Kind == DateTimeKind.Utc ||
+                        dateTimeAssumption == DateTimeAssumption.AssumeLocal && dateTime.Kind == DateTimeKind.Unspecified);
+
+            Console.WriteLine("{0}-- {1} -- ({2}){0}", Environment.NewLine, dateTime.ToString(StandardDateTimeFormats.GeneralDateLongTime), dateTimeAssumption);
+            foreach (string standardDateTimeFormat in StandardDateTimeFormats.AllStandardDateTimeFormats)
+            {
+                Console.WriteLine("{0} - {1}", standardDateTimeFormat, dateTime.ToString(standardDateTimeFormat));
+                DateTime? result = StringConvert.ToDateTime(dateTime.ToString(standardDateTimeFormat), standardDateTimeFormat, CultureInfo.CurrentCulture, dateTimeAssumption);
+                Assert.That(result.HasValue);
+                // We know now that the result has value and that result.Value will not throw InvalidOperationException.
+                // ReSharper disable PossibleInvalidOperationException
+                Console.WriteLine("{0} - {1}", standardDateTimeFormat, result.Value.ToString(standardDateTimeFormat));
+                // ReSharper restore PossibleInvalidOperationException
+                AssertThatToDateTimeResultIsEquivalentToOriginalDateTime(standardDateTimeFormat,
+                                                                         dateTimeAssumption == DateTimeAssumption.AssumeUniversal ? result.Value : result.Value.ToLocalTime(),
+                                                                         dateTime);
+            }
+        }
+
+        [Test]
+        public static void ToDateTime__ValueIsInAnyStandardDateTimeFormat_FormatKnow_InvalidAssumption_CurrentCulture__ReturnsBestGuessDateTime()
+        {
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeUniversal, arbitraryLocalDateTime);
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeLocal, arbitraryUniversalDateTime);
+            AssertThatForAllStandardDateTimeFormatResultIsAtLeastBestGuessDateTime(DateTimeAssumption.AssumeUniversal, arbitraryUnspecifiedDateTime);
+        }
+
+        private static void AssertThatToDateTimeResultIsEquivalentToOriginalDateTime(string standardDateTimeFormat, DateTime? result, DateTime originalDateTime)
+        {
+            Assert.That(result.HasValue);
+
+            // We have to analyze the result piece by piece. It is not possible to simply do something like:
+            //   Assert.That(result.Value.ToString(standardDateTimeFormat), Is.EqualTo(originalDateTime.ToString(standardDateTimeFormat)));
+            // or
+            //   Assert.That(result.Value.ToUniversalTime().ToString(standardDateTimeFormat), Is.EqualTo(originalDateTime.ToUniversalTime().ToString(standardDateTimeFormat)));
+            if (standardDateTimeFormat == StandardDateTimeFormats.YearMonth)
+            {
+                Assert.That(result.Value.Month, Is.EqualTo(originalDateTime.Month));
+                Assert.That(result.Value.Year, Is.EqualTo(originalDateTime.Year));
+                Assert.That(result.Value.TimeOfDay, Is.EqualTo(TimeSpan.Zero));
+            }
+            else
+            {
+                Assert.That(result.Value == originalDateTime || // Completely equal or...
+                            (result.Value.Date == originalDateTime.Date && // Date is equal and...
+                                (result.Value.TimeOfDay == originalDateTime.TimeOfDay || // Time is completely equal or...
+                                 result.Value.TimeOfDay == TimeSpan.Zero || // there is no time component
+                                 (result.Value.TimeOfDay.Hours == originalDateTime.TimeOfDay.Hours && // time component has hours and minutes that are equal and...
+                                    result.Value.TimeOfDay.Minutes == originalDateTime.TimeOfDay.Minutes &&
+                                    (result.Value.TimeOfDay.Seconds == 0 && // there are no seconds and milliseconds or...
+                                     result.Value.TimeOfDay.Milliseconds == 0) ||
+                                     (result.Value.TimeOfDay.Seconds == originalDateTime.TimeOfDay.Seconds && // seconds are equal and there are no milliseconds
+                                     result.Value.TimeOfDay.Milliseconds == 0)) ||
+                                 (result.Value.TimeOfDay.Hours == (originalDateTime.TimeOfDay.Hours + DateTimeOffset.Now.Offset.Hours) && // time component has hours shifted for the offset and minutes that are equal and...
+                                    result.Value.TimeOfDay.Minutes == originalDateTime.TimeOfDay.Minutes &&
+                                    (result.Value.TimeOfDay.Seconds == 0 && // there are no seconds and milliseconds or...
+                                     result.Value.TimeOfDay.Milliseconds == 0) ||
+                                     (result.Value.TimeOfDay.Seconds == originalDateTime.TimeOfDay.Seconds && // seconds are equal and there are no milliseconds
+                                     result.Value.TimeOfDay.Milliseconds == 0))
+                                 )
+                            ));
+            }
+        }
+        #endregion
     }
     // ReSharper restore InconsistentNaming
 }

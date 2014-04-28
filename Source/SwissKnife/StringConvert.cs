@@ -387,6 +387,8 @@ namespace SwissKnife
         }
 
         // TODO-IG: Test all ToDateTimeXYZ() methods.
+        // TODO-IG: Add a new comment about default DateTimeAssumption to all ToDateTimeXYZ() methods. Do this after you introduce <inheritdoc> in comments.
+        // TODO-IG: Add the existing comment about dangerous conversion to all ToDateTimeXYZ() methods. Do this after you introduce <inheritdoc> in comments.
         /// <summary>
         /// Converts the specified string representation of a date and time to its <see cref="DateTime"/> equivalent.
         /// The return value indicates whether the conversion succeeded or failed.
@@ -399,21 +401,47 @@ namespace SwissKnife
         /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// <note type="caution">
+        /// <para>
+        /// Avoid using <see cref="String"/> to <see cref="DateTime"/> conversion without explicitly specifying the format and the format provider.
+        /// They are made optional in all of the date time conversion methods only to support cases when the origin of the textual representation is not known.
+        /// (In other words, for the cases when the format and the culture in which the <see cref="value"/> is originally created is not know.)
+        /// Such cases should be an exception.
+        /// </para>
+        /// <para>
+        /// If the format and the format specifier are not provided the conversion methods can only do their best guess in order to convert the <paramref name="value"/> to <see cref="DateTime"/>.
+        /// It is possible (if not even likely) that the conversion will succeed but the returned value will not be the value that one would expect.
+        /// (In other words, it will not be equivalent to the <see cref="DateTime"/> value originally used to create the <paramref name="value"/>.)
+        /// </para>
+        /// <para>
+        /// Ideally, <see cref="string"/> to <see cref="DateTime"/> conversion should always be done by using the
+        /// <see cref="ToDateTime(Option{string}, Option{string}, Option{IFormatProvider}, DateTimeAssumption)"/> override with all parameters provided.
+        /// </para>
+        /// </note>
+        /// </para>
+        /// <para>
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>null if the conversion failed.
+        /// <br/>-or-<br/>null if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime? ToDateTime(Option<string> value)
         {
-            return ToDateTime(value, null, CultureInfo.CurrentCulture);
+            return ToDateTime(value, null, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal);
         }
 
         /// <summary>
@@ -427,7 +455,13 @@ namespace SwissKnife
         /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -438,14 +472,15 @@ namespace SwissKnife
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>null if the conversion failed.
+        /// <br/>-or-<br/>null if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime? ToDateTime(Option<string> value, Option<string> format)
         {
-            return ToDateTime(value, format, CultureInfo.CurrentCulture);
+            return ToDateTime(value, format, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal);
         }
 
         // TODO-IG: Test with format provider set to invariant culture.
@@ -462,7 +497,13 @@ namespace SwissKnife
         /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -474,23 +515,27 @@ namespace SwissKnife
         /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
         /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
         /// </param>
+        /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>null if the conversion failed.
+        /// <br/>-or-<br/>null if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
-        public static DateTime? ToDateTime(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
+        public static DateTime? ToDateTime(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider, DateTimeAssumption dateTimeAssumption)
         {
+            // TODO-IG: Check that dateTimeAssumptio is a valid enumeration value.
+
             // The TryParseExact() fails if the string parameter is null.
             // That means we don't need additional check if the value is None.
             DateTime result;
             return DateTime.TryParseExact(value.ValueOrNull,
                                           format.IsNone ? StandardDateTimeFormats.AllStandardDateTimeFormats : new [] { format.Value },
                                           formatProvider.ValueOr(CultureInfo.CurrentCulture),
-                                          DateTimeStyles.None,
+                                          DateTimeAssumptionHelper.ToDateTimeStyles(dateTimeAssumption) | DateTimeStyles.AdjustToUniversal,
                                           out result) ? result : (DateTime?)null;
         }
 
@@ -507,7 +552,13 @@ namespace SwissKnife
         /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -519,18 +570,20 @@ namespace SwissKnife
         /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
         /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
         /// </param>
+        /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
-        public static DateTime ToDateTimeOr(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider, DateTime defaultValue)
+        public static DateTime ToDateTimeOr(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider, DateTimeAssumption dateTimeAssumption, DateTime defaultValue)
         {
-            return ToDateTime(value, format, formatProvider).GetValueOrDefault(defaultValue);
+            return ToDateTime(value, format, formatProvider, dateTimeAssumption).GetValueOrDefault(defaultValue);
         }
 
         /// <summary>
@@ -544,7 +597,13 @@ namespace SwissKnife
         /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -556,14 +615,15 @@ namespace SwissKnife
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime ToDateTimeOr(Option<string> value, Option<string> format, DateTime defaultValue)
         {
-            return ToDateTime(value, format, CultureInfo.CurrentCulture).GetValueOrDefault(defaultValue);
+            return ToDateTime(value, format, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal).GetValueOrDefault(defaultValue);
         }
 
         /// <summary>
@@ -578,7 +638,13 @@ namespace SwissKnife
         /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -586,14 +652,15 @@ namespace SwissKnife
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
+        /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime ToDateTimeOr(Option<string> value, DateTime defaultValue)
         {
-            return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(defaultValue);
+            return ToDateTime(value, null, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal).GetValueOrDefault(defaultValue);
         }
 
         /// <summary>
@@ -614,7 +681,13 @@ namespace SwissKnife
         /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -626,17 +699,19 @@ namespace SwissKnife
         /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
         /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
         /// </param>
+        /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
-        public static DateTime ToDateTimeOrNow(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
+        public static DateTime ToDateTimeOrNow(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider, DateTimeAssumption dateTimeAssumption)
         {
-            return ToDateTime(value, format, formatProvider).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
+            return ToDateTime(value, format, formatProvider, dateTimeAssumption).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
         }
 
         /// <summary>
@@ -655,7 +730,13 @@ namespace SwissKnife
         /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -666,14 +747,15 @@ namespace SwissKnife
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime ToDateTimeOrNow(Option<string> value, Option<string> format)
         {
-            return ToDateTime(value, format, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
+            return ToDateTime(value, format, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
         }
 
         /// <summary>
@@ -693,21 +775,28 @@ namespace SwissKnife
         /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime ToDateTimeOrNow(Option<string> value)
         {
-            return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
+            return ToDateTime(value, null, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal).GetValueOrDefault(TimeGenerator.GetLocalNow().LocalDateTime);
         }
 
         /// <summary>
@@ -728,7 +817,13 @@ namespace SwissKnife
         /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -740,17 +835,19 @@ namespace SwissKnife
         /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
         /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
         /// </param>
+        /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
-        public static DateTime ToDateTimeOrUtcNow(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
+        public static DateTime ToDateTimeOrUtcNow(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider, DateTimeAssumption dateTimeAssumption)
         {
-            return ToDateTime(value, format, formatProvider).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
+            return ToDateTime(value, format, formatProvider, dateTimeAssumption).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
         }
 
         /// <summary>
@@ -769,7 +866,13 @@ namespace SwissKnife
         /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -780,14 +883,15 @@ namespace SwissKnife
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime ToDateTimeOrUtcNow(Option<string> value, Option<string> format)
         {
-            return ToDateTime(value, format, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
+            return ToDateTime(value, format, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
         }
 
         /// <summary>
@@ -807,21 +911,28 @@ namespace SwissKnife
         /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date and time if the conversion failed.
+        /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime ToDateTimeOrUtcNow(Option<string> value)
         {
-            return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
+            return ToDateTime(value, null, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal).GetValueOrDefault(TimeGenerator.GetUtcNow().UtcDateTime);
         }
 
         /// <summary>
@@ -842,7 +953,13 @@ namespace SwissKnife
         /// If the <paramref name="formatProvider"/> is not specified, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) as the format provider.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -854,17 +971,19 @@ namespace SwissKnife
         /// An object that supplies culture-specific formatting information about the <paramref name="value"/>.
         /// If None, the method will use the current thread culture (<see cref="CultureInfo.CurrentCulture"/>).
         /// </param>
+        /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date if the conversion failed.
+        /// <br/>-or-<br/>Current date if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
-        public static DateTime ToDateTimeOrToday(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider)
+        public static DateTime ToDateTimeOrToday(Option<string> value, Option<string> format, Option<IFormatProvider> formatProvider, DateTimeAssumption dateTimeAssumption)
         {
-            return ToDateTime(value, format, formatProvider).GetValueOrDefault(TimeGenerator.GetToday());
+            return ToDateTime(value, format, formatProvider, dateTimeAssumption).GetValueOrDefault(TimeGenerator.GetToday());
         }
 
         /// <summary>
@@ -883,7 +1002,13 @@ namespace SwissKnife
         /// If the <paramref name="format"/> is not specified (None) the method will try to convert the <paramref name="value"/> by using any of the standard .NET date and time format strings (see <see cref="StandardDateTimeFormats"/>).
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
@@ -894,14 +1019,15 @@ namespace SwissKnife
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date if the conversion failed.
+        /// <br/>-or-<br/>Current date if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime ToDateTimeOrToday(Option<string> value, Option<string> format)
         {
-            return ToDateTime(value, format, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetToday());
+            return ToDateTime(value, format, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal).GetValueOrDefault(TimeGenerator.GetToday());
         }
 
         /// <summary>
@@ -921,21 +1047,28 @@ namespace SwissKnife
         /// The method uses the current thread culture (<see cref="CultureInfo.CurrentCulture"/>) for providing culture-specific format information.
         /// </para>
         /// <para>
-        /// The parsing is done by using the <see cref="System.Globalization.DateTimeStyles.None"/>.
+        /// Date and time are returned as a Coordinated Universal Time (UTC).
+        /// If the <paramref name="value"/> denotes a local time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeLocal"/>,
+        /// the date and time are converted from the local time to UTC.
+        /// If the input string denotes a UTC time, through a time zone specifier or <see cref="DateTimeAssumption.AssumeUniversal"/>, no conversion occurs.
+        /// </para>
+        /// <para>
+        /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
         /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
         /// <returns>
         /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
-        /// <br/>-or-<br/>Current date if the conversion failed.
+        /// <br/>-or-<br/>Current date if the conversion failed.<br/>
+        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx">Custom Date and Time Format Strings</seealso>
         public static DateTime ToDateTimeOrToday(Option<string> value)
         {
-            return ToDateTime(value, null, CultureInfo.CurrentCulture).GetValueOrDefault(TimeGenerator.GetToday());
+            return ToDateTime(value, null, CultureInfo.CurrentCulture, DateTimeAssumption.AssumeUniversal).GetValueOrDefault(TimeGenerator.GetToday());
         }
     }
 }
