@@ -23,6 +23,7 @@ namespace SwissKnife.Enums
         /// If you want to check if an arbitrary type is a flags enumeration, use the <see cref="TypeExtensions.IsFlagsEnum"/> method instead.
         /// </note>
         /// </remarks>
+        /// <typeparam name="TEnum">The enumeration type that has to be inspected.</typeparam>
         /// <returns>
         /// true if the <typeparamref name="TEnum"/> is a flags enumeration; otherwise false.
         /// </returns>
@@ -43,6 +44,7 @@ namespace SwissKnife.Enums
         /// If you want to check if an arbitrary type is a flags enumeration, use the <see cref="TypeExtensions.IsFlagsEnum"/> method instead.
         /// </note>
         /// </remarks>
+        /// <param name="enumType">The enumeration type that has to be inspected.</param>
         /// <returns>
         /// true if the <paramref name="enumType"/> is a flags enumeration; otherwise false.
         /// </returns>

@@ -33,7 +33,7 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Creates a Some option that represents the <paramref name="value"/>.
+        /// Creates a Some option that represents a value.
         /// </summary>
         /// <param name="value">The value represented by the option.</param>
         /// <returns>An option that represents the <paramref name="value"/>.</returns>

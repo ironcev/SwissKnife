@@ -14,7 +14,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to its 32-bit signed integer equivalent. The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
         /// 32-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
@@ -31,7 +31,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to its 32-bit signed integer equivalent or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
         /// 32-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
@@ -46,7 +46,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to its 32-bit signed integer equivalent or zero if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
         /// 32-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Zero if the <paramref name="value"/> is None option.
@@ -60,7 +60,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to its 64-bit signed integer equivalent. The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
         /// 64-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
@@ -77,7 +77,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to its 64-bit signed integer equivalent or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
         /// 64-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
@@ -92,7 +92,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to its 64-bit signed integer equivalent or zero if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
         /// 64-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Zero if the <paramref name="value"/> is None option.
@@ -106,7 +106,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent single-precision floating-point number. The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
         /// Single-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
@@ -123,7 +123,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent single-precision floating-point number or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
         /// Single-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
@@ -138,7 +138,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent double-precision floating-point number or zero if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
         /// Single-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Zero if the <paramref name="value"/> is None option.
@@ -152,7 +152,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent double-precision floating-point number. The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
         /// Double-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
@@ -169,7 +169,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent double-precision floating-point number or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
         /// Double-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
@@ -184,7 +184,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent double-precision floating-point number or zero if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing a number to convert.</param>
+        /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
         /// Double-precision floating-point value value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Zero if the <paramref name="value"/> is None option.
@@ -198,7 +198,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent. The return value indicates whether the conversion succeeded or failed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
         /// <remarks>
         /// <para>
@@ -238,7 +238,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
         /// <remarks>
@@ -263,7 +263,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or false if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
         /// <remarks>
         /// <para>
@@ -287,7 +287,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or true if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
         /// <remarks>
         /// <para>
@@ -321,7 +321,7 @@ namespace SwissKnife
         /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
         /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
@@ -350,7 +350,7 @@ namespace SwissKnife
         /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
         /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
@@ -375,7 +375,7 @@ namespace SwissKnife
         /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
         /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><see cref="Guid.Empty"/> if the <paramref name="value"/> is None option.
@@ -429,12 +429,12 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>null if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -464,16 +464,16 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
         /// </param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>null if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -506,7 +506,7 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
@@ -517,10 +517,10 @@ namespace SwissKnife
         /// </param>
         /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>null if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>null if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -561,7 +561,7 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
@@ -573,10 +573,10 @@ namespace SwissKnife
         /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -606,17 +606,17 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
         /// </param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -647,13 +647,13 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="defaultValue">Default value to return if the conversion fails.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -690,7 +690,7 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
@@ -701,10 +701,10 @@ namespace SwissKnife
         /// </param>
         /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -739,16 +739,16 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
         /// </param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -784,12 +784,12 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -826,7 +826,7 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
@@ -837,10 +837,10 @@ namespace SwissKnife
         /// </param>
         /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -875,16 +875,16 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
         /// </param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -920,12 +920,12 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date and time if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date and time if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -962,7 +962,7 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
@@ -973,10 +973,10 @@ namespace SwissKnife
         /// </param>
         /// <param name="dateTimeAssumption">An assumption about the date time stored in the <paramref name="value"/>; is it stored as a local or UTC time.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -1011,16 +1011,16 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <param name="format">
         /// The required date time format of the <paramref name="value"/>.
         /// If None, the method will try to use <a href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">any of the standard .NET date and time formats</a>.
         /// </param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>
@@ -1056,12 +1056,12 @@ namespace SwissKnife
         /// The <see cref="DateTime.Kind"/> of the returned <see cref="DateTime"/> object is always <see cref="DateTimeKind.Utc"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">A <see cref="string"/> containing the value to convert.</param>
+        /// <param name="value">The string containing the value to convert.</param>
         /// <returns>
-        /// <see cref="DateTime"/> value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Date time value equivalent to the <see cref="DateTime"/> contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Current date if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Current date if the conversion failed.<br/>
-        /// In case of successful conversion, the returned <see cref="DateTime"/> object will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
+        /// In case of successful conversion, the returned date time will have <see cref="DateTime.Kind"/> set to <see cref="DateTimeKind.Utc"/>.
         /// </returns>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/2h3syy57(v=vs.110).aspx">Parsing Date and Time Strings</seealso>
         /// <seealso href="http://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx">Standard Date and Time Format Strings</seealso>

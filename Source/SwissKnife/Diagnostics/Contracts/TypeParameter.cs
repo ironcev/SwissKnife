@@ -13,7 +13,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// <summary>
         /// Checks if a type parameter represents an enumeration.
         /// </summary>
-        /// <param name="typeParameter"><see cref="Type"/> that has to be checked if it represents an enumeration.</param>
+        /// <param name="typeParameter">The type that has to be checked if it represents an enumeration.</param>
         /// <param name="typeParameterName">The name of the type parameter. E.g. "T", "TInput", "TOutput", or "TResult"
         /// in case of generic parameters or e.g. "enumType" in case of method arguments.</param>
         /// <exception cref="ArgumentNullException"><paramref name="typeParameter"/> is null.</exception>

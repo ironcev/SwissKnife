@@ -10,7 +10,7 @@ namespace SwissKnife
     public static class GuidUtility
     {
         /// <summary>
-        /// Creates new sequential <see cref="Guid"/>.
+        /// Creates new sequential GUID.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -23,7 +23,7 @@ namespace SwissKnife
         /// </para>
         /// </remarks>
         /// <returns>
-        /// Sequential <see cref="Guid"/>.
+        /// Sequential GUID.
         /// </returns>
         public static Guid NewSequentialGuid()
         {
@@ -57,7 +57,7 @@ namespace SwissKnife
 
 
         /// <summary>
-        /// Converts a <see cref="Guid"/> to its short string representation.
+        /// Converts a GUID to its short string representation.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -73,7 +73,7 @@ namespace SwissKnife
         /// </ul>
         /// </para>
         /// </remarks>
-        /// <param name="guid">The <see cref="Guid"/> that has to be converted to its short string representation.</param>
+        /// <param name="guid">The GUID that has to be converted to its short string representation.</param>
         /// <returns>
         /// The short string representation of the <paramref name="guid"/>.
         /// </returns>
@@ -88,11 +88,11 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Creates new <see cref="Guid"/> out of its short string representation.
+        /// Creates a new GUID out of its short string representation.
         /// </summary>
         /// <param name="shortStringGuidRepresentation">Short string representation of a <see cref="Guid"/>.</param>
         /// <returns>
-        /// <see cref="Guid"/> represented by the <paramref name="shortStringGuidRepresentation"/>.
+        /// GUID represented by the <paramref name="shortStringGuidRepresentation"/>.
         /// <br/>-or-<br/>
         /// Null if the <paramref name="shortStringGuidRepresentation"/> is null or does not represent a valid short string GUID representation.
         /// </returns>

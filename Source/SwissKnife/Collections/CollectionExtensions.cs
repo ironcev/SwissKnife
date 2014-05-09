@@ -19,13 +19,14 @@ namespace SwissKnife.Collections
 
 
         /// <summary>
-        /// Adds <paramref name="itemsToAdd"/> to the <paramref name="collection"/>.
+        /// Adds one or more items to a collection.
         /// </summary>
         /// <typeparam name="T">The type of the items in the <paramref name="collection"/>.</typeparam>
-        /// <param name="collection">The <see cref="ICollection{T}"/> to which to add <paramref name="itemsToAdd"/>.</param>
+        /// <param name="collection">The collection to which to add <paramref name="itemsToAdd"/>.</param>
         /// <param name="itemsToAdd">Items that has to be added to the <paramref name="collection"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="collection"/> is null.<br/>-or-<br/><paramref name="itemsToAdd"/> is null.</exception>
         /// <exception cref="NotSupportedException"><paramref name="collection"/> is read-only.</exception>
+        // TODO-IG: What if the collection checks for duplicates or similar? Exception could be thrown. Test and document that case.
         public static void AddMany<T>(this ICollection<T> collection, IEnumerable<T> itemsToAdd)
         {
             Argument.IsNotNull(collection, "collection");
@@ -36,7 +37,7 @@ namespace SwissKnife.Collections
         }
 
         /// <summary>
-        /// Gets the value from the <paramref name="dictionary"/> associated with the specified <paramref name="key"/>. If the value does not exist in the <paramref name="dictionary"/> it will be added to it.
+        /// Gets the value from a dictionary associated with a key. If the value does not exist in the dictionary it will be added to it.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -50,7 +51,7 @@ namespace SwissKnife.Collections
         /// </remarks>
         /// <typeparam name="TKey">The type of keys in the <paramref name="dictionary"/>.</typeparam>
         /// <typeparam name="TValue">The type of values in the <paramref name="dictionary"/>.</typeparam>
-        /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}"/> from which the value has to be get.</param>
+        /// <param name="dictionary">The dictionary from which the value has to be get.</param>
         /// <param name="key">The key associated with the value.</param>
         /// <param name="getValueToAdd">
         /// The function that returns the value that has to be inserted into the <paramref name="dictionary"/> if it does not contain the <paramref name="key"/>.
@@ -74,7 +75,7 @@ namespace SwissKnife.Collections
         }
 
         /// <summary>
-        /// Splits <see cref="IEnumerable{T}"/> into groups of specified size.
+        /// Splits a collection into groups of defined size.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -90,7 +91,7 @@ namespace SwissKnife.Collections
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
-        /// <param name="source">The <see cref="IEnumerable{T}"/> to split into groups.</param>
+        /// <param name="source">The collection to split into groups.</param>
         /// <param name="groupSize">The number of elements in each group except eventually the last one. The last group can have less elements than the group size.</param>
         /// <returns>Enumerable whose each element is an <see cref="IEnumerable{T}"/> that represents a single group.<br/>-or-<br/>Empty enumerable if the <paramref name="source"/> is empty.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
@@ -109,7 +110,7 @@ namespace SwissKnife.Collections
         }
 
         /// <summary>
-        /// Randomizes the order of elements in <see cref="IEnumerable{T}"/>.
+        /// Randomizes the order of elements in a collection.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -125,8 +126,8 @@ namespace SwissKnife.Collections
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
-        /// <param name="source">The <see cref="IEnumerable{T}"/> to randomize.</param>
-        /// <returns>Randomized <see cref="IEnumerable{T}"/>.</returns>
+        /// <param name="source">The collection to randomize.</param>
+        /// <returns>Randomized collection.</returns>
         public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
         {
             Argument.IsNotNull(source, "source");
@@ -135,7 +136,7 @@ namespace SwissKnife.Collections
         }
 
         /// <summary>
-        /// Splits <see cref="IEnumerable{T}"/> into specified number of groups.
+        /// Splits collection into specified number of groups.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -156,7 +157,7 @@ namespace SwissKnife.Collections
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
-        /// <param name="source">The <see cref="IEnumerable{T}"/> to split into groups.</param>
+        /// <param name="source">The collection to split into groups.</param>
         /// <param name="numberOfGroups">The number of resulting groups. The exact number of resulting is either equal to this value or to the number of elements in the <paramref name="source"/>.</param>
         /// <returns>Enumerable whose each element is an <see cref="IEnumerable{T}"/> that represents a single group.<br/>-or-<br/>Empty enumerable if the <paramref name="source"/> is empty.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
@@ -186,7 +187,7 @@ namespace SwissKnife.Collections
         }
 
         /// <summary>
-        /// Enumerates <see cref="IEnumerator{T}"/> and returns resulting <see cref="IEnumerable{T}"/>.
+        /// Enumerates an enumerator and returns resulting <see cref="IEnumerable{T}"/>.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -198,7 +199,7 @@ namespace SwissKnife.Collections
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the elements enumerated by the <paramref name="enumerator"/>.</typeparam>
-        /// <param name="enumerator">The <see cref="IEnumerator{T}"/> to enumerate.</param>
+        /// <param name="enumerator">The enumerator to enumerate.</param>
         /// <returns>Enumerable whose each element is return by the <paramref name="enumerator"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="enumerator"/> is null.</exception>
         /// <exception cref="InvalidOperationException">The collection was modified after the <paramref name="enumerator"/> was created.</exception>
@@ -218,7 +219,7 @@ namespace SwissKnife.Collections
         }
 
         /// <summary>
-        /// Enumerates <see cref="IEnumerator"/> and returns resulting <see cref="IEnumerable"/>.
+        /// Enumerates an enumerator and returns resulting <see cref="IEnumerable"/>.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -229,7 +230,7 @@ namespace SwissKnife.Collections
         /// The method will reset the <paramref name="enumerator"/> before enumerating it.
         /// </para>
         /// </remarks>
-        /// <param name="enumerator">The <see cref="IEnumerator"/> to enumerate.</param>
+        /// <param name="enumerator">The enumerator to enumerate.</param>
         /// <returns>Enumerable whose each element is return by the <paramref name="enumerator"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="enumerator"/> is null.</exception>
         /// <exception cref="InvalidOperationException">The collection was modified after the <paramref name="enumerator"/> was created.</exception>
@@ -254,8 +255,8 @@ namespace SwissKnife.Collections
         /// <remarks>
         /// <note type="caution">If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.</note>
         /// </remarks>
-        /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
-        /// <param name="predicate">A <see cref="Predicate{T}"/> to test each element for a condition.</param>
+        /// <param name="source">The sequence to return an element from.</param>
+        /// <param name="predicate">The predicate to test each element for a condition.</param>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
         /// <returns>
         /// <see cref="Option{T}.None"/> if source is empty or if no element passes the test specified by the <paramref name="predicate"/>; 
@@ -278,7 +279,7 @@ namespace SwissKnife.Collections
         /// <summary>
         /// Returns a random element from a sequence or <see cref="Option{T}.None"/> if the sequence is empty.
         /// </summary>
-        /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
+        /// <param name="source">The sequence to return an element from.</param>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
         /// <returns>
         /// <see cref="Option{T}.None"/> if the <paramref name="source"/> is empty; otherwise, a random element in <paramref name="source"/>.
@@ -297,8 +298,8 @@ namespace SwissKnife.Collections
         /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
-        /// <param name="predicate">A <see cref="Predicate{T}"/> to test each element for a condition.</param>
+        /// <param name="source">The sequence to return an element from.</param>
+        /// <param name="predicate">The predicate to test each element for a condition.</param>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
         /// <returns>
         /// Null if the <paramref name="source"/> is empty or if no element passes the test specified by the <paramref name="predicate"/>; 
@@ -321,7 +322,7 @@ namespace SwissKnife.Collections
         /// <summary>
         /// Returns a random element from a sequence or null if the sequence is empty.
         /// </summary>
-        /// <param name="source">An <see cref="IEnumerable{T}"/> to return an element from.</param>
+        /// <param name="source">The sequence to return an element from.</param>
         /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
         /// <returns>
         /// Null if the <paramref name="source"/> is empty; otherwise, a random element in <paramref name="source"/>.

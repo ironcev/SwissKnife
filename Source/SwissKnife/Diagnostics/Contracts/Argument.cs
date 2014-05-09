@@ -58,9 +58,9 @@ namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Cont
         }
 
         /// <summary>
-        /// Checks if a method parameter satisfies the <paramref name="validityCondition"/>.
+        /// Checks if a method parameter satisfies a logical condition.
         /// </summary>
-        /// <param name="validityCondition">Logical condition that is true if the method parameter is valid.</param>
+        /// <param name="validityCondition">The logical condition that is true if the method parameter is valid.</param>
         /// <param name="parameterName">The name of the method parameter.</param>
         /// <param name="exceptionMessage">The error message that describes the reason why the parameter is not valid.</param>
         /// <exception cref="ArgumentException"><paramref name="validityCondition"/> is false.</exception>
@@ -110,7 +110,7 @@ namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Cont
         }
 
         /// <summary>
-        /// Checks that <see cref="int"/> method parameter is <b>greater than or equal to</b> the <paramref name="lowerBound"/> and <b>lower than</b> the <paramref name="upperBound"/>.
+        /// Checks that <see cref="int"/> method parameter is <b>greater than or equal to</b> a lower bound and <b>lower than</b> an upper bound.
         /// </summary>
         /// <param name="parameterValue">The value of the method parameter.</param>
         /// <param name="lowerBound">The lower bound of the range.</param>

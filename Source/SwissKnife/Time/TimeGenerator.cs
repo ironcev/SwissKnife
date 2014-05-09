@@ -29,7 +29,7 @@ namespace SwissKnife.Time
         /// Override this method to specify how the current date and time is generated.
         /// </remarks>
         /// <returns>
-        /// A <see cref="DateTimeOffset"/> object whose date and time represents the current local time and whose offset is the local time zone's offset from Coordinated Universal Time (UTC).
+        /// A date time offset whose date and time represents the current local time and whose offset is the local time zone's offset from Coordinated Universal Time (UTC).
         /// </returns>
         public abstract DateTimeOffset LocalNow();
 

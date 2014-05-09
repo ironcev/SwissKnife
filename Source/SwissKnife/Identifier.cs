@@ -30,10 +30,10 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Converts <paramref name="identifierExpression"/> into <see cref="string"/>.
+        /// Converts an identifier expression into <see cref="string"/>.
         /// </summary>
         /// <typeparam name="T">Type whose member identifier has to be converted into <see cref="string"/>.</typeparam>
-        /// <param name="identifierExpression"><see cref="Expression"/> that access members of the type <typeparamref name="T"/>.</param>
+        /// <param name="identifierExpression">The identitfer expression that access members of the type <typeparamref name="T"/>.</param>
         /// <exception cref="ArgumentNullException">If the <paramref name="identifierExpression"/> is <code>null</code>.</exception>
         /// <exception cref="ArgumentException">If the <paramref name="identifierExpression"/> is not a valid identifier expression. For example: 'someInstance.IdentifierAsString(x => 0)'.</exception>
         public static string ToString<T, TResult>(Expression<Func<T, TResult>> identifierExpression, Option<ConversionOptions> identifierOptions)
