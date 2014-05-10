@@ -186,23 +186,8 @@ namespace SwissKnife.Collections
                 yield return group;
         }
 
-        /// <summary>
-        /// Enumerates an enumerator and returns resulting <see cref="IEnumerable{T}"/>.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// The execution of <see cref="ToEnumerable{T}"/> is not deferred.
-        /// The method immediately advances the <paramref name="enumerator"/> until the end of the collection.
-        /// </para>
-        /// <para>
-        /// The method will reset the <paramref name="enumerator"/> before enumerating it.
-        /// </para>
-        /// </remarks>
+        /// <inheritdoc cref="ToEnumerable(IEnumerator)" />
         /// <typeparam name="T">The type of the elements enumerated by the <paramref name="enumerator"/>.</typeparam>
-        /// <param name="enumerator">The enumerator to enumerate.</param>
-        /// <returns>Enumerable whose each element is return by the <paramref name="enumerator"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="enumerator"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">The collection was modified after the <paramref name="enumerator"/> was created.</exception>
         public static IEnumerable<T> ToEnumerable<T>(this IEnumerator<T> enumerator)
         {
             Argument.IsNotNull(enumerator, "enumerator");
@@ -219,11 +204,11 @@ namespace SwissKnife.Collections
         }
 
         /// <summary>
-        /// Enumerates an enumerator and returns resulting <see cref="IEnumerable"/>.
+        /// Enumerates an enumerator and returns the resulting enumerable.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// The execution of <see cref="ToEnumerable"/> is not deferred.
+        /// The execution of this method is not deferred.
         /// The method immediately advances the <paramref name="enumerator"/> until the end of the collection.
         /// </para>
         /// <para>
