@@ -11,7 +11,7 @@ namespace SwissKnife
     public static class TypeExtensions
     {
         /// <summary>
-        /// Gets the <see cref="Type"/>s that can appear as underlying types in flags enumerations; 
+        /// Gets the types that can appear as underlying types in flags enumerations; 
         /// that is, in enumerations that can be treated as bit fields or, in other words, sets of flags.
         /// </summary>
         /// <remarks>
@@ -56,7 +56,7 @@ namespace SwissKnife
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <paramref name="type"/> is static.
+        /// Gets a value indicating whether a type is static.
         /// </summary>
         /// <returns>
         /// true if the <paramref name="type"/> is static; otherwise false.
@@ -70,7 +70,7 @@ namespace SwissKnife
         }
         
         /// <summary>
-        /// Gets a value indicating whether a <paramref name="type"/> represents a flags enumeration; 
+        /// Gets a value indicating whether a type represents a flags enumeration; 
         /// that is, an enumeration that can be treated as a bit field or, in other words, a set of flags.
         /// </summary>
         /// <remarks>

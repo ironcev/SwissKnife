@@ -36,7 +36,7 @@ namespace SwissKnife.Web.Mvc
         /// will produce the same output: <i>http://localhost/relative/url</i>.
         /// </para>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
+        /// <param name="urlHelper">The url helper used to get the current URL.</param>
         /// <param name="relativeOrAbsoluteUrl">Relative or absolute URL to convert to an absolute URL.</param>
         /// <returns>
         /// An absolute URL presented in the unescaped canonical representation.
@@ -91,7 +91,7 @@ namespace SwissKnife.Web.Mvc
         /// If there is a parameter in the current URL query string that has the same name as one of the current route parameters, the existing parameter in the current route will be replaced by the value of the parameter in the query string.
         /// </para>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
+        /// <param name="urlHelper">The url helper used to get the current URL.</param>
         /// <returns>
         /// Current URL as defined in the request context.
         /// </returns>
@@ -125,7 +125,7 @@ namespace SwissKnife.Web.Mvc
         /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
+        /// <param name="urlHelper">The url helper used to get the current URL.</param>
         /// <param name="newRouteParameters">URL parameters and their new values defined as lambda expressions.</param>
         /// <returns>
         /// Current URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>.
@@ -152,7 +152,7 @@ namespace SwissKnife.Web.Mvc
         /// If there is a parameter in the current URL query string that has the same name as one of the current route parameters, the existing parameter in the current route will be replaced by the value of the parameter in the query string.
         /// </para>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
+        /// <param name="urlHelper">The url helper used to get the current URL.</param>
         /// <returns>
         /// Current absolute URL as defined in the request context.
         /// </returns>
@@ -191,7 +191,7 @@ namespace SwissKnife.Web.Mvc
         /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
+        /// <param name="urlHelper">The url helper used to get the current URL.</param>
         /// <param name="newRouteParameters">URL parameters and their new values defined as lambda expressions.</param>
         /// <returns>
         /// Current absolute URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>.
@@ -237,8 +237,8 @@ namespace SwissKnife.Web.Mvc
         /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to get the current URL.</param>
-        /// <param name="protocol"><see cref="Protocol"/> used as URI schema in the returned absolute URL. Use this parameter if you want to override the original URI scheme of the current URL.</param>
+        /// <param name="urlHelper">The url helper used to get the current URL.</param>
+        /// <param name="protocol">The protocol used as URI schema in the returned absolute URL. Use this parameter if you want to override the original URI scheme of the current URL.</param>
         /// <param name="newRouteParameters">URL parameters and their new values defined as lambda expressions.</param>
         /// <returns>
         /// Current absolute URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>
@@ -321,7 +321,7 @@ namespace SwissKnife.Web.Mvc
         /// <summary>
         /// Generates a fully qualified absolute URL for the specified parameterless route and the HTTP protocol.
         /// </summary>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="urlHelper">The url helper used to generate the absolute URL.</param>
         /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
         /// <returns>
         /// Generated fully qualified absolute URL for the specified route.
@@ -351,7 +351,7 @@ namespace SwissKnife.Web.Mvc
         /// <summary>
         /// Generates a fully qualified absolute URL for the specified route, its values and the HTTP protocol.
         /// </summary>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="urlHelper">The url helper used to generate the absolute URL.</param>
         /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
         /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
         /// <returns>
@@ -387,10 +387,10 @@ namespace SwissKnife.Web.Mvc
         /// <summary>
         /// Generates a fully qualified absolute URL for the specified route, its values and the protocol.
         /// </summary>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="urlHelper">The url helper used to generate the absolute URL.</param>
         /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
         /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
-        /// <param name="protocol"><see cref="Protocol"/> used as URI schema in the absolute URL.</param>
+        /// <param name="protocol">The protocol used as URI schema in the absolute URL.</param>
         /// <returns>
         /// Generated fully qualified absolute URL for the specified route.
         /// </returns>
@@ -424,7 +424,7 @@ namespace SwissKnife.Web.Mvc
         /// <summary>
         /// Generates a fully qualified absolute URL for the specified route, its values and the HTTP protocol.
         /// </summary>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="urlHelper">The url helper used to generate the absolute URL.</param>
         /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
         /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
         /// <returns>
@@ -459,10 +459,10 @@ namespace SwissKnife.Web.Mvc
         /// <summary>
         /// Generates a fully qualified absolute URL for the specified route, its values and the protocol.
         /// </summary>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the absolute URL.</param>
+        /// <param name="urlHelper">The url helper used to generate the absolute URL.</param>
         /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
         /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
-        /// <param name="protocol"><see cref="Protocol"/> used as URI schema in the absolute URL.</param>
+        /// <param name="protocol">The protocol used as URI schema in the absolute URL.</param>
         /// <returns>
         /// Generated fully qualified absolute URL for the specified route.
         /// </returns>
@@ -551,7 +551,7 @@ namespace SwissKnife.Web.Mvc
         /// using the standard MVC convention. For example, if the controller type name is <i>UserController</i>, the controller name will be <i>User</i>.
         /// </para>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the action URL.</param>
+        /// <param name="urlHelper">The url helper used to generate the action URL.</param>
         /// <param name="actionExpression">Action expression that returns the action name.</param>
         /// <typeparam name="TController">The controller type.</typeparam>
         /// <returns>
@@ -582,7 +582,7 @@ namespace SwissKnife.Web.Mvc
         /// using the standard MVC convention. For example, if the controller type name is <i>UserController</i>, the controller name will be <i>User</i>.
         /// </para>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the action URL.</param>
+        /// <param name="urlHelper">The url helper used to generate the action URL.</param>
         /// <param name="actionExpression">Action expression that returns the action name.</param>
         /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
         /// <typeparam name="TController">The controller type.</typeparam>
@@ -615,8 +615,8 @@ namespace SwissKnife.Web.Mvc
         /// using the standard MVC convention. For example, if the controller type name is <i>UserController</i>, the controller name will be <i>User</i>.
         /// </para>
         /// </remarks>
-        /// <param name="urlHelper"><see cref="UrlHelper"/> used to generate the action URL.</param>
-        /// <param name="actionExpression">Action expression that returns the action name.</param>
+        /// <param name="urlHelper">The url helper used to generate the action URL.</param>
+        /// <param name="actionExpression">The action expression that returns the action name.</param>
         /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
         /// <typeparam name="TController">The controller type.</typeparam>
         /// <returns>

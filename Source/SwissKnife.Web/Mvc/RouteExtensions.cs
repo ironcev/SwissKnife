@@ -20,7 +20,7 @@ namespace SwissKnife.Web.Mvc
         /// <remarks>
         /// If the default value for the <paramref name="urlParameter"/> is already set it will be overwritten by the <paramref name="defaultValue"/>.
         /// </remarks>
-        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Defaults"/> will be set.</param>
+        /// <param name="route">The route whose <see cref="Route.Defaults"/> will be set.</param>
         /// <param name="urlParameter">Name of the URL parameter.</param>
         /// <param name="defaultValue">Default value for the <paramref name="urlParameter"/>.</param>
         /// <returns>
@@ -54,7 +54,7 @@ namespace SwissKnife.Web.Mvc
         /// If the <paramref name="urlParameterAndDefaultValue"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Defaults"/> will be set.</param>
+        /// <param name="route">The route whose <see cref="Route.Defaults"/> will be set.</param>
         /// <param name="urlParameterAndDefaultValue">URL parameter and its value defined as lambda expressions.</param>
         /// <returns>
         /// The original <paramref name="route"/>.
@@ -92,7 +92,7 @@ namespace SwissKnife.Web.Mvc
         /// If any of the <paramref name="urlParametersAndDefaultValues"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Defaults"/> will be set.</param>
+        /// <param name="route">The route whose <see cref="Route.Defaults"/> will be set.</param>
         /// <param name="urlParametersAndDefaultValues">URL parameters and their values defined as lambda expressions.</param>
         /// <returns>
         /// The original <paramref name="route"/>.
@@ -131,7 +131,7 @@ namespace SwissKnife.Web.Mvc
         /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Constraints"/> will be set.</param>
+        /// <param name="route">The route whose <see cref="Route.Constraints"/> will be set.</param>
         /// <param name="urlParameter">Name of the URL parameter.</param>
         /// <param name="predicate">The predicate that returns true if the value of the <paramref name="urlParameter"/> is valid.</param>
         /// <returns>
@@ -160,9 +160,9 @@ namespace SwissKnife.Web.Mvc
         /// If the <paramref name="constraint"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Constraints"/> will be set.</param>
+        /// <param name="route">The route whose <see cref="Route.Constraints"/> will be set.</param>
         /// <param name="urlParameter">Name of the URL parameter.</param>
-        /// <param name="constraint"><see cref="IRouteConstraint"/> that checks whether the value of the <paramref name="urlParameter"/> is valid.</param>
+        /// <param name="constraint">Route constraint that checks whether the value of the <paramref name="urlParameter"/> is valid.</param>
         /// <returns>
         /// The original <paramref name="route"/>.
         /// </returns>
@@ -186,7 +186,7 @@ namespace SwissKnife.Web.Mvc
         /// <summary>
         /// Sets predicate for a route URL parameter expressed as a regular expression.
         /// </summary>
-        /// <param name="route">The <see cref="Route"/> whose <see cref="Route.Constraints"/> will be set.</param>
+        /// <param name="route">The route whose <see cref="Route.Constraints"/> will be set.</param>
         /// <param name="urlParameter">Name of the URL parameter.</param>
         /// <param name="regularExpression">Regular expression that defines a valid <paramref name="urlParameter"/>.</param>
         /// <returns>
