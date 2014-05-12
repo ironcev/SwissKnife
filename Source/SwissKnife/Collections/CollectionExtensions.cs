@@ -264,8 +264,8 @@ namespace SwissKnife.Collections
         /// <summary>
         /// Returns a random element from a sequence or <see cref="Option{T}.None"/> if the sequence is empty.
         /// </summary>
-        /// <param name="source">The sequence to return an element from.</param>
-        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <inheritdoc cref="Random{T}(IEnumerable{T}, Predicate{T})" select="param[@name='source']"/>
+        /// <inheritdoc cref="Random{T}(IEnumerable{T}, Predicate{T})" select="typeparam"/>
         /// <returns>
         /// <see cref="Option{T}.None"/> if the <paramref name="source"/> is empty; otherwise, a random element in <paramref name="source"/>.
         /// </returns>
@@ -283,9 +283,9 @@ namespace SwissKnife.Collections
         /// If the <paramref name="predicate"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="source">The sequence to return an element from.</param>
-        /// <param name="predicate">The predicate to test each element for a condition.</param>
-        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <inheritdoc cref="Random{T}(IEnumerable{T}, Predicate{T})" select="param[@name='source']"/>
+        /// <inheritdoc cref="Random{T}(IEnumerable{T}, Predicate{T})" select="param[@name='predicate']"/>
+        /// <inheritdoc cref="Random{T}(IEnumerable{T}, Predicate{T})" select="typeparam"/>
         /// <returns>
         /// Null if the <paramref name="source"/> is empty or if no element passes the test specified by the <paramref name="predicate"/>; 
         /// otherwise, a random element in <paramref name="source"/> that passes the test specified by the <paramref name="predicate"/>.
@@ -307,8 +307,8 @@ namespace SwissKnife.Collections
         /// <summary>
         /// Returns a random element from a sequence or null if the sequence is empty.
         /// </summary>
-        /// <param name="source">The sequence to return an element from.</param>
-        /// <typeparam name="T">The type of the elements contained in the <paramref name="source"/>.</typeparam>
+        /// <inheritdoc cref="Random{T}(IEnumerable{T}, Predicate{T})" select="param[@name='source']"/>
+        /// <inheritdoc cref="Random{T}(IEnumerable{T}, Predicate{T})" select="typeparam"/>
         /// <returns>
         /// Null if the <paramref name="source"/> is empty; otherwise, a random element in <paramref name="source"/>.
         /// </returns>
