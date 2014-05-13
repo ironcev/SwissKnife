@@ -11,12 +11,14 @@ namespace SwissKnife
     /// <threadsafety static="true"/>
     public static class StringConvert
     {
+        // TODO-IG: <inheritdoc/> in <returns> does not work with a part of the text somehow isolated (e.g. in <span>).  Check all <returns> on all methods.
+
         /// <summary>
         /// Converts the string representation of a number to its 32-bit signed integer equivalent. The return value indicates whether the conversion succeeded.
         /// </summary>
         /// <param name="value">The string containing a number to convert.</param>
         /// <returns>
-        /// 32-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// 32-bit signed integer value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Null if the conversion failed.
         /// </returns>
@@ -28,13 +30,14 @@ namespace SwissKnife
             return int.TryParse(value.ValueOrNull, out result) ? result : (int?)null;
         }
 
+        #pragma warning disable 1573 // Parameter does not have XML comment.
         /// <summary>
         /// Converts the string representation of a number to its 32-bit signed integer equivalent or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
-        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <param name="defaultValue">The default value to return if the conversion fails.</param>
         /// <returns>
-        /// 32-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// 32-bit signed integer value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
         /// </returns>
@@ -42,13 +45,14 @@ namespace SwissKnife
         {
             return ToInt32(value).GetValueOrDefault(defaultValue);
         }
+        #pragma warning restore 1573
 
         /// <summary>
         /// Converts the string representation of a number to its 32-bit signed integer equivalent or zero if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
         /// <returns>
-        /// 32-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// 32-bit signed integer value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Zero if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Zero if the conversion failed.
         /// </returns>
@@ -60,7 +64,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to its 64-bit signed integer equivalent. The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
         /// <returns>
         /// 64-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
@@ -77,10 +81,10 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to its 64-bit signed integer equivalent or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
-        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='defaultValue']"/>
         /// <returns>
-        /// 64-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// 64-bit signed integer value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
         /// </returns>
@@ -88,13 +92,13 @@ namespace SwissKnife
         {
             return ToInt64(value).GetValueOrDefault(defaultValue);
         }
-
+        
         /// <summary>
         /// Converts the string representation of a number to its 64-bit signed integer equivalent or zero if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
         /// <returns>
-        /// 64-bit signed integer value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// 64-bit signed integer value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Zero if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Zero if the conversion failed.
         /// </returns>
@@ -106,9 +110,9 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent single-precision floating-point number. The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
         /// <returns>
-        /// Single-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Single-precision floating-point value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Null if the conversion failed.
         /// </returns>
@@ -123,10 +127,10 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent single-precision floating-point number or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
-        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='defaultValue']"/>
         /// <returns>
-        /// Single-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Single-precision floating-point value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
         /// </returns>
@@ -138,9 +142,9 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent double-precision floating-point number or zero if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
         /// <returns>
-        /// Single-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Single-precision floating-point value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Zero if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Zero if the conversion failed.
         /// </returns>
@@ -152,9 +156,9 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent double-precision floating-point number. The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
         /// <returns>
-        /// Double-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Double-precision floating-point value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Null if the conversion failed.
         /// </returns>
@@ -169,10 +173,10 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent double-precision floating-point number or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
-        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='defaultValue']"/>
         /// <returns>
-        /// Double-precision floating-point value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Double-precision floating-point value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
         /// </returns>
@@ -184,9 +188,9 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a number to an equivalent double-precision floating-point number or zero if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing a number to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
         /// <returns>
-        /// Double-precision floating-point value value equivalent to the number contained in the <paramref name="value"/> if the conversion succeeded.
+        /// Double-precision floating-point value value equivalent of the number contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Zero if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Zero if the conversion failed.
         /// </returns>
@@ -198,8 +202,7 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent. The return value indicates whether the conversion succeeded or failed.
         /// </summary>
-        /// <param name="value">The string containing the value to convert.</param>
-        /// <returns>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>        
         /// <remarks>
         /// <para>
         /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
@@ -210,6 +213,7 @@ namespace SwissKnife
         /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
         /// </note>
         /// </remarks>
+        /// <returns>
         /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>Null if the conversion failed.
@@ -238,19 +242,10 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing the value to convert.</param>
-        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='defaultValue']"/>
+        /// <inheritdoc cref="ToBoolean(Option{string})" source="remarks" />
         /// <returns>
-        /// <remarks>
-        /// <para>
-        /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
-        /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
-        /// </para>
-        /// <note>
-        /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
-        /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
-        /// </note>
-        /// </remarks>
         /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the conversion failed.
@@ -263,18 +258,9 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or false if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing the value to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <inheritdoc cref="ToBoolean(Option{string})" source="remarks" />
         /// <returns>
-        /// <remarks>
-        /// <para>
-        /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
-        /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
-        /// </para>
-        /// <note>
-        /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
-        /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
-        /// </note>
-        /// </remarks>
         /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
         /// <br/>-or-<br/>false if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>false if the conversion failed.
@@ -287,18 +273,9 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a logical value to its <see cref="Boolean"/> equivalent or true if the conversion does not succeed.
         /// </summary>
-        /// <param name="value">The string containing the value to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <inheritdoc cref="ToBoolean(Option{string})" source="remarks" />
         /// <returns>
-        /// <remarks>
-        /// <para>
-        /// The <paramref name="value"/> can be preceded or followed by white space. The comparison is case-insensitive. For example, all of this values will be converted to true:
-        /// "true", "True", "TRUE", " tRuE ", "1", " 1 ".
-        /// </para>
-        /// <note>
-        /// This method has different semantic than <see cref="Convert.ToBoolean(string)"/> or <see cref="Boolean.Parse"/>.
-        /// It accepts not only <see cref="Boolean.TrueString"/> and <see cref="Boolean.FalseString"/> as a valid input for conversion but also the strings "0" and "1".
-        /// </note>
-        /// </remarks>
         /// true if the <paramref name="value"/> is equivalent to <see cref="Boolean.TrueString"/> or "1" or false if value is equivalent to <see cref="Boolean.FalseString"/> or "0".
         /// <br/>-or-<br/>true if the <paramref name="value"/> is None option.
         /// <br/>-or-<br/>true if the conversion failed.
@@ -321,7 +298,7 @@ namespace SwissKnife
         /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
         /// </para>
         /// </remarks>
-        /// <param name="value">The string containing the value to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
         /// <returns>
         /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/>Null if the <paramref name="value"/> is None option.
@@ -340,18 +317,9 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a GUID to the equivalent <see cref="Guid"/> structure or specified default value if the conversion does not succeed.
         /// </summary>
-        /// <remarks>
-        /// <note>
-        /// This method has different semantic than <see cref="Guid.Parse"/>.
-        /// It accepts not only GUIDs formated with format parameters "N", "D", "B", "P", or "X" as a valid input for conversion 
-        /// but also strings that are short string representations of GUIDs.
-        /// </note>
-        /// <para>
-        /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
-        /// </para>
-        /// </remarks>
-        /// <param name="value">The string containing the value to convert.</param>
-        /// <param name="defaultValue">Default value to return if the conversion fails.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='defaultValue']"/>
+        /// <inheritdoc cref="ToGuid(Option{string})" source="remarks" />
         /// <returns>
         /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><paramref name="defaultValue"/> if the <paramref name="value"/> is None option.
@@ -365,17 +333,8 @@ namespace SwissKnife
         /// <summary>
         /// Converts the string representation of a GUID to the equivalent <see cref="Guid"/> structure or <see cref="Guid.Empty"/> if the conversion does not succeed.
         /// </summary>
-        /// <remarks>
-        /// <note>
-        /// This method has different semantic than <see cref="Guid.Parse"/>.
-        /// It accepts not only GUIDs formated with format parameters "N", "D", "B", "P", or "X" as a valid input for conversion 
-        /// but also strings that are short string representations of GUIDs.
-        /// </note>
-        /// <para>
-        /// For more on short string GUID representation see <see cref="GuidUtility.ToShortString"/>.
-        /// </para>
-        /// </remarks>
-        /// <param name="value">The string containing the value to convert.</param>
+        /// <inheritdoc cref="ToInt32(Option{string})" source="param[name='value']"/>
+        /// <inheritdoc cref="ToGuid(Option{string})" source="remarks" />
         /// <returns>
         /// GUID value equivalent to the GUID contained in the <paramref name="value"/> if the conversion succeeded.
         /// <br/>-or-<br/><see cref="Guid.Empty"/> if the <paramref name="value"/> is None option.

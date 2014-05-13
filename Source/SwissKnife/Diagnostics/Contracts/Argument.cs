@@ -27,11 +27,13 @@ namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Cont
             Contract.EndContractBlock();
         }
 
+        // TODO-IG: <inheritdoc cref="IsNotNullOrWhitespace(string, Option{string})" select="exception[@cref='ArgumentNullException']"/> does not work. Check why.
+
         /// <summary>
         /// Checks if a <see cref="string"/> method parameter is not null or empty.
         /// </summary>
         /// <inheritdoc cref="IsNotNullOrWhitespace(string, Option{string})" select="param"/>
-        /// <inheritdoc cref="IsNotNullOrWhitespace(string, Option{string})" select="exception[@cref='ArgumentNullException']"/>
+        /// <exception cref="ArgumentNullException"><paramref name="parameterValue"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="parameterValue"/> is empty string.</exception>
         [ContractArgumentValidator]
         public static void IsNotNullOrEmpty(string parameterValue, Option<string> parameterName)
@@ -42,11 +44,13 @@ namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Cont
             Contract.EndContractBlock();
         }
 
+        // TODO-IG: <inheritdoc cref="IsNotNullOrWhitespace(string, Option{string})" select="exception[@cref='ArgumentNullException']"/> does not work. Check why.
+
         /// <summary>
         /// Checks if a method parameter is not null.
         /// </summary>
         /// <inheritdoc cref="IsNotNullOrWhitespace(string, Option{string})" select="param"/>
-        /// <inheritdoc cref="IsNotNullOrWhitespace(string, Option{string})" select="exception[@cref='ArgumentNullException']"/>
+        /// <exception cref="ArgumentNullException"><paramref name="parameterValue"/> is null.</exception>
         [ContractArgumentValidator]
         public static void IsNotNull(object parameterValue, Option<string> parameterName)
         {
