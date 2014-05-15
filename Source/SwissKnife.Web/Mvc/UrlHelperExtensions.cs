@@ -104,6 +104,7 @@ namespace SwissKnife.Web.Mvc
             return CurrentUrl(urlHelper, new Func<object, object>[0]);
         }
 
+        #pragma warning disable 1573 // Parameter does not have XML comment.
         /// <summary>
         /// Generates a new URL by taking the current URL as defined in the request context and replacing the existing route parameters with provided new route parameters.
         /// </summary>
@@ -125,7 +126,7 @@ namespace SwissKnife.Web.Mvc
         /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="urlHelper">The url helper used to get the current URL.</param>
+        /// <inheritdoc cref="CurrentUrl(UrlHelper)" source="param[@name='urlHelper']" />
         /// <param name="newRouteParameters">URL parameters and their new values defined as lambda expressions.</param>
         /// <returns>
         /// Current URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>.
@@ -143,6 +144,7 @@ namespace SwissKnife.Web.Mvc
 
             return urlHelper.RouteUrl(ReplaceValuesInRouteData(urlHelper, newRouteParameters)) ?? string.Empty;
         }
+        #pragma warning restore 1573
 
         /// <summary>
         /// Gets the current absolute URL as defined in the request context.
@@ -152,7 +154,7 @@ namespace SwissKnife.Web.Mvc
         /// If there is a parameter in the current URL query string that has the same name as one of the current route parameters, the existing parameter in the current route will be replaced by the value of the parameter in the query string.
         /// </para>
         /// </remarks>
-        /// <param name="urlHelper">The url helper used to get the current URL.</param>
+        /// <inheritdoc cref="CurrentUrl(UrlHelper)" source="param[@name='urlHelper']" />
         /// <returns>
         /// Current absolute URL as defined in the request context.
         /// </returns>
@@ -191,8 +193,8 @@ namespace SwissKnife.Web.Mvc
         /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="urlHelper">The url helper used to get the current URL.</param>
-        /// <param name="newRouteParameters">URL parameters and their new values defined as lambda expressions.</param>
+        /// <inheritdoc cref="CurrentUrl(UrlHelper)" source="param[@name='urlHelper']" />
+        /// <inheritdoc cref="CurrentUrl(UrlHelper)" source="param[@name='newRouteParameters']" />
         /// <returns>
         /// Current absolute URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>.
         /// </returns>
@@ -216,30 +218,9 @@ namespace SwissKnife.Web.Mvc
             return CurrentAbsoluteUrlCore(urlHelper, ProtocolHelper.GetProtocolFromHttpRequest(urlHelper.RequestContext.HttpContext.Request), newRouteParameters);
         }
 
-        /// <summary>
-        /// Generates a new absolute URL by taking the current URL as defined in the request context and replacing the existing route parameters with provided new route parameters.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// If a parameter defined in the <paramref name="newRouteParameters"/> is one of the current route parameters, the existing parameter in the current route will be replaced by that parameter value.<br/>
-        /// If a parameter defined in the <paramref name="newRouteParameters"/> is not one of the current route parameters, it will be added to the query string.<br/>
-        /// If there is a parameter in the current URL query string that has the same name as one of the current route parameters, the existing parameter in the current route will be replaced by the value of the parameter in the query string.
-        /// </para>
-        /// <para>
-        /// For example, let us assume that the current route is defined as "<i>{language}/{year}</i>" and that the current URL is "<i>http://localhost/en-US/1999</i>".<br/>
-        /// The following call:<br/>
-        /// <code>
-        /// urlHelper.CurrentAbsoluteUrl(language => "hr-HR", year => 2000, p1 => "firstParameter", p2 => 1, p3 => 1.23);
-        /// </code>
-        /// will return "<i>http://localhost/hr-HR/2000?p1=firstParameter&amp;p2=1&amp;p3=1.23</i>".
-        /// </para>        
-        /// <note type="caution">
-        /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.
-        /// </note>
-        /// </remarks>
-        /// <param name="urlHelper">The url helper used to get the current URL.</param>
+        #pragma warning disable 1573 // Parameter does not have XML comment.
+        /// <inheritdoc cref="CurrentAbsoluteUrl(UrlHelper, Func{object, object}[])" />
         /// <param name="protocol">The protocol used as URI schema in the returned absolute URL. Use this parameter if you want to override the original URI scheme of the current URL.</param>
-        /// <param name="newRouteParameters">URL parameters and their new values defined as lambda expressions.</param>
         /// <returns>
         /// Current absolute URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>
         /// and with the original URI scheme replaced by the one that corresponds to the <paramref name="protocol"/>.
@@ -261,6 +242,7 @@ namespace SwissKnife.Web.Mvc
 
             return CurrentAbsoluteUrlCore(urlHelper, protocol, newRouteParameters);
         }
+        #pragma warning restore 1573
 
         /// <remarks>
         /// We extracted this method to avoid duplicated check of preconditions between <see cref="CurrentAbsoluteUrl(UrlHelper, Func{object, object}[])"/>
@@ -384,26 +366,14 @@ namespace SwissKnife.Web.Mvc
             return urlHelper.RouteAbsoluteUrl(routeName, new RouteValueDictionary(routeValues.ValueOrNull), Protocol.Http);            
         }
 
+        #pragma warning disable 1573 // Parameter does not have XML comment.
         /// <summary>
         /// Generates a fully qualified absolute URL for the specified route, its values and the protocol.
         /// </summary>
-        /// <param name="urlHelper">The url helper used to generate the absolute URL.</param>
-        /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
-        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
+        /// <inheritdoc cref="RouteAbsoluteUrl(UrlHelper, string, Option{object})" source="param" />
         /// <param name="protocol">The protocol used as URI schema in the absolute URL.</param>
-        /// <returns>
-        /// Generated fully qualified absolute URL for the specified route.
-        /// </returns>
-        /// <remarks>
-        /// <para>
-        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(string, object)"/> method.
-        /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
-        /// </para>
-        /// <para>
-        /// Implicit MVC values "actionExpression" and "controller" are not automatically included. 
-        /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
-        /// </para>
-        /// </remarks>
+        /// <inheritdoc cref="RouteAbsoluteUrl(UrlHelper, string, Option{object})" source="returns" />
+        /// <inheritdoc cref="RouteAbsoluteUrl(UrlHelper, string, Option{object})" source="remarks" />
         /// <exception cref="ArgumentNullException">
         /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
         /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
@@ -420,73 +390,15 @@ namespace SwissKnife.Web.Mvc
             // The constructor of the RouteValueDictionary class accepts null as a valid argument.
             return urlHelper.RouteAbsoluteUrl(routeName, new RouteValueDictionary(routeValues.ValueOrNull), protocol);
         }
+        #pragma warning restore 1573
 
-        /// <summary>
-        /// Generates a fully qualified absolute URL for the specified route, its values and the HTTP protocol.
-        /// </summary>
-        /// <param name="urlHelper">The url helper used to generate the absolute URL.</param>
-        /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
-        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
-        /// <returns>
-        /// Generated fully qualified absolute URL for the specified route.
-        /// </returns>
-        /// <remarks>
-        /// <para>
-        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(string, RouteValueDictionary)"/> method.
-        /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
-        /// </para>
-        /// <para>
-        /// Implicit MVC values "actionExpression" and "controller" are not automatically included. 
-        /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
-        /// </para>
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
-        /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
-        /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
-        /// <paramref name="routeName"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="routeName"/> is empty or white space.<br/>-or-<br/>
-        /// A route with the name <paramref name="routeName"/> does not exist in the <paramref name="urlHelper.RouteCollection"/>.
-        /// </exception>
-        /// <exception cref="InvalidOperationException">Not all of the parameters defined in the <see cref="Route.Url"/> are provided in the <paramref name="routeValues"/>.</exception>
+        /// <inheritdoc cref="RouteAbsoluteUrl(UrlHelper, string, Option{object})" />
         public static string RouteAbsoluteUrl(this UrlHelper urlHelper, string routeName, Option<RouteValueDictionary> routeValues)
         {
             return urlHelper.RouteAbsoluteUrl(routeName, routeValues, Protocol.Http);
         }
 
-        /// <summary>
-        /// Generates a fully qualified absolute URL for the specified route, its values and the protocol.
-        /// </summary>
-        /// <param name="urlHelper">The url helper used to generate the absolute URL.</param>
-        /// <param name="routeName">The name of the <see cref="Route"/> that is used to generate the absolute URL.</param>
-        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
-        /// <param name="protocol">The protocol used as URI schema in the absolute URL.</param>
-        /// <returns>
-        /// Generated fully qualified absolute URL for the specified route.
-        /// </returns>
-        /// <remarks>
-        /// <para>
-        /// The URL that is returned by this method ends with the relative URL returned by the <see cref="UrlHelper.RouteUrl(string, RouteValueDictionary)"/> method.
-        /// For example, if the relative URL is '/Home/About' a possible absolute URL could be 'https://localhost/Home/About'.
-        /// </para>
-        /// <para>
-        /// Implicit MVC values "actionExpression" and "controller" are not automatically included. 
-        /// Even if the route specify their default values, they have to be explicitly included in the <paramref name="routeValues"/>.
-        /// </para>
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
-        /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
-        /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
-        /// <paramref name="routeName"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// <paramref name="routeName"/> is empty or white space.<br/>-or-<br/>
-        /// A route with the name <paramref name="routeName"/> does not exist in the <paramref name="urlHelper.RouteCollection"/>.
-        /// </exception>
-        /// <exception cref="InvalidOperationException">Not all of the parameters defined in the <see cref="Route.Url"/> are provided in the <paramref name="routeValues"/>.</exception>
+        /// <inheritdoc cref="RouteAbsoluteUrl(UrlHelper, string, Option{object}, Protocol)" />
         public static string RouteAbsoluteUrl(this UrlHelper urlHelper, string routeName, Option<RouteValueDictionary> routeValues, Protocol protocol)
         {
             Argument.IsNotNull(urlHelper, "urlHelper");
@@ -537,7 +449,7 @@ namespace SwissKnife.Web.Mvc
         }
 
         /// <summary>
-        /// Generates a fully qualified URL to an action method by using the specified action name and controller name.
+        /// Generates a fully qualified URL to an action method by using action name and controller name.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -567,66 +479,20 @@ namespace SwissKnife.Web.Mvc
             return urlHelper.Action(actionExpression, new RouteValueDictionary());
         }
 
+        #pragma warning disable 1573 // Parameter does not have XML comment.
+        /// <inheritdoc href="Action{TController}(UrlHelper, Expression{Func{TController, ActionResult}})" />
         /// <summary>
-        /// Generates a fully qualified URL to an action method by using the specified action name, controller name, and route values.
+        /// Generates a fully qualified URL to an action method by using action name, controller name, and route values.
         /// </summary>
-        /// <remarks>
-        /// <para>
-        /// A valid <paramref name="actionExpression"/> consists of a single controller method call. For example '<i>userController => userController.EditUser(0)</i>'.
-        /// The action name is then taken from the method name ('<i>EditUser</i>' in the above example).
-        /// If the controller method specified in the <paramref name="actionExpression"/> has the <see cref="ActionNameAttribute"/> applied,
-        /// the action name is then taken from the <see cref="ActionNameAttribute.Name"/>.
-        /// </para>
-        /// <para>
-        /// The controller name is taken from the name of the controller type which is provided through <typeparamref name="TController"/>
-        /// using the standard MVC convention. For example, if the controller type name is <i>UserController</i>, the controller name will be <i>User</i>.
-        /// </para>
-        /// </remarks>
-        /// <param name="urlHelper">The url helper used to generate the action URL.</param>
-        /// <param name="actionExpression">Action expression that returns the action name.</param>
         /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
-        /// <typeparam name="TController">The controller type.</typeparam>
-        /// <returns>
-        /// The fully qualified URL to an action method.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
-        /// <paramref name="actionExpression"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentException"><paramref name="actionExpression"/> is not a valid action expression.</exception>
         public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<object> routeValues) where TController : Controller
         {
             // The constructor of the RouteValueDictionary class accepts null as a valid argument.
             return urlHelper.Action(actionExpression, new RouteValueDictionary(routeValues.ValueOrNull));
         }
+        #pragma warning restore 1573
 
-        /// <summary>
-        /// Generates a fully qualified URL to an action method by using the specified action name, controller name, and route values.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// A valid <paramref name="actionExpression"/> consists of a single controller method call. For example '<i>userController => userController.EditUser(0)</i>'.
-        /// The action name is then taken from the method name ('<i>EditUser</i>' in the above example).
-        /// If the controller method specified in the <paramref name="actionExpression"/> has the <see cref="ActionNameAttribute"/> applied,
-        /// the action name is then taken from the <see cref="ActionNameAttribute.Name"/>.
-        /// </para>
-        /// <para>
-        /// The controller name is taken from the name of the controller type which is provided through <typeparamref name="TController"/>
-        /// using the standard MVC convention. For example, if the controller type name is <i>UserController</i>, the controller name will be <i>User</i>.
-        /// </para>
-        /// </remarks>
-        /// <param name="urlHelper">The url helper used to generate the action URL.</param>
-        /// <param name="actionExpression">The action expression that returns the action name.</param>
-        /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
-        /// <typeparam name="TController">The controller type.</typeparam>
-        /// <returns>
-        /// The fully qualified URL to an action method.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
-        /// <paramref name="actionExpression"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentException"><paramref name="actionExpression"/> is not a valid action expression.</exception>
+        /// <inheritdoc href="Action{TController}(UrlHelper, Expression{Func{TController, ActionResult}}, Option{object})" />
         public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<RouteValueDictionary> routeValues) where TController : Controller
         {
             Argument.IsNotNull(urlHelper, "urlHelper");
