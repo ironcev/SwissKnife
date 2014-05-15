@@ -31,7 +31,7 @@ namespace SwissKnife.Diagnostics.Contracts
         /// <typeparam name="T">The type that has to be checked if it represents an enumeration.</typeparam>
         /// <inheritdoc cref="IsEnum(Type, Option{string})" select="param[@name='typeParameterName']"/>
         /// <param name="typeParameterName">The name of the type parameter. E.g. "T", "TInput", "TOutput", or "TResult".</param>
-        /// <exception cref="ArgumentException"><typeparam name="T"/> does not represent an enumeration.</exception>
+        /// <exception cref="ArgumentException"><typeparamref name="T"/> does not represent an enumeration.</exception>
         public static void IsEnum<T>(Option<string> typeParameterName)
         {
             IsEnum(typeof(T), typeParameterName);

@@ -15,14 +15,14 @@ namespace SwissKnife.Web.Mvc
     public static class RouteExtensions
     {
         /// <summary>
-        /// Sets the default value for a route URL parameter.
+        /// Sets a default value for a route URL parameter.
         /// </summary>
         /// <remarks>
-        /// If the default value for the <paramref name="urlParameter"/> is already set it will be overwritten by the <paramref name="defaultValue"/>.
+        /// If the default value for the URL parameter is already set it will be overwritten by the new default value.
         /// </remarks>
         /// <param name="route">The route whose <see cref="Route.Defaults"/> will be set.</param>
-        /// <param name="urlParameter">Name of the URL parameter.</param>
-        /// <param name="defaultValue">Default value for the <paramref name="urlParameter"/>.</param>
+        /// <param name="urlParameter">The name of the URL parameter.</param>
+        /// <param name="defaultValue">The default value for the <paramref name="urlParameter"/>.</param>
         /// <returns>
         /// The original <paramref name="route"/>.
         /// </returns>
@@ -43,22 +43,17 @@ namespace SwissKnife.Web.Mvc
             return route;
         }
 
-        /// <summary>
-        /// Sets the default value for a route URL parameter.
-        /// </summary>
+        #pragma warning disable 1573 // Parameter does not have XML comment.
+        /// <inheritdoc cref="SetDefault(Route, string, object)" source="summary"/>
         /// <remarks>
-        /// <para>
-        /// If the default value for the URL parameter is already set it will be overwritten by the new default value.
-        /// </para>
+        /// <inheritdoc cref="SetDefault(Route, string, object)"/>
         /// <note type="caution">
         /// If the <paramref name="urlParameterAndDefaultValue"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="route">The route whose <see cref="Route.Defaults"/> will be set.</param>
+        /// <inheritdoc cref="SetDefault(Route, string, object)" source="param[@name='route']"/>
         /// <param name="urlParameterAndDefaultValue">URL parameter and its value defined as lambda expressions.</param>
-        /// <returns>
-        /// The original <paramref name="route"/>.
-        /// </returns>
+        /// <inheritdoc cref="SetDefault(Route, string, object)" source="returns"/>
         /// <exception cref="ArgumentNullException"><paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameterAndDefaultValue"/> is null.</exception>
         /// <exception cref="ArgumentException">The calculated default value is null.</exception>
         public static Route SetDefault(this Route route, Func<object, object> urlParameterAndDefaultValue)
@@ -76,7 +71,9 @@ namespace SwissKnife.Web.Mvc
 
             return route;
         }
+        #pragma warning restore 1573
 
+        #pragma warning disable 1573 // Parameter does not have XML comment.
         /// <summary>
         /// Sets default values for route URL parameters.
         /// </summary>
@@ -92,10 +89,10 @@ namespace SwissKnife.Web.Mvc
         /// If any of the <paramref name="urlParametersAndDefaultValues"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="route">The route whose <see cref="Route.Defaults"/> will be set.</param>
+        /// <inheritdoc cref="SetDefault(Route, string, object)" source="param[@name='route']"/>
         /// <param name="urlParametersAndDefaultValues">URL parameters and their values defined as lambda expressions.</param>
         /// <returns>
-        /// The original <paramref name="route"/>.
+        /// <inheritdoc cref="SetDefault(Route, string, object)" source="returns"/>
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParametersAndDefaultValues"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="urlParametersAndDefaultValues"/> is empty.</exception>
@@ -119,6 +116,7 @@ namespace SwissKnife.Web.Mvc
 
             return route;
         }
+        #pragma warning restore 1573
 
         /// <summary>
         /// Sets constraint for a route URL parameter expressed as an arbitrary predicate that checks whether a URL parameter value is valid.
@@ -132,10 +130,10 @@ namespace SwissKnife.Web.Mvc
         /// </note>
         /// </remarks>
         /// <param name="route">The route whose <see cref="Route.Constraints"/> will be set.</param>
-        /// <param name="urlParameter">Name of the URL parameter.</param>
+        /// <param name="urlParameter">The name of the URL parameter.</param>
         /// <param name="predicate">The predicate that returns true if the value of the <paramref name="urlParameter"/> is valid.</param>
         /// <returns>
-        /// The original <paramref name="route"/>.
+        /// <inheritdoc cref="SetDefault(Route, string, object)" source="returns"/>
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameter"/> is null.<br/>-or-<br/><paramref name="predicate"/> is null.
@@ -149,6 +147,7 @@ namespace SwissKnife.Web.Mvc
             return route.SetConstraint(urlParameter, new PredicateRouteConstraint(predicate));
         }
 
+        #pragma warning disable 1573 // Parameter does not have XML comment.
         /// <summary>
         /// Sets constraint for a route URL parameter expressed as an arbitrary route constraint.
         /// </summary>
@@ -160,12 +159,10 @@ namespace SwissKnife.Web.Mvc
         /// If the <paramref name="constraint"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
-        /// <param name="route">The route whose <see cref="Route.Constraints"/> will be set.</param>
-        /// <param name="urlParameter">Name of the URL parameter.</param>
+        /// <inheritdoc cref="SetConstraint(Route, string, Predicate{object})" source="param[@name='route']"/>
+        /// <inheritdoc cref="SetConstraint(Route, string, Predicate{object})" source="param[@name='urlParameter']"/>
         /// <param name="constraint">Route constraint that checks whether the value of the <paramref name="urlParameter"/> is valid.</param>
-        /// <returns>
-        /// The original <paramref name="route"/>.
-        /// </returns>
+        /// <inheritdoc cref="SetDefault(Route, string, object)" source="returns"/>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameter"/> is null.<br/>-or-<br/><paramref name="constraint"/> is null.
         /// </exception>
@@ -182,16 +179,16 @@ namespace SwissKnife.Web.Mvc
 
             return route;
         }
+        #pragma warning restore 1573
 
+        #pragma warning disable 1573 // Parameter does not have XML comment.
         /// <summary>
         /// Sets predicate for a route URL parameter expressed as a regular expression.
         /// </summary>
-        /// <param name="route">The route whose <see cref="Route.Constraints"/> will be set.</param>
-        /// <param name="urlParameter">Name of the URL parameter.</param>
+        /// <inheritdoc cref="SetConstraint(Route, string, Predicate{object})" source="param[@name='route']"/>
+        /// <inheritdoc cref="SetConstraint(Route, string, Predicate{object})" source="param[@name='urlParameter']"/>
         /// <param name="regularExpression">Regular expression that defines a valid <paramref name="urlParameter"/>.</param>
-        /// <returns>
-        /// The original <paramref name="route"/>.
-        /// </returns>
+        /// <inheritdoc cref="SetDefault(Route, string, object)" source="returns"/>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="route"/> is null.<br/>-or-<br/><paramref name="urlParameter"/> is null.<br/>-or-<br/><paramref name="regularExpression"/> is null.
         /// </exception>
@@ -211,5 +208,6 @@ namespace SwissKnife.Web.Mvc
 
             return route;
         }
+        #pragma warning restore 1573
     }
 }
