@@ -1,0 +1,67 @@
+﻿@using System.Linq
+@using System.Globalization
+@using MvcContrib.UI.Pager
+@using MvcContrib.UI.Grid
+@using SwissKnife.Experiments.QueryStringAndIEnumerablePropertiesInAspDotNetMvc.Models
+
+@model ExampleViewModel
+     
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            select {
+                width: 300px;
+                height: 200px;
+            }
+        </style>
+        <title>Model Binding of IEnumerable Properties in ASP.NET MVC</title>
+    </head>
+    <body>
+        <div>
+            <h1>Query String</h1>
+            @foreach (var queryStringKey in HttpContext.Current.Request.QueryString.AllKeys)
+            {
+                @Html.Raw((string.Format("{0}: {1}<br/>", queryStringKey, HttpContext.Current.Request.QueryString[queryStringKey])))
+            }                
+        </div>
+        <div>
+            <h1>Query String With Separated Values</h1>
+            @foreach (var queryStringKey in HttpContext.Current.Request.QueryString.AllKeys)
+            {
+                foreach (string value in HttpContext.Current.Request.QueryString.GetValues(queryStringKey) ?? new string[0])
+                {
+                    @Html.Raw((string.Format("{0}: {1}<br/>", queryStringKey, value)))
+                }                    
+            }
+        </div>
+        <div>
+            <h1>Form</h1>
+        </div>
+        <div>
+            @using (Html.BeginForm("Get", "Example", FormMethod.Get))
+            {
+                <div>
+                    @Html.ListBox("SelectedStringItems", Model.StringItems.Select(item => new SelectListItem { Text = item, Value = item, Selected = Model.SelectedStringItems.Contains(item) }))
+                    @Html.ListBox("SelectedIntegerItems", Model.IntegerItems.Select(item => new SelectListItem { Text = item.ToString(CultureInfo.InvariantCulture), Value = item.ToString(CultureInfo.InvariantCulture), Selected = Model.SelectedIntegerItems.Contains(item) }))            
+                </div>
+                <div>
+                    <input type="text" name="SomeText"/>
+                </div>
+                <div>
+                    <input type="submit" value="Search" />    
+                </div>        
+            }
+        </div>
+        <div>
+            <h1>Search Result</h1>
+            @Html.Raw(Html.Pager(Model.SearchResult))
+
+            @Html.Grid(Model.SearchResult).Columns(column =>
+            {
+                column.For(item => item.String);
+                column.For(item => item.Integer);
+            })
+        </div>
+    </body>
+</html>
