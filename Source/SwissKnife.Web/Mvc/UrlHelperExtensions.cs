@@ -86,11 +86,6 @@ namespace SwissKnife.Web.Mvc
         /// <summary>
         /// Gets the current URL as defined in the request context.
         /// </summary>
-        /// <remarks>
-        /// <para>
-        /// If there is a parameter in the current URL query string that has the same name as one of the current route parameters, the existing parameter in the current route will be replaced by the value of the parameter in the query string.
-        /// </para>
-        /// </remarks>
         /// <param name="urlHelper">The url helper used to get the current URL.</param>
         /// <returns>
         /// Current URL as defined in the request context.
@@ -105,14 +100,71 @@ namespace SwissKnife.Web.Mvc
         }
 
         #pragma warning disable 1573 // Parameter does not have XML comment.
+        // TODO-IG: Add an example to each paragraph that describes the detailed method semantics.
         /// <summary>
-        /// Generates a new URL by taking the current URL as defined in the request context and replacing the existing route parameters with provided new route parameters.
+        /// Generates a new URL by taking the current URL as defined in the request context and replacing the existing route and query string parameters with provided new parameters.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// If a parameter defined in the <paramref name="newRouteParameters"/> is one of the current route parameters, the existing parameter in the current route will be replaced by that parameter value.<br/>
-        /// If a parameter defined in the <paramref name="newRouteParameters"/> is not one of the current route parameters, it will be added to the query string.<br/>
-        /// If there is a parameter in the current URL query string that has the same name as one of the current route parameters, the existing parameter in the current route will be replaced by the value of the parameter in the query string.
+        /// If a parameter defined in the <paramref name="newRouteAndQueryStringParameters"/> is one of the route parameters,
+        /// the existing parameter in the current route will be replaced by that parameter value.
+        /// </para>
+        /// <para>
+        /// TODO-IG Route parameter is null -> ArgumentException: The route parameter '{0}' was null. A route parameter cannot be set to null. If you want to remove the parameter from the route parameter collection set it to 'UrlParameter.Optional'.
+        /// </para>
+        /// <para>
+        /// TODO-IG Route parameter is "" -> ArgumentException: The route parameter '{0}' was empty string. A route parameter cannot be set to empty string. If you want to remove the parameter from the route parameter collection set it to 'UrlParameter.Optional'.
+        /// </para>
+        /// <para>
+        /// TODO-IG Route parameter is UrlParameter.Optional -> Removed from the route parameters
+        /// </para>
+        /// <para>
+        /// If a parameter defined in the <paramref name="newRouteAndQueryStringParameters"/> is not one of the current route parameters,
+        /// it will either be added to the query string or an existing parameter in the query string will be replaced by that parameter value.
+        /// </para>
+        /// <para>
+        /// If a parameter exists both as a route parameter and as a query string parameter, query string parameters have precedence.
+        /// </para>
+        /// <para>
+        /// TODO-IG Query string parameter is null -> ArgumentException: The query string parameter '{0}' was null. A query string parameter cannot be set to null. If you want to remove the parameter from the query string set it to 'UrlParameter.Optional'.
+        /// </para>
+        /// <para>
+        /// TODO-IG Query string parameter is "" -> ArgumentException: The query string parameter '{0}' was empty string. A query string parameter cannot be set to empty string. If you want to remove the parameter from the query string set it to 'UrlParameter.Optional'.
+        ///         DECISION AND NOTE: NameValueCollection supports empty strings. Parameters are removed from the query string. We wanted to get consistent API and uniform treatment of route and query parameters. Problem s with setting route parameters to empty string.
+        /// </para>
+        /// <para>
+        /// TODO-IG Query string parameter is UrlParameter.Optional -> Removed from the query string
+        /// </para>
+        /// <para>
+        /// TODO-IG Query string IEnumerable parameter -> replaces all existing parameters with same name.
+        ///         DECISION: Replaces and not extends. Consistent API because non-enumerable parameters also replace.
+        /// </para>
+        /// <para>
+        /// TODO-IG Query string IEnumerable parameter contains UrlParameter.Optional -> they are simply ignored.
+        /// </para>
+        /// <para>
+        /// TODO-IG Query string IEnumerable parameter contains null -> ArgumentException: The item on the zero-index {0} of the enumerable query string parameter '{1}' was null. An enumerable item cannot be null.
+        /// </para>
+        /// <para>
+        /// TODO-IG Query string IEnumerable parameter contains empty string -> ArgumentException: The item on the zero-index {0} of the enumerable query string parameter '{1}' was empty string. An enumerable item cannot be empty string.
+        /// </para>
+        /// <para>
+        /// TODO-IG Route IEnumerable parameter. What to do?
+        ///         Option #1: If no route parameter with that name add to the query string; otherwise throw InvalidOperationException
+        ///         Option #2: Always add IEnumerable parameter to the query string.
+        ///         DECISION: #1 - easier to comprehend; we don't support *parameter parameters in the route.
+        /// </para>
+        /// <para>
+        /// TODO-IG Parameter specified more than once (p1 => 1, p1 => 2) -> ArgumentException: Each new route and query string parameter can be specified only once. The following parameters were specified more than once: 
+        /// </para>
+        /// <para>
+        /// TODO-IG Non-enumerable parameter replaces enumerable parameters (p=1&p=2&p=3; p => 0 -> p=0)
+        /// </para>
+        /// <para>
+        /// TODO-IG Parameters are converted to string by calling ToString().
+        /// </para>
+        /// <para>
+        /// TODO-IG NameValueCollection and RouteCollection have no special treatment. They are treated as any other collection of objects.
         /// </para>
         /// <para>
         /// For example, let us assume that the current route is defined as "<i>{language}/{year}</i>" and that the current URL is "<i>/en-US/1999</i>".<br/>
@@ -121,28 +173,31 @@ namespace SwissKnife.Web.Mvc
         /// urlHelper.CurrentUrl(language => "hr-HR", year => 2000, p1 => "firstParameter", p2 => 1, p3 => 1.23);
         /// </code>
         /// will return "<i>/hr-HR/2000?p1=firstParameter&amp;p2=1&amp;p3=1.23</i>".
-        /// </para>        
+        /// </para>
+        /// <para>
+        /// Parameter names are case-insensitive.
+        /// </para>
         /// <note type="caution">
-        /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.
+        /// If any of the <paramref name="newRouteAndQueryStringParameters"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
         /// <inheritdoc cref="CurrentUrl(UrlHelper)" source="param[@name='urlHelper']" />
-        /// <param name="newRouteParameters">URL parameters and their new values defined as lambda expressions.</param>
+        /// <param name="newRouteAndQueryStringParameters">URL parameters and their new values defined as lambda expressions.</param>
         /// <returns>
-        /// Current URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>.
+        /// Current URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteAndQueryStringParameters"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
         /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
-        /// <paramref name="newRouteParameters"/> is null.
+        /// <paramref name="newRouteAndQueryStringParameters"/> is null.
         /// </exception>
-        public static string CurrentUrl(this UrlHelper urlHelper, params Func<object, object>[] newRouteParameters)
+        public static string CurrentUrl(this UrlHelper urlHelper, params Func<object, object>[] newRouteAndQueryStringParameters)
         {
             Argument.IsNotNull(urlHelper, "urlHelper");
             Argument.IsNotNull(urlHelper.RequestContext, "urlHelper.RequestContext");
-            Argument.IsNotNull(newRouteParameters, "newRouteParameters");
+            Argument.IsNotNull(newRouteAndQueryStringParameters, "newRouteAndQueryStringParameters");
 
-            return urlHelper.RouteUrl(ReplaceValuesInRouteData(urlHelper, newRouteParameters)) ?? string.Empty;
+            return urlHelper.RouteUrl(ReplaceValuesInRouteData(urlHelper, newRouteAndQueryStringParameters)) ?? string.Empty;
         }
         #pragma warning restore 1573
 
@@ -177,8 +232,9 @@ namespace SwissKnife.Web.Mvc
         /// </summary>
         /// <remarks>
         /// <para>
-        /// If a parameter defined in the <paramref name="newRouteParameters"/> is one of the current route parameters, the existing parameter in the current route will be replaced by that parameter value.<br/>
-        /// If a parameter defined in the <paramref name="newRouteParameters"/> is not one of the current route parameters, it will be added to the query string.<br/>
+        /// TODO-IG: For complete documentation see CurrentUrl()
+        /// If a parameter defined in the <paramref name="newRouteAndQueryStringParameters"/> is one of the current route parameters, the existing parameter in the current route will be replaced by that parameter value.<br/>
+        /// If a parameter defined in the <paramref name="newRouteAndQueryStringParameters"/> is not one of the current route parameters, it will be added to the query string.<br/>
         /// If there is a parameter in the current URL query string that has the same name as one of the current route parameters, the existing parameter in the current route will be replaced by the value of the parameter in the query string.
         /// </para>
         /// <para>
@@ -190,57 +246,57 @@ namespace SwissKnife.Web.Mvc
         /// will return "<i>http://localhost/hr-HR/2000?p1=firstParameter&amp;p2=1&amp;p3=1.23</i>".
         /// </para>        
         /// <note type="caution">
-        /// If any of the <paramref name="newRouteParameters"/> throws an exception, that exception will be propagated to the caller.
+        /// If any of the <paramref name="newRouteAndQueryStringParameters"/> throws an exception, that exception will be propagated to the caller.
         /// </note>
         /// </remarks>
         /// <inheritdoc cref="CurrentUrl(UrlHelper)" source="param[@name='urlHelper']" />
-        /// <inheritdoc cref="CurrentUrl(UrlHelper)" source="param[@name='newRouteParameters']" />
+        /// <inheritdoc cref="CurrentUrl(UrlHelper)" source="param[@name='newRouteAndQueryStringParameters']" />
         /// <returns>
-        /// Current absolute URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>.
+        /// Current absolute URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteAndQueryStringParameters"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
         /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
         /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
-        /// <paramref name="newRouteParameters"/> is null.
+        /// <paramref name="newRouteAndQueryStringParameters"/> is null.
         /// </exception>
         /// <exception cref="InvalidOperationException">
         /// Current absolute URL is invalid (e.g. not all route parameters are defined or the HTTP request has no URL defined at all).<br/>-or-<br/>
         /// The HTTP request has a URL scheme that do not correspond to any of the web protocols defined in the <see cref="Protocol"/> enumeration.
         /// </exception>
-        public static string CurrentAbsoluteUrl(this UrlHelper urlHelper, params Func<object, object>[] newRouteParameters)
+        public static string CurrentAbsoluteUrl(this UrlHelper urlHelper, params Func<object, object>[] newRouteAndQueryStringParameters)
         {
             Argument.IsNotNull(urlHelper, "urlHelper");
             Argument.IsNotNull(urlHelper.RouteCollection, "urlHelper.RouteCollection");
             Argument.IsNotNull(urlHelper.RequestContext, "urlHelper.RequestContext");
-            Argument.IsNotNull(newRouteParameters, "newRouteParameters");
+            Argument.IsNotNull(newRouteAndQueryStringParameters, "newRouteAndQueryStringParameters");
 
-            return CurrentAbsoluteUrlCore(urlHelper, ProtocolHelper.GetProtocolFromHttpRequest(urlHelper.RequestContext.HttpContext.Request), newRouteParameters);
+            return CurrentAbsoluteUrlCore(urlHelper, ProtocolHelper.GetProtocolFromHttpRequest(urlHelper.RequestContext.HttpContext.Request), newRouteAndQueryStringParameters);
         }
 
         #pragma warning disable 1573 // Parameter does not have XML comment.
         /// <inheritdoc cref="CurrentAbsoluteUrl(UrlHelper, Func{object, object}[])" />
         /// <param name="protocol">The protocol used as URI schema in the returned absolute URL. Use this parameter if you want to override the original URI scheme of the current URL.</param>
         /// <returns>
-        /// Current absolute URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteParameters"/>
+        /// Current absolute URL as defined in the request context with original URL parameters replaced by <paramref name="newRouteAndQueryStringParameters"/>
         /// and with the original URI scheme replaced by the one that corresponds to the <paramref name="protocol"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="urlHelper"/> is null.<br/>-or-<br/>
         /// <paramref name="urlHelper.RouteCollection"/> is null.<br/>-or-<br/>
         /// <paramref name="urlHelper.RequestContext"/> is null.<br/>-or-<br/>
-        /// <paramref name="newRouteParameters"/> is null.
+        /// <paramref name="newRouteAndQueryStringParameters"/> is null.
         /// </exception>
         /// <exception cref="InvalidOperationException">Current absolute URL is invalid (e.g. not all route parameters are defined).</exception>
-        public static string CurrentAbsoluteUrl(this UrlHelper urlHelper, Protocol protocol, params Func<object, object>[] newRouteParameters)
+        public static string CurrentAbsoluteUrl(this UrlHelper urlHelper, Protocol protocol, params Func<object, object>[] newRouteAndQueryStringParameters)
         {
             Argument.IsNotNull(urlHelper, "urlHelper");
             Argument.IsNotNull(urlHelper.RouteCollection, "urlHelper.RouteCollection");
             Argument.IsNotNull(urlHelper.RequestContext, "urlHelper.RequestContext");
-            Argument.IsNotNull(newRouteParameters, "newRouteParameters");
+            Argument.IsNotNull(newRouteAndQueryStringParameters, "newRouteAndQueryStringParameters");
             // TODO-IG: Check that the protocol is in range.
 
-            return CurrentAbsoluteUrlCore(urlHelper, protocol, newRouteParameters);
+            return CurrentAbsoluteUrlCore(urlHelper, protocol, newRouteAndQueryStringParameters);
         }
         #pragma warning restore 1573
 
@@ -248,7 +304,7 @@ namespace SwissKnife.Web.Mvc
         /// We extracted this method to avoid duplicated check of preconditions between <see cref="CurrentAbsoluteUrl(UrlHelper, Func{object, object}[])"/>
         /// and <see cref="CurrentAbsoluteUrl(UrlHelper, Protocol, Func{object, object}[])"/>.
         /// </remarks>
-        private static string CurrentAbsoluteUrlCore(UrlHelper urlHelper, Protocol protocol, Func<object, object>[] newRouteParameters)
+        private static string CurrentAbsoluteUrlCore(UrlHelper urlHelper, Protocol protocol, Func<object, object>[] newRouteAndQueryStringParameters)
         {
             string result = UrlHelper.GenerateUrl(null, // routeName
                                                   null, // actionName
@@ -256,7 +312,7 @@ namespace SwissKnife.Web.Mvc
                                                   protocol.ToString().ToLowerInvariant(),
                                                   null, // hostName,
                                                   null, // fragment
-                                                  ReplaceValuesInRouteData(urlHelper, newRouteParameters),
+                                                  ReplaceValuesInRouteData(urlHelper, newRouteAndQueryStringParameters),
                                                   urlHelper.RouteCollection,
                                                   urlHelper.RequestContext,
                                                   false // includeImplicitMvcValues
@@ -276,7 +332,7 @@ namespace SwissKnife.Web.Mvc
                                                                                                                               : ((Route) urlHelper.RequestContext.RouteData.Route).Url,
                                                                   RouteValueDictionaryToString(urlHelper.RequestContext.RouteData.Values),
                                                                   RouteValueDictionaryToString(
-                                                                      new RouteValueDictionary(newRouteParameters.ToDictionary(function => function.Method.GetParameters()[0].Name, function => function(null))))
+                                                                      new RouteValueDictionary(newRouteAndQueryStringParameters.ToDictionary(function => function.Method.GetParameters()[0].Name, function => function(null))))
                                                                  )
                                                   );
 

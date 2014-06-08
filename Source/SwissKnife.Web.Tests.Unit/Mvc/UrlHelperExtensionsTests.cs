@@ -178,14 +178,26 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
         #region CurrentUrl
         [Test]
-        public void CurrentUrl_UrlHelperIsNull_ThrowsException()
+        public void CurrentUrl_EmptyRoute_ReturnsEmptyString()
+        {
+            var urlHelper = MvcTestHelper.GetUrlHelper();
+            Assert.That(urlHelper.CurrentUrl(), Is.Empty);
+        }
+        #endregion
+
+        #region CurrentUrl and CurrentAbsoluteUrl() (Common tests)
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_UrlHelperIsNull_ThrowsException()
         {
             var parameterName = Assert.Throws<ArgumentNullException>(() => UrlHelperExtensions.CurrentUrl(null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper"));
+
+            parameterName = Assert.Throws<ArgumentNullException>(() => UrlHelperExtensions.CurrentAbsoluteUrl(null, Protocol.Http, new Func<object, object>[0])).ParamName;
             Assert.That(parameterName, Is.EqualTo("urlHelper"));
         }
 
         [Test]
-        public void CurrentUrl_UrlHelperRequestContextIsNull_ThrowsException()
+        public void CurrentUrlAndCurrentAbsoluteUrl_UrlHelperRequestContextIsNull_ThrowsException()
         {
             var urlHelper = new UrlHelper();
             // It is not possible to set UrlHelper.RequestContext to null and at the same time to have RouteCollection being not null.
@@ -196,37 +208,37 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentUrl(new Func<object, object>[0])).ParamName;
             Assert.That(parameterName, Is.EqualTo("urlHelper.RequestContext"));
+
+            parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentAbsoluteUrl(Protocol.Http, new Func<object, object>[0])).ParamName;
+            Assert.That(parameterName, Is.EqualTo("urlHelper.RequestContext"));
         }
 
         [Test]
-        public void CurrentUrl_NewRouteParametersIsNull_ThrowsException()
+        public void CurrentUrlAndCurrentAbsoluteUrl_NewRouteAndQueryStringParametersIsNull_ThrowsException()
         {
             var urlHelper = new UrlHelper(new RequestContext(), new RouteCollection());
 
             var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentUrl(null)).ParamName;
-            Assert.That(parameterName, Is.EqualTo("newRouteParameters"));
+            Assert.That(parameterName, Is.EqualTo("newRouteAndQueryStringParameters"));
+
+            parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentAbsoluteUrl(Protocol.Http, null)).ParamName;
+            Assert.That(parameterName, Is.EqualTo("newRouteAndQueryStringParameters"));
         }
 
         [Test]
-        public void CurrentUrl_EmptyRoute_ReturnsEmptyString()
-        {
-            var urlHelper = MvcTestHelper.GetUrlHelper();
-            Assert.That(urlHelper.CurrentUrl(), Is.Empty);
-        }
-
-        [Test]
-        public void CurrentUrl__RouteWithoutParameters_NoNewRouteParameters__ReturnsOriginalRoute()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithoutParameters_NoNewRouteParameters__ReturnsOriginalUrl()
         {
             RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "route-without-parameters");
+            routeCollection.MapRoute("RouteWithoutParameters", "route-without-parameters");
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/route-without-parameters"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/route-without-parameters"));
         }
 
         [Test]
-        public void CurrentUrl__RouteWithParameters_NoNewRouteParameters__ReturnsOriginalRoute()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithParameters_NoNewRouteParameters__ReturnsOriginalUrl()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
@@ -238,21 +250,23 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999"));
         }
 
         [Test]
-        public void CurrentUrl__RouteWithoutParameters_NewRouteParameters__ParametersAddedToQueryString()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithoutParameters_NewRouteParameters__ParametersAddedToQueryString()
         {
             RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "route-without-parameters");
+            routeCollection.MapRoute("RouteWithoutParameters", "route-without-parameters");
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("/route-without-parameters?p1=p1&p2=1&p3=1.23"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/route-without-parameters?p1=p1&p2=1&p3=1.23"));
         }
 
         [Test]
-        public void CurrentUrl__RouteWithParameters_NewRouteParametersThatDoNotExist__ParametersAddedToQueryString()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatDoNotExist__ParametersAddedToQueryString()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
@@ -264,10 +278,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("/en-US/1999?p1=p1&p2=1&p3=1.23"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/en-US/1999?p1=p1&p2=1&p3=1.23"));
         }
 
         [Test]
-        public void CurrentUrl__RouteWithParameters_NewRouteParametersThatAlreadyExist__ParametersOverriddenInTheUrl()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatAlreadyExist__ParametersOverriddenInTheUrl()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
@@ -279,14 +294,16 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(language => "hr-HR"), Is.EqualTo("/hr-HR/1999"));
-
             Assert.That(urlHelper.CurrentUrl(year => 2000), Is.EqualTo("/en-US/2000"));
-
             Assert.That(urlHelper.CurrentUrl(language => "hr-HR", year => 2000), Is.EqualTo("/hr-HR/2000"));
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR"), Is.EqualTo("http://localhost/hr-HR/1999"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(year => 2000), Is.EqualTo("http://localhost/en-US/2000"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR", year => 2000), Is.EqualTo("http://localhost/hr-HR/2000"));
         }
 
         [Test]
-        public void CurrentUrl__RouteWithParameters_NewRouteParametersThatAlreadyExistAndThatDoNotExist__ExistingParametersOverriddenInTheUrl_NonExistingParametersAddedToQueryString()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatAlreadyExistAndThatDoNotExist__ExistingParametersOverriddenInTheUrl_NonExistingParametersAddedToQueryString()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
@@ -298,10 +315,11 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(language => "hr-HR", year => 2000, p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("/hr-HR/2000?p1=p1&p2=1&p3=1.23"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR", year => 2000, p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/hr-HR/2000?p1=p1&p2=1&p3=1.23"));
         }
 
         [Test]
-        public void CurrentUrl__RouteWithParameters_ParameterWithSameNameInQueryString__ParametersOverriddenInTheUrl()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithParameters_ParameterWithSameNameInQueryString__RouteParameterRemainTheSame()
         {
             var httpContextDefinition = new TestHttpContextDefinition
             {
@@ -319,15 +337,17 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/hr-HR/1999"));
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999"));
         }
 
         [Test]
-        public void CurrentUrl__RouteWithParameters_ParameterWithSameNameInQueryStringAndInNewRouteParameters__ParametersOverriddenInTheUrl_NewRouteParametersWin()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithParameters_ParameterWithSameNameInQueryString__QueryStringParameterRemainInTheQueryString()
         {
             var httpContextDefinition = new TestHttpContextDefinition
             {
-                QueryString = new NameValueCollection { { "language", "hr-HR" }, { "year", "2000" } }
+                QueryString = new NameValueCollection { { "language", "hr-HR" } },
+                RequestPath = "/en-US/1999/?language=hr-HR"
             };
 
             var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
@@ -341,11 +361,35 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(language => "fr-FR"), Is.EqualTo("/fr-FR/2000"));
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999/?language=hr-HR"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999/?language=hr-HR"));
         }
 
         [Test]
-        public void CurrentUrl_NewRouteParametersAreCaseInsensitive()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithParameters_ParameterWithSameNameInQueryStringAndInNewRouteParameters__ParametersOverriddenOnlyInTheQueryString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "language", "hr-HR" }, { "year", "2000" } },
+                RequestPath = "/en-US/1999/?language=hr-HR&year=2000"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(language => "fr-FR"), Is.EqualTo("/en-US/1999/?language=fr-FR&year=2000"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_RouteParametesrAreCaseInsensitive()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}");
@@ -358,14 +402,19 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Assert.That(urlHelper.CurrentUrl(language => "hr-HR"), Is.EqualTo("/hr-HR"));
             Assert.That(urlHelper.CurrentUrl(LANGUAGE => "hr-HR"), Is.EqualTo("/hr-HR"));
             Assert.That(urlHelper.CurrentUrl(LaNgUaGe => "hr-HR"), Is.EqualTo("/hr-HR"));
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(LANGUAGE => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(LaNgUaGe => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
         }
 
         [Test]
-        public void CurrentUrl_ParametersInTheQueryStringAreCaseInsensitive()
+        public void CurrentUrlAndCurrentAbsoluteUrl_QueryStringParametersAreCaseInsensitive()
         {
             var httpContextDefinition = new TestHttpContextDefinition
             {
-                QueryString = new NameValueCollection { { "LANGUAGE", "hr-HR" } }
+                QueryString = new NameValueCollection { { "parameter", "value" } },
+                RequestPath = "/en-US/1999/?parameter=value"
             };
 
             var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
@@ -379,11 +428,17 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/hr-HR/1999"));
+            Assert.That(urlHelper.CurrentUrl(parameter => "newValue"), Is.EqualTo("/en-US/1999?parameter=newValue"));
+            Assert.That(urlHelper.CurrentUrl(PARAMETER => "newValue"), Is.EqualTo("/en-US/1999?parameter=newValue"));
+            Assert.That(urlHelper.CurrentUrl(pArAmEtEr => "newValue"), Is.EqualTo("/en-US/1999?parameter=newValue"));
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(parameter => "newValue"), Is.EqualTo("http://localhost/en-US/1999?parameter=newValue"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(PARAMETER => "newValue"), Is.EqualTo("http://localhost/en-US/1999?parameter=newValue"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(pArAmEtEr => "newValue"), Is.EqualTo("http://localhost/en-US/1999?parameter=newValue"));
         }
 
         [Test]
-        public void CurrentUrl_ReturnsCurrentUrlWithEncodedParameters()
+        public void CurrentUrlAndCurrentAbsoluteUrl_ReturnsUrlWithEncodedParameters()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithEncodedParameter", "{parameter}");
@@ -391,17 +446,649 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(parameter => " &?!.,:"), Is.EqualTo("/%20%26%3f!.%2c%3a"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(parameter => " &?!.,:"), Is.EqualTo("http://localhost/%20%26%3f!.%2c%3a"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_QueryStringWithDuplicateParameterEntries_ExistingQueryStringIsPreserved()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "p1", "1" }, { "p1", "2" }, { "p1", "3" } },
+                RequestPath = "/?p1=1&p1=2&p1=3"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            RouteData routeData = new RouteData();
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/?p1=1&p1=2&p1=3"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/?p1=1&p1=2&p1=3"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_QueryStringWithoutDuplicateParameterEntries_ExistingQueryStringIsPreserved()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {                
+                QueryString = new NameValueCollection { { "p1", "1" }, { "p2", "2.0" }, { "p3", "text" } },
+                RequestPath = "/?p1=1&p2=2.0&p3=text"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            RouteData routeData = new RouteData();
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/?p1=1&p2=2.0&p3=text"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/?p1=1&p2=2.0&p3=text"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_RouteParameterSetToNull_ThrowsException()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{routeParameter}");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(routeParameter => null));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A route parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("'routeParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(routeParameter => null));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A route parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("'routeParameter'"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_RouteParameterSetToEmptyString_ThrowsException()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{routeParameter}");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(routeParameter => string.Empty));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A route parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("'routeParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(routeParameter => string.Empty));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A route parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("'routeParameter'"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_ExistingQueryStringParameterSetToNull_ThrowsException()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "queryStringParameter", "1" } },
+                RequestPath = "/?urlParameter=1"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(queryStringParameter => null));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.Message.Contains("A query string parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("'queryStringParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(queryStringParameter => null));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.Message.Contains("A query string parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("'queryStringParameter'"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_ExistingQueryStringParameterSetToEmptyString_ThrowsException()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "queryStringParameter", "1" } },
+                RequestPath = "/?urlParameter=1"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(queryStringParameter => string.Empty));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A query string parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("'queryStringParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(queryStringParameter => string.Empty));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A query string parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("'queryStringParameter'"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_NewQueryStringParameterSetToNull_ThrowsException()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection()
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(newQueryStringParameter => null));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A query string parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("'newQueryStringParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(newQueryStringParameter => null));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A query string parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("'newQueryStringParameter'"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_NewQueryStringParameterSetToEmpty_ThrowsException()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection()
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(newQueryStringParameter => string.Empty));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A query string parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("'newQueryStringParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(newQueryStringParameter => string.Empty));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("A query string parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("'newQueryStringParameter'"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_RouteParameterSetToUrlParameterOptional_RouteParameterRemovedFromUrl()
+        {
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}/{month}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", 2000);
+            routeData.Values.Add("month", UrlParameter.Optional);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/2000/"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/2000/"));
+
+            // The routes constructed below does not make any sense.
+            // Still, it must be possible to put all parameters to optional and get nonsense.
+            // We also have to test if nonsense URLs are properly generated :-)
+            routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", UrlParameter.Optional);
+            routeData.Values.Add("month", UrlParameter.Optional);
+
+            urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US//"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US//"));
+
+            routeData = new RouteData();
+            routeData.Values.Add("language", UrlParameter.Optional);
+            routeData.Values.Add("year", UrlParameter.Optional);
+            routeData.Values.Add("month", UrlParameter.Optional);
+
+            urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("///"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost///"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_ExistingQueryStringParameterSetToUrlParameterOptional_ParameterRemovedFromQueryString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "p1", "1" }, { "p2", "2" }, { "p3", "3" } },
+                RequestPath = "/?p1=1&p2=2&p3=3"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(p1 => UrlParameter.Optional), Is.EqualTo("/?p2=2&p3=3"));
+            Assert.That(urlHelper.CurrentUrl(p2 => UrlParameter.Optional), Is.EqualTo("/?p1=1&p3=3"));
+            Assert.That(urlHelper.CurrentUrl(p3 => UrlParameter.Optional), Is.EqualTo("/?p1=1&p2=2"));
+            Assert.That(urlHelper.CurrentUrl(p1 => UrlParameter.Optional, p2 => UrlParameter.Optional), Is.EqualTo("/?p3=3"));
+            Assert.That(urlHelper.CurrentUrl(p1 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo("/?p2=2"));
+            Assert.That(urlHelper.CurrentUrl(p2 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo("/?p1=1"));
+            Assert.That(urlHelper.CurrentUrl(p1 => UrlParameter.Optional, p2 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo(string.Empty));
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => UrlParameter.Optional), Is.EqualTo("http://localhost/?p2=2&p3=3"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p2 => UrlParameter.Optional), Is.EqualTo("http://localhost/?p1=1&p3=3"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p3 => UrlParameter.Optional), Is.EqualTo("http://localhost/?p1=1&p2=2"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => UrlParameter.Optional, p2 => UrlParameter.Optional), Is.EqualTo("http://localhost/?p3=3"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo("http://localhost/?p2=2"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p2 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo("http://localhost/?p1=1"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => UrlParameter.Optional, p2 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo("http://localhost/"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_NewQueryStringParameterSetToUrlParameterOptional_ParameterNotAddedToQueryString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection()
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(newParameter => UrlParameter.Optional), Is.EqualTo(string.Empty));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(newParameter => UrlParameter.Optional), Is.EqualTo("http://localhost/"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_ExistingNonEnumerableQueryStringParameterSetToEnumerableParameter_ExistingParameterReplacedWithEnumerableParameter()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "existing", "0" } },
+                RequestPath = "/?existing=0"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(existing => new[] { 1, 2, 3 }), Is.EqualTo("/?existing=1&existing=2&existing=3"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(existing => new[] { 1, 2, 3 }), Is.EqualTo("http://localhost/?existing=1&existing=2&existing=3"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_ExistingEnumerableQueryStringParameterSetToEnumerableParameter_AllExistingEnumerableValuesReplacedWithNewEnumerableValues()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "existing", "0" }, { "existing", "1" }, { "existing", "2" } },
+                RequestPath = "/?existing=0&existing=1&existing=2"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(existing => new[] { 3, 4, 5 }), Is.EqualTo("/?existing=3&existing=4&existing=5"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(existing => new[] { 3, 4, 5 }), Is.EqualTo("http://localhost/?existing=1&existing=2&existing=3"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_ExistingEnumerableQueryStringParameterSetToNonEnumerableParameter_AllExistingEnumerableValuesReplacedNewParameter()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "existing", "0" }, { "existing", "1" }, { "existing", "2" } },
+                RequestPath = "/?existing=0&existing=1&existing=2"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(existing => 0), Is.EqualTo("/?existing=0"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(existing => 0), Is.EqualTo("http://localhost/?existing=0"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_ExistingEnumerableQueryStringParameterValuesOverlapWithNewEnumerableParameterValues_OverlappedValuesRemainInQueryString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "existing", "0" }, { "existing", "1" }, { "existing", "2" } },
+                RequestPath = "/?existing=0&existing=1&existing=2"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(existing => new[] { 1, 2, 3, 4 }), Is.EqualTo("/?existing=1&existing=2&existing=3&existing=4"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(existing => new[] { 1, 2, 3, 4 }), Is.EqualTo("http://localhost/?existing=1&existing=2&existing=3&existing=4"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_EnumerableQueryStringParameterValuesContainUrlParameterOptional_OptionParameterIgnored()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection()
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(p => new[] { UrlParameter.Optional }), Is.EqualTo(string.Empty));
+            Assert.That(urlHelper.CurrentUrl(p => new object[] { 1, UrlParameter.Optional }), Is.EqualTo("/?p=1"));
+            Assert.That(urlHelper.CurrentUrl(p => new object[] { UrlParameter.Optional, 1 }), Is.EqualTo("/?p=1"));
+            Assert.That(urlHelper.CurrentUrl(p => new object[] { 1, UrlParameter.Optional, 2 }), Is.EqualTo("/?p=1&p=2"));
+
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p => new[] { UrlParameter.Optional }), Is.EqualTo("http://localhost/"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p => new object[] { 1, UrlParameter.Optional }), Is.EqualTo("http://localhost/?p=1"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p => new object[] { UrlParameter.Optional, 1 }), Is.EqualTo("http://localhost/?p=1"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p => new object[] { 1, UrlParameter.Optional, 2 }), Is.EqualTo("http://localhost/?p=1&p=2"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_EnumerableQueryStringParameterValuesContainNull_ThrowsException()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection()
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(enumerableParameter => new object[] { null }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be null."));
+            Assert.That(exception.Message.Contains("0"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(enumerableParameter => new object[] { null, 1 }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be null."));
+            Assert.That(exception.Message.Contains("0"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(enumerableParameter => new object[] { 1, null }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be null."));
+            Assert.That(exception.Message.Contains("1"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(enumerableParameter => new object[] { null }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be null."));
+            Assert.That(exception.Message.Contains("0"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(enumerableParameter => new object[] { null, 1 }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be null."));
+            Assert.That(exception.Message.Contains("0"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(enumerableParameter => new object[] { 1, null }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be null."));
+            Assert.That(exception.Message.Contains("1"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_EnumerableQueryStringParameterValuesContainEmptyString_ThrowsException()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection()
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(enumerableParameter => new object[] { string.Empty }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot empty string."));
+            Assert.That(exception.Message.Contains("0"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(enumerableParameter => new object[] { string.Empty, 1 }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be empty string."));
+            Assert.That(exception.Message.Contains("0"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(enumerableParameter => new object[] { 1, string.Empty }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be empty string."));
+            Assert.That(exception.Message.Contains("1"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(enumerableParameter => new object[] { string.Empty }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be empty string."));
+            Assert.That(exception.Message.Contains("0"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(enumerableParameter => new object[] { string.Empty, 1 }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be empty string."));
+            Assert.That(exception.Message.Contains("0"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+
+            exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(enumerableParameter => new object[] { 1, string.Empty }));
+            Console.WriteLine(exception.Message);
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("The item on the zero-index"));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be empty string."));
+            Assert.That(exception.Message.Contains("1"));
+            Assert.That(exception.Message.Contains("'enumerableParameter'"));
+        }
+
+        /// <summary>
+        /// Enumerable parameters are always added to the query string.
+        /// </summary>
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_EnumerableParameterDoesNotExistInQueryString_ParameterWithSameNameExistsInRouteParameters_EnumerableParameterAddedToQueryString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection(),
+                RequestPath = "/routeEnumerableParameter"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{enumerableParameter}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("enumerableParameter", "routeEnumerableParameter");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(enumerableParameter => new[] { 1, 2 }), Is.EqualTo("/routeEnumerableParameter?enumerableParameter=1&enumerableParameter=2"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(enumerableParameter => new[] { 1, 2 }), Is.EqualTo("http://localhost/routeEnumerableParameter?enumerableParameter=1&enumerableParameter=2"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_NewRouteAndQueryStringParameterSpecifiedMoreThanOnce_ThrowsException()
+        {
+            var urlHelper = new UrlHelper(new RequestContext(), new RouteCollection());
+
+            var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(firstRepeating => 0, firstRepeating => 0, nonRepeating => 0, secondRepeating => 0, secondRepeating => 0));
+            Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
+            Assert.That(exception.Message.Contains("Each new route and query string parameter can be specified only once."));
+            Assert.That(exception.Message.Contains("firstRepeating"));
+            Assert.That(exception.Message.Contains("secondRepeating"));
+            Assert.That(exception.Message.Contains("nonRepeating"), Is.Not.True);
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_NewQueryStringParameterConvertedToString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { {"p", "0" } },
+                RequestPath = "/?p=0"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(p => new TestClassThatOverridesToString()), Is.EqualTo("/?p=" + TestClassThatOverridesToString.ToStringText));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p => new TestClassThatOverridesToString()), Is.EqualTo("http://localhost/?p=" + TestClassThatOverridesToString.ToStringText));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_NewEnumerableQueryStringParameterItemsConvertedToString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection { { "p", "0" } },
+                RequestPath = "/?p=0"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithoutParameters", string.Empty);
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(p => new[] { new TestClassThatOverridesToString(), new TestClassThatOverridesToString() }), Is.EqualTo(string.Format("/?p={0}&p={0}", TestClassThatOverridesToString.ToStringText)));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(p => new[] { new TestClassThatOverridesToString(), new TestClassThatOverridesToString() }), Is.EqualTo(string.Format("http://localhost/?p={0}&p={0}", TestClassThatOverridesToString.ToStringText)));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl_NewRouteParameterConvertedToString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection(),
+                RequestPath = "/parameterValue"
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{parameter}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("parameter", "parameterValue");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(parameter => new TestClassThatOverridesToString()), Is.EqualTo("/" + TestClassThatOverridesToString.ToStringText));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(parameter => new TestClassThatOverridesToString()), Is.EqualTo("http://localhost/" + TestClassThatOverridesToString.ToStringText));
+        }
+
+        private class TestClassThatOverridesToString
+        {
+            internal const string ToStringText = "ToStringText";
+
+            public override string ToString()
+            {
+                return ToStringText;
+            }
         }
         #endregion
 
         #region CurrentAbsoluteUrl
-        [Test]
-        public void CurrentAbsoluteUrl_UrlHelperIsNull_ThrowsException()
-        {
-            var parameterName = Assert.Throws<ArgumentNullException>(() => UrlHelperExtensions.CurrentAbsoluteUrl(null, Protocol.Http, new Func<object, object>[0])).ParamName;
-            Assert.That(parameterName, Is.EqualTo("urlHelper"));
-        }
-
         [Test]
         public void CurrentAbsoluteUrl_UrlHelperRouteCollectionIsNull_ThrowsException()
         {
@@ -412,44 +1099,25 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
-        public void CurrentAbsoluteUrl_UrlHelperRequestContextIsNull_ThrowsException()
-        {
-            var urlHelper = new UrlHelper();
-            // It is not possible to set UrlHelper.RequestContext to null and at the same time to have RouteCollection being not null.
-            // Therefor this little trick to pass the null check for the urlHelper.RouteCollection.
-
-            urlHelper.GetType().GetProperty("RouteCollection").GetSetMethod(true).Invoke(urlHelper, new object[] { new RouteCollection() });
-            Assert.That(urlHelper.RouteCollection, Is.Not.Null);
-
-            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentAbsoluteUrl(Protocol.Http, new Func<object, object>[0])).ParamName;
-            Assert.That(parameterName, Is.EqualTo("urlHelper.RequestContext"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl_NewRouteParametersIsNull_ThrowsException()
-        {
-            var urlHelper = MvcTestHelper.GetUrlHelper();
-
-            var parameterName = Assert.Throws<ArgumentNullException>(() => urlHelper.CurrentAbsoluteUrl(Protocol.Http, null)).ParamName;
-            Assert.That(parameterName, Is.EqualTo("newRouteParameters"));
-        }
-
-        [Test]
         public void CurrentAbsoluteUrl_RouteWithParametersRouteValuesNotAllDefined_ThrowsException()
         {
             RouteCollection routeCollection = new RouteCollection();
             routeCollection.MapRoute("RouteWithParameters", "{language}/{year}/{month}");
 
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", 2000);
+            // The "month" parameter is missing.
 
-            var routeValues = new RouteValueDictionary();
-            routeValues.Add("language", "en-US");
-            routeValues.Add("year", 2000);
-            // "month" parameter is missing.
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
 
             var exception = Assert.Throws<InvalidOperationException>(() => urlHelper.CurrentAbsoluteUrl());
             Assert.That(exception.Message.Contains("cannot be generated"));
             Assert.That(exception.Message.Contains("current route"));
+            Assert.That(exception.Message.Contains("language"));
+            Assert.That(exception.Message.Contains("en-US"));
+            Assert.That(exception.Message.Contains("year"));
+            Assert.That(exception.Message.Contains("2000"));
             Console.WriteLine(exception.Message);
         }
 
@@ -461,185 +1129,6 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
             Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl__RouteWithoutParameters_NoNewRouteParameters__ReturnsOriginalAbsolutRoute()
-        {
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "route-without-parameters");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/route-without-parameters"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl__RouteWithParameters_NoNewRouteParameters__ReturnsOriginalAbsoluteRoute()
-        {
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
-
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("language", "en-US");
-            routeData.Values.Add("year", "1999");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl__RouteWithoutParameters_NewRouteParameters__ParametersAddedToQueryString()
-        {
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "route-without-parameters");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/route-without-parameters?p1=p1&p2=1&p3=1.23"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatDoNotExist__ParametersAddedToQueryString()
-        {
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
-
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("language", "en-US");
-            routeData.Values.Add("year", "1999");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/en-US/1999?p1=p1&p2=1&p3=1.23"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatAlreadyExist__ParametersOverriddenInTheUrl()
-        {
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
-
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("language", "en-US");
-            routeData.Values.Add("year", "1999");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR"), Is.EqualTo("http://localhost/hr-HR/1999"));
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(year => 2000), Is.EqualTo("http://localhost/en-US/2000"));
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR", year => 2000), Is.EqualTo("http://localhost/hr-HR/2000"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl__RouteWithParameters_NewRouteParametersThatAlreadyExistAndThatDoNotExist__ExistingParametersOverriddenInTheUrl_NonExistingParametersAddedToQueryString()
-        {
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
-
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("language", "en-US");
-            routeData.Values.Add("year", "1999");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR", year => 2000, p1 => "p1", p2 => 1, p3 => 1.23), Is.EqualTo("http://localhost/hr-HR/2000?p1=p1&p2=1&p3=1.23"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl__RouteWithParameters_ParameterWithSameNameInQueryString__ParametersOverriddenInTheUrl()
-        {
-            var httpContextDefinition = new TestHttpContextDefinition
-            {
-                QueryString = new NameValueCollection { { "language", "hr-HR" } }
-            };
-
-            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
-
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
-
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("language", "en-US");
-            routeData.Values.Add("year", "1999");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/hr-HR/1999"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl__RouteWithParameters_ParameterWithSameNameInQueryStringAndInNewRouteParameters__ParametersOverriddenInTheUrl_NewRouteParametersWin()
-        {
-            var httpContextDefinition = new TestHttpContextDefinition
-            {
-                QueryString = new NameValueCollection { { "language", "hr-HR" }, { "year", "2000" } }
-            };
-
-            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
-
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
-
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("language", "en-US");
-            routeData.Values.Add("year", "1999");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "fr-FR"), Is.EqualTo("http://localhost/fr-FR/2000"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl_NewRouteParametersAreCaseInsensitive()
-        {
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "{language}");
-
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("language", "en-US");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(routeData, routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(language => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
-            Assert.That(urlHelper.CurrentAbsoluteUrl(LANGUAGE => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
-            Assert.That(urlHelper.CurrentAbsoluteUrl(LaNgUaGe => "hr-HR"), Is.EqualTo("http://localhost/hr-HR"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl_ParametersInTheQueryStringAreCaseInsensitive()
-        {
-            var httpContextDefinition = new TestHttpContextDefinition
-            {
-                QueryString = new NameValueCollection { { "LANGUAGE", "hr-HR" } }
-            };
-
-            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
-
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
-
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("language", "en-US");
-            routeData.Values.Add("year", "1999");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/hr-HR/1999"));
-        }
-
-        [Test]
-        public void CurrentAbsoluteUrl_ReturnsCurrentUrlWithEncodedParameters()
-        {
-            RouteCollection routeCollection = new RouteCollection();
-            routeCollection.MapRoute("RouteWithEncodedParameter", "{parameter}");
-
-            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(new RouteData(), routeCollection);
-
-            Assert.That(urlHelper.CurrentAbsoluteUrl(parameter => " &?!.,:"), Is.EqualTo("http://localhost/%20%26%3f!.%2c%3a"));
         }
 
         [Test]
