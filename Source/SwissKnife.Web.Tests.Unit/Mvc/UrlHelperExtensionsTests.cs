@@ -186,6 +186,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         #endregion
 
         #region CurrentUrl and CurrentAbsoluteUrl() (Common tests)
+        // TODO-IG: Key in the current query string is null or empty.
+        // TODO-iG: Value in the current query string is null or empty.
         [Test]
         public void CurrentUrlAndCurrentAbsoluteUrl_UrlHelperIsNull_ThrowsException()
         {
@@ -323,7 +325,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         {
             var httpContextDefinition = new TestHttpContextDefinition
             {
-                QueryString = new NameValueCollection {{"language", "hr-HR"}}
+                QueryString = new NameValueCollection {{"language", "hr-HR"}},
+                RequestPath = "/en-US/1999?language=hr-HR"
             };
 
             var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
@@ -337,8 +340,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999"));
-            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999"));
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999?language=hr-HR"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999?language=hr-HR"));
         }
 
         [Test]
@@ -361,8 +364,8 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999/?language=hr-HR"));
-            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999/?language=hr-HR"));
+            Assert.That(urlHelper.CurrentUrl(), Is.EqualTo("/en-US/1999?language=hr-HR"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(), Is.EqualTo("http://localhost/en-US/1999?language=hr-HR"));
         }
 
         [Test]
@@ -385,7 +388,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(language => "fr-FR"), Is.EqualTo("/en-US/1999/?language=fr-FR&year=2000"));
+            // The order of the parameters in the query string is not important.
+            Assert.That(urlHelper.CurrentUrl(language => "fr-FR").StartsWith("/en-US/1999?"));
+            Assert.That(urlHelper.CurrentUrl(language => "fr-FR").Contains("language=fr-FR"));
+            Assert.That(urlHelper.CurrentUrl(language => "fr-FR").Contains("year=2000"));
+            Assert.That(urlHelper.CurrentUrl(language => "fr-FR").Contains("&"));
+            Assert.That(!urlHelper.CurrentUrl(language => "fr-FR").EndsWith("&"));
+
         }
 
         [Test]
@@ -429,12 +438,12 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(parameter => "newValue"), Is.EqualTo("/en-US/1999?parameter=newValue"));
-            Assert.That(urlHelper.CurrentUrl(PARAMETER => "newValue"), Is.EqualTo("/en-US/1999?parameter=newValue"));
-            Assert.That(urlHelper.CurrentUrl(pArAmEtEr => "newValue"), Is.EqualTo("/en-US/1999?parameter=newValue"));
+            Assert.That(urlHelper.CurrentUrl(PARAMETER => "newValue"), Is.EqualTo("/en-US/1999?PARAMETER=newValue"));
+            Assert.That(urlHelper.CurrentUrl(PARAMETER => "newValue"), Is.EqualTo("/en-US/1999?PARAMETER=newValue"));
 
             Assert.That(urlHelper.CurrentAbsoluteUrl(parameter => "newValue"), Is.EqualTo("http://localhost/en-US/1999?parameter=newValue"));
-            Assert.That(urlHelper.CurrentAbsoluteUrl(PARAMETER => "newValue"), Is.EqualTo("http://localhost/en-US/1999?parameter=newValue"));
-            Assert.That(urlHelper.CurrentAbsoluteUrl(pArAmEtEr => "newValue"), Is.EqualTo("http://localhost/en-US/1999?parameter=newValue"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(PARAMETER => "newValue"), Is.EqualTo("http://localhost/en-US/1999?PARAMETER=newValue"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(pArAmEtEr => "newValue"), Is.EqualTo("http://localhost/en-US/1999?pArAmEtEr=newValue"));
         }
 
         [Test]
@@ -504,13 +513,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(routeParameter => null));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A route parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to null."));
             Assert.That(exception.Message.Contains("'routeParameter'"));
 
             exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(routeParameter => null));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A route parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to null."));
             Assert.That(exception.Message.Contains("'routeParameter'"));
         }
 
@@ -525,13 +534,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(routeParameter => string.Empty));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A route parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to empty string."));
             Assert.That(exception.Message.Contains("'routeParameter'"));
 
             exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(routeParameter => string.Empty));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A route parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to empty string."));
             Assert.That(exception.Message.Contains("'routeParameter'"));
         }
 
@@ -553,12 +562,12 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(queryStringParameter => null));
             Console.WriteLine(exception.Message);
-            Assert.That(exception.Message.Contains("A query string parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to null."));
             Assert.That(exception.Message.Contains("'queryStringParameter'"));
 
             exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(queryStringParameter => null));
             Console.WriteLine(exception.Message);
-            Assert.That(exception.Message.Contains("A query string parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to null."));
             Assert.That(exception.Message.Contains("'queryStringParameter'"));
         }
 
@@ -581,13 +590,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(queryStringParameter => string.Empty));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A query string parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to empty string."));
             Assert.That(exception.Message.Contains("'queryStringParameter'"));
 
             exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(queryStringParameter => string.Empty));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A query string parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to empty string."));
             Assert.That(exception.Message.Contains("'queryStringParameter'"));
         }
 
@@ -609,13 +618,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(newQueryStringParameter => null));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A query string parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to null."));
             Assert.That(exception.Message.Contains("'newQueryStringParameter'"));
 
             exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(newQueryStringParameter => null));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A query string parameter cannot be set to null."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to null."));
             Assert.That(exception.Message.Contains("'newQueryStringParameter'"));
         }
 
@@ -637,13 +646,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(newQueryStringParameter => string.Empty));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A query string parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to empty string."));
             Assert.That(exception.Message.Contains("'newQueryStringParameter'"));
 
             exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentAbsoluteUrl(newQueryStringParameter => string.Empty));
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
-            Assert.That(exception.Message.Contains("A query string parameter cannot be set to empty string."));
+            Assert.That(exception.Message.Contains("A route or query string parameter cannot be set to empty string."));
             Assert.That(exception.Message.Contains("'newQueryStringParameter'"));
         }
 
@@ -709,7 +718,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Assert.That(urlHelper.CurrentUrl(p1 => UrlParameter.Optional, p2 => UrlParameter.Optional), Is.EqualTo("/?p3=3"));
             Assert.That(urlHelper.CurrentUrl(p1 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo("/?p2=2"));
             Assert.That(urlHelper.CurrentUrl(p2 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo("/?p1=1"));
-            Assert.That(urlHelper.CurrentUrl(p1 => UrlParameter.Optional, p2 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo(string.Empty));
+            Assert.That(urlHelper.CurrentUrl(p1 => UrlParameter.Optional, p2 => UrlParameter.Optional, p3 => UrlParameter.Optional), Is.EqualTo("/"));
 
             Assert.That(urlHelper.CurrentAbsoluteUrl(p1 => UrlParameter.Optional), Is.EqualTo("http://localhost/?p2=2&p3=3"));
             Assert.That(urlHelper.CurrentAbsoluteUrl(p2 => UrlParameter.Optional), Is.EqualTo("http://localhost/?p1=1&p3=3"));
@@ -721,7 +730,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
-        public void CurrentUrlAndCurrentAbsoluteUrl_NewQueryStringParameterSetToUrlParameterOptional_ParameterNotAddedToQueryString()
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithoutParameters_NewQueryStringParameterSetToUrlParameterOptional__ParameterWithoutValueAddedToQueryString()
         {
             var httpContextDefinition = new TestHttpContextDefinition
             {
@@ -735,8 +744,31 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(newParameter => UrlParameter.Optional), Is.EqualTo(string.Empty));
+            Assert.That(urlHelper.CurrentUrl(newParameter => UrlParameter.Optional), Is.EqualTo("/"));
             Assert.That(urlHelper.CurrentAbsoluteUrl(newParameter => UrlParameter.Optional), Is.EqualTo("http://localhost/"));
+        }
+
+        [Test]
+        public void CurrentUrlAndCurrentAbsoluteUrl__RouteWithParameters_NewQueryStringParameterSetToUrlParameterOptional__ParameterWithoutValueAddedToQueryString()
+        {
+            var httpContextDefinition = new TestHttpContextDefinition
+            {
+                QueryString = new NameValueCollection()
+            };
+
+            var httpContext = MvcTestHelper.GetHttpContext(httpContextDefinition);
+
+            RouteCollection routeCollection = new RouteCollection();
+            routeCollection.MapRoute("RouteWithParameters", "{language}/{year}");
+
+            RouteData routeData = new RouteData();
+            routeData.Values.Add("language", "en-US");
+            routeData.Values.Add("year", "1999");
+
+            UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, routeData, routeCollection);
+
+            Assert.That(urlHelper.CurrentUrl(newParameter => UrlParameter.Optional), Is.EqualTo("/en-US/1999"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(newParameter => UrlParameter.Optional), Is.EqualTo("http://localhost/en-US/1999"));
         }
 
         [Test]
@@ -776,7 +808,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
 
             Assert.That(urlHelper.CurrentUrl(existing => new[] { 3, 4, 5 }), Is.EqualTo("/?existing=3&existing=4&existing=5"));
-            Assert.That(urlHelper.CurrentAbsoluteUrl(existing => new[] { 3, 4, 5 }), Is.EqualTo("http://localhost/?existing=1&existing=2&existing=3"));
+            Assert.That(urlHelper.CurrentAbsoluteUrl(existing => new[] { 3, 4, 5 }), Is.EqualTo("http://localhost/?existing=3&existing=4&existing=5"));
         }
 
         [Test]
@@ -820,7 +852,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         }
 
         [Test]
-        public void CurrentUrlAndCurrentAbsoluteUrl_EnumerableQueryStringParameterValuesContainUrlParameterOptional_OptionParameterIgnored()
+        public void CurrentUrlAndCurrentAbsoluteUrl_EnumerableQueryStringParameterValuesContainUrlParameterOptional_OptionalParameterIsIgnored()
         {
             var httpContextDefinition = new TestHttpContextDefinition
             {
@@ -834,7 +866,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
 
             UrlHelper urlHelper = MvcTestHelper.GetUrlHelper(httpContext, new RouteData(), routeCollection);
 
-            Assert.That(urlHelper.CurrentUrl(p => new[] { UrlParameter.Optional }), Is.EqualTo(string.Empty));
+            Assert.That(urlHelper.CurrentUrl(p => new[] { UrlParameter.Optional }), Is.EqualTo("/"));
             Assert.That(urlHelper.CurrentUrl(p => new object[] { 1, UrlParameter.Optional }), Is.EqualTo("/?p=1"));
             Assert.That(urlHelper.CurrentUrl(p => new object[] { UrlParameter.Optional, 1 }), Is.EqualTo("/?p=1"));
             Assert.That(urlHelper.CurrentUrl(p => new object[] { 1, UrlParameter.Optional, 2 }), Is.EqualTo("/?p=1&p=2"));
@@ -929,7 +961,7 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
             Console.WriteLine(exception.Message);
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
             Assert.That(exception.Message.Contains("The item on the zero-index"));
-            Assert.That(exception.Message.Contains("An enumerable item cannot empty string."));
+            Assert.That(exception.Message.Contains("An enumerable item cannot be empty string."));
             Assert.That(exception.Message.Contains("0"));
             Assert.That(exception.Message.Contains("'enumerableParameter'"));
 
@@ -1004,13 +1036,13 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void CurrentUrlAndCurrentAbsoluteUrl_NewRouteAndQueryStringParameterSpecifiedMoreThanOnce_ThrowsException()
         {
-            var urlHelper = new UrlHelper(new RequestContext(), new RouteCollection());
+            var urlHelper = MvcTestHelper.GetUrlHelper();
 
             var exception = Assert.Throws<ArgumentException>(() => urlHelper.CurrentUrl(firstRepeating => 0, firstRepeating => 0, nonRepeating => 0, secondRepeating => 0, secondRepeating => 0));
             Assert.That(exception.ParamName, Is.EqualTo("newRouteAndQueryStringParameters"));
             Assert.That(exception.Message.Contains("Each new route and query string parameter can be specified only once."));
             Assert.That(exception.Message.Contains("firstRepeating"));
-            Assert.That(exception.Message.Contains("secondRepeating"));
+            Assert.That(exception.Message.Contains("secondRepeating"), Is.Not.True);
             Assert.That(exception.Message.Contains("nonRepeating"), Is.Not.True);
         }
 

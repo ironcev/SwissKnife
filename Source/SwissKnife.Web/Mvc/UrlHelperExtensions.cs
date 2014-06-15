@@ -2,8 +2,13 @@
  * Original proposal for this class comes from Marin Rončević (http://github.com/mroncev).
  */
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using SwissKnife.Diagnostics.Contracts;
@@ -110,7 +115,7 @@ namespace SwissKnife.Web.Mvc
         /// the existing parameter in the current route will be replaced by that parameter value.
         /// </para>
         /// <para>
-        /// TODO-IG Route parameter is null -> ArgumentException: The route parameter '{0}' was null. A route parameter cannot be set to null. If you want to remove the parameter from the route parameter collection set it to 'UrlParameter.Optional'.
+        /// TODO-IG Route parameter is null -> ArgumentException: The parameter '{0}' was null. A route or query string parameter cannot be set to null. If you want to remove the parameter from the route parameter collection or from the query string set it to 'UrlParameter.Optional'.
         /// </para>
         /// <para>
         /// TODO-IG Route parameter is "" -> ArgumentException: The route parameter '{0}' was empty string. A route parameter cannot be set to empty string. If you want to remove the parameter from the route parameter collection set it to 'UrlParameter.Optional'.
@@ -197,9 +202,49 @@ namespace SwissKnife.Web.Mvc
             Argument.IsNotNull(urlHelper.RequestContext, "urlHelper.RequestContext");
             Argument.IsNotNull(newRouteAndQueryStringParameters, "newRouteAndQueryStringParameters");
 
-            return urlHelper.RouteUrl(ReplaceValuesInRouteData(urlHelper, newRouteAndQueryStringParameters)) ?? string.Empty;
+            RouteValueDictionary newRouteValues;
+            NameValueCollection newQueryString;
+            GetNewRouteDataValuesAndQueryString(urlHelper.RequestContext.RouteData.Values, urlHelper.RequestContext.HttpContext.Request.QueryString, newRouteAndQueryStringParameters,
+                                                out newRouteValues, out newQueryString);
+
+            return CreateUrlWithQueryString(urlHelper.RouteUrl(newRouteValues) ?? string.Empty, newQueryString);
         }
         #pragma warning restore 1573
+        private static string CreateUrlWithQueryString(string originalUrl, NameValueCollection queryStringParameters)
+        {
+            if (!queryStringParameters.HasKeys()) return originalUrl;
+
+            StringBuilder sb = new StringBuilder(originalUrl);
+
+            if (originalUrl == string.Empty)
+                sb.Append('/');
+
+            // If the URL string does not contain the query part.
+            // TODO-IG: Find better way to check if the URL already contains query string.
+            if (!originalUrl.Contains("?"))
+                sb.Append('?');
+            else
+            {
+                // If the '?' is not at the end of the URL, we assume that some query string parameters are already there.
+                if (!originalUrl.EndsWith("?"))
+                    sb.Append("&");
+            }                
+
+            foreach (string key in queryStringParameters.AllKeys.Where(key => key != null))
+            {
+                // The key is surely not null, but ReSharper unfortunately does not see that.
+                // ReSharper disable PossibleNullReferenceException
+                foreach (string value in queryStringParameters.GetValues(key))
+                // ReSharper restore PossibleNullReferenceException
+                    sb.AppendFormat("{0}={1}&", key, HttpUtility.HtmlEncode(value));
+            }
+
+            // Remove the last "&".
+            if (sb.ToString().EndsWith("&"))
+                sb.Length -= 1; // "&".Length is 1;
+
+            return sb.ToString();
+        }
 
         /// <summary>
         /// Gets the current absolute URL as defined in the request context.
@@ -306,19 +351,24 @@ namespace SwissKnife.Web.Mvc
         /// </remarks>
         private static string CurrentAbsoluteUrlCore(UrlHelper urlHelper, Protocol protocol, Func<object, object>[] newRouteAndQueryStringParameters)
         {
-            string result = UrlHelper.GenerateUrl(null, // routeName
-                                                  null, // actionName
-                                                  null, // controllerName
-                                                  protocol.ToString().ToLowerInvariant(),
-                                                  null, // hostName,
-                                                  null, // fragment
-                                                  ReplaceValuesInRouteData(urlHelper, newRouteAndQueryStringParameters),
-                                                  urlHelper.RouteCollection,
-                                                  urlHelper.RequestContext,
-                                                  false // includeImplicitMvcValues
-                                                 );
+            RouteValueDictionary newRouteValues;
+            NameValueCollection newQueryString;
+            GetNewRouteDataValuesAndQueryString(urlHelper.RequestContext.RouteData.Values, urlHelper.RequestContext.HttpContext.Request.QueryString, newRouteAndQueryStringParameters,
+                                                out newRouteValues, out newQueryString);
 
-            if (string.IsNullOrWhiteSpace(result))
+            string url = UrlHelper.GenerateUrl(null, // routeName
+                                               null, // actionName
+                                               null, // controllerName
+                                               protocol.ToString().ToLowerInvariant(),
+                                               null, // hostName,
+                                               null, // fragment
+                                               newRouteValues,
+                                               urlHelper.RouteCollection,
+                                               urlHelper.RequestContext,
+                                               false // includeImplicitMvcValues
+                                               );
+
+            if (string.IsNullOrWhiteSpace(url))
                 throw new InvalidOperationException(string.Format("The absolute URL for the current route and the protocol '{1}' cannot be generated.{0}" +
                                                                   "The route URL was: '{2}'.{0}" +
                                                                   "The route data values were:{0}" +
@@ -336,24 +386,117 @@ namespace SwissKnife.Web.Mvc
                                                                  )
                                                   );
 
-            return result;
+            return CreateUrlWithQueryString(url, newQueryString);
         }
 
-        private static RouteValueDictionary ReplaceValuesInRouteData(UrlHelper urlHelper, params Func<object, object>[] newRouteParameters)
+        private static void GetNewRouteDataValuesAndQueryString(RouteValueDictionary currentRouteValues, NameValueCollection currentQueryString, IEnumerable<Func<object, object>> newRouteAndQueryStringParameters,
+                                                                out RouteValueDictionary newRouteValues, out NameValueCollection newQueryString)
         {
-            var result = new RouteValueDictionary(urlHelper.RequestContext.RouteData.Values);
-            var queryString = urlHelper.RequestContext.HttpContext.Request.QueryString;
+            // Take over all existing query string parameters.
+            newQueryString = new NameValueCollection(currentQueryString);
+            HashSet<string> currentQueryStringKeys = new HashSet<string>(currentQueryString.AllKeys);
 
-            // Replace the existing parameters using the values from the query string if there are parameters with the same name.
-            if (queryString != null)
-                foreach (var param in queryString.Cast<string>().Where(param => !string.IsNullOrEmpty(queryString[param])))
-                    result[param] = queryString[param];
+            // Take over all existing route parameters.
+            newRouteValues = new RouteValueDictionary(currentRouteValues);
 
-            // Replace the existing parameters with new ones.
-            foreach (var function in newRouteParameters)
-                result[function.Method.GetParameters()[0].Name] = function(null);
+            HashSet<string> newParameterKeys = new HashSet<string>();
+            foreach (var newParameter in newRouteAndQueryStringParameters)
+            {
+                string key = newParameter.Method.GetParameters()[0].Name;
+                object value = newParameter(null);
 
-            return result;
+                if (value == null)
+                    throw new ArgumentException(string.Format("The parameter '{0}' was null. " +
+                                                              "A route or query string parameter cannot be set to null. " +
+                                                              "If you want to remove the parameter from the route parameter collection " +
+                                                              "or from the query string set it to 'UrlParameter.Optional'.", key),
+                                                              "newRouteAndQueryStringParameters");
+
+                if ((value as string) == string.Empty)
+                    throw new ArgumentException(string.Format("The parameter '{0}' was empty string. " +
+                                                              "A route or query string parameter cannot be set to empty string. " +
+                                                              "If you want to remove the parameter from the route parameter collection " +
+                                                              "or from the query string set it to 'UrlParameter.Optional'.", key),
+                                                              "newRouteAndQueryStringParameters");
+
+                // Check for duplicates in keys.
+                if (newParameterKeys.Contains(key))
+                    throw new ArgumentException(string.Format("Each new route and query string parameter can be specified only once. " +
+                                                              "The parameter '{0}' was specified more than once.", key), "newRouteAndQueryStringParameters");
+
+                newParameterKeys.Add(key);
+
+                // If the parameter exists in the query string
+                if (currentQueryStringKeys.Contains(key, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    // Remove it explicitly (in case it has more than one value assigned or if it has to be removed because new value is UrlParameter.Optional)...
+                    newQueryString.Remove(key);
+
+                    // ...and replace it with new one only if the new one is not UrlParameter.Optional.
+                    if (Equals(value, UrlParameter.Optional)) continue;
+
+                    var items = UrlParameterValueAsEnumerable(value);
+                    if (items != null)
+                    {
+                        AddEnumerableParameterToQueryString(newQueryString, key, items);
+                    }
+                    else // It is not an enumerable but just a single value.
+                    {
+                        // We already know that it is not UrlParameter.Optional (checked at the beginning) so we just have to set it.
+                        newQueryString.Add(key, value.ToString());
+                    }
+                }
+                else // If the parameter does not exist in the query string.
+                {
+                    // If it is an enumerable parameter, than we still want to add it to the query string.
+                    var items = UrlParameterValueAsEnumerable(value);
+                    if (items != null)
+                    {
+                        AddEnumerableParameterToQueryString(newQueryString, key, items);
+                    }
+                    else // It is not an enumerable but just a single value.
+                    {
+                        // If the key does not exist in route parameters, it will simply be added to the query string.
+                        // This is a desired behavior.
+                        // However, if the key does not exist in the rout parameters and is set to UrlParameter.Optional
+                        // then we don't want to set it. In that case it would appear in the URL as a query parameter without value.
+                        // That's why we check for that case.
+                        if (Equals(value, UrlParameter.Optional) && !currentRouteValues.ContainsKey(key)) continue;
+
+                        newRouteValues[key] = value;
+                    }                    
+                }
+            }
+        }
+
+        private static IEnumerable UrlParameterValueAsEnumerable(object value)
+        {
+            // So far, we have to treat only the String as a non enumerable.
+            return value is string ? null : value as IEnumerable;
+        }
+
+
+        private static void AddEnumerableParameterToQueryString(NameValueCollection queryString, string key, IEnumerable enumerable)
+        {
+            int i = 0;
+            foreach (var item in enumerable)
+            {
+                // Silence ReSharper because it does not recognize the "newRouteAndQueryStringParameters".
+                // ReSharper disable NotResolvedInText
+                if (item == null)
+                    throw new ArgumentException(string.Format("The item on the zero-index {0} of the enumerable query string parameter '{1}' was null. " +
+                                                              "An enumerable item cannot be null.", i, key), "newRouteAndQueryStringParameters");
+
+                if ((item as string) == string.Empty)
+                    throw new ArgumentException(string.Format("The item on the zero-index {0} of the enumerable query string parameter '{1}' was empty string. " +
+                                                              "An enumerable item cannot be empty string.", i, key), "newRouteAndQueryStringParameters");
+                // ReSharper restore NotResolvedInText
+
+                if (!Equals(item, UrlParameter.Optional)) // Ignore the UrlParameter.Optional.
+                    queryString.Add(key, item.ToString());
+
+                i++;
+            }                                    
         }
 
         /// <summary>
