@@ -13,20 +13,20 @@ namespace SwissKnife.Web.Mvc
     /// <threadsafety static="true"/>
     public static class ChildActionExtensions // TODO-IG: This type is in development. Review and refactoring is needed.
     {
-        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
+        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression) where TController : IController
         {
             RenderAction(htmlHelper, actionExpression, (object)null);
         }
 
-        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression, object routeValues) where TController : Controller
+        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression, object routeValues) where TController : IController
         {
             RenderAction(htmlHelper, actionExpression, new RouteValueDictionary(routeValues));
         }
 
-        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression, RouteValueDictionary routeValues) where TController : Controller
+        public static void RenderAction<TController>(this HtmlHelper htmlHelper, Expression<Func<TController, ActionResult>> actionExpression, RouteValueDictionary routeValues) where TController : IController
         {
             var actionName = ControllerHelper.GetActionName(actionExpression);
-            var controllerName = ControllerHelper.GetControllerName(typeof(TController));
+            var controllerName = ControllerHelper.GetControllerName<TController>();
 
             htmlHelper.RenderAction(actionName, controllerName, routeValues);
         }

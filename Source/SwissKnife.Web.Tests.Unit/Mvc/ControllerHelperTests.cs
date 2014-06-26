@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using System.Web.Routing;
 using NUnit.Framework;
 using SwissKnife.Web.Mvc;
 
@@ -13,45 +14,47 @@ namespace SwissKnife.Web.Tests.Unit.Mvc
         [Test]
         public void GetControllerName_ControllerTypeNameEndsWithControler_ReturnsControllerName()
         {
-            Assert.That(ControllerHelper.GetControllerName(typeof(ControllerNameController)), Is.EqualTo("ControllerName"));
+            Assert.That(ControllerHelper.GetControllerName<ControllerNameController>(), Is.EqualTo("ControllerName"));
         }
 
         [Test]
         public void GetControllerName_ControllerTypeNameEndsWithControlerCaseSensitive_ReturnsControllerName()
         {
-            Assert.That(ControllerHelper.GetControllerName(typeof(ControllerNameCoNtRoLlEr)), Is.EqualTo("ControllerName"));
+            Assert.That(ControllerHelper.GetControllerName<ControllerNameCoNtRoLlEr>(), Is.EqualTo("ControllerName"));
         }
 
         [Test]
         public void GetControllerName_ControllerTypeNameEndsWithControler_ReturnsControllerNameCaseSensitive()
         {
-            Assert.That(ControllerHelper.GetControllerName(typeof(CONTROLLERNAMEController)), Is.EqualTo("CONTROLLERNAME"));
+            Assert.That(ControllerHelper.GetControllerName<CONTROLLERNAMEController>(), Is.EqualTo("CONTROLLERNAME"));
         }
 
         [Test]
         public void GetControllerName_ControllerTypeNameDoesNoteEndWithControler_ReturnsTypeName()
         {
-            Assert.That(ControllerHelper.GetControllerName(typeof(TyPeNaMe)), Is.EqualTo("TyPeNaMe"));
+            Assert.That(ControllerHelper.GetControllerName<TyPeNaMe>(), Is.EqualTo("TyPeNaMe"));
         }
 
         [Test]
         public void GetControllerName_ControllerTypeNameIsControler_ReturnsControler()
         {
-            Assert.That(ControllerHelper.GetControllerName(typeof(Controller)), Is.EqualTo("Controller"));
+            Assert.That(ControllerHelper.GetControllerName<Controller>(), Is.EqualTo("Controller"));
         }
 
         [Test]
         public void GetControllerName_ControllerTypeNameIsControlerCaseSensitive_ReturnsTypeName()
         {
-            Assert.That(ControllerHelper.GetControllerName(typeof(CoNtRoLlEr)), Is.EqualTo("CoNtRoLlEr"));
+            Assert.That(ControllerHelper.GetControllerName<CoNtRoLlEr>(), Is.EqualTo("CoNtRoLlEr"));
         }
 
-        class ControllerNameController { }
-        class ControllerNameCoNtRoLlEr { }
-        class CONTROLLERNAMEController { }
-        class TyPeNaMe { }
-        class Controller { }
-        class CoNtRoLlEr { }
+        // ReSharper disable ClassNeverInstantiated.Local
+        class ControllerNameController : IController { public void Execute(RequestContext requestContext) { } }
+        class ControllerNameCoNtRoLlEr : IController { public void Execute(RequestContext requestContext) { } }
+        class CONTROLLERNAMEController : IController { public void Execute(RequestContext requestContext) { } }
+        class TyPeNaMe : IController { public void Execute(RequestContext requestContext) { } }
+        class Controller : IController { public void Execute(RequestContext requestContext) { } }
+        class CoNtRoLlEr : IController { public void Execute(RequestContext requestContext) { } }
+        // ReSharper restore ClassNeverInstantiated.Local
         #endregion
 
         #region GetActionName

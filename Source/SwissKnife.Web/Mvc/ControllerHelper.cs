@@ -11,11 +11,9 @@ namespace SwissKnife.Web.Mvc
     {
         private const string DefaultControllerNameSuffix = "Controller";
 
-        internal static string GetControllerName(Type controllerType)
+        internal static string GetControllerName<TController>() where TController : IController
         {
-            System.Diagnostics.Debug.Assert(controllerType != null);
-
-            string controllerName = controllerType.Name;
+            string controllerName = typeof(TController).Name;
 
             if (controllerName.EndsWith(DefaultControllerNameSuffix, StringComparison.InvariantCultureIgnoreCase) &&
                 !controllerName.Equals(DefaultControllerNameSuffix, StringComparison.InvariantCultureIgnoreCase))
@@ -26,14 +24,14 @@ namespace SwissKnife.Web.Mvc
             return controllerName;
         }
 
-        internal static string GetActionName<TController>(Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
+        internal static string GetActionName<TController>(Expression<Func<TController, ActionResult>> actionExpression) where TController : IController
         {
             System.Diagnostics.Debug.Assert(actionExpression != null);
 
             return GetActionNameFromActionExpressionCore(actionExpression.Body);
         }
 
-        internal static string GetActionName<TController>(Expression<Func<TController, Task<ActionResult>>> actionExpression) where TController : Controller
+        internal static string GetActionName<TController>(Expression<Func<TController, Task<ActionResult>>> actionExpression) where TController : IController
         {
             System.Diagnostics.Debug.Assert(actionExpression != null);
 

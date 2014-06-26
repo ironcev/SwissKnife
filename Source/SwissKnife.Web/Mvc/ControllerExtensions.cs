@@ -14,6 +14,7 @@ namespace SwissKnife.Web.Mvc
     /// <threadsafety static="true"/>
     public static class ControllerExtensions // TODO-IG: This type is in development. Review and refactoring is needed.
         // TODO-IG: Should this be extension or base class or we should offer both?
+    // In this case we want to have Controller instead of less restrictive IController because we expect the object to have the RedirectToAction() method.
     {
         public static RedirectToRouteResult RedirectToAction<TController>(this Controller controller, Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
         {
@@ -47,7 +48,7 @@ namespace SwissKnife.Web.Mvc
 
         private static RedirectToRouteResult RedirectToActionCore<TController>(Controller controller, string actionName, RouteValueDictionary routeValues) where TController : Controller
         {
-            var controllerName = ControllerHelper.GetControllerName(typeof(TController));
+            var controllerName = ControllerHelper.GetControllerName<TController>();
 
             var methodInfo = typeof(TController).GetMethod("RedirectToAction", BindingFlags.NonPublic | BindingFlags.Instance, null, new[]
                                                                        {

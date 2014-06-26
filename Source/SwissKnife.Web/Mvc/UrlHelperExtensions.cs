@@ -673,7 +673,7 @@ namespace SwissKnife.Web.Mvc
         /// <paramref name="actionExpression"/> is null.
         /// </exception>
         /// <exception cref="ArgumentException"><paramref name="actionExpression"/> is not a valid action expression.</exception>
-        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression) where TController : Controller
+        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression) where TController : IController
         {
             return urlHelper.Action(actionExpression, new RouteValueDictionary());
         }
@@ -684,7 +684,7 @@ namespace SwissKnife.Web.Mvc
         /// Generates a fully qualified URL to an action method by using action name, controller name, and route values.
         /// </summary>
         /// <param name="routeValues">The object that contains the parameters for the <see cref="Route"/>.</param>
-        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<object> routeValues) where TController : Controller
+        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<object> routeValues) where TController : IController
         {
             // The constructor of the RouteValueDictionary class accepts null as a valid argument.
             return urlHelper.Action(actionExpression, new RouteValueDictionary(routeValues.ValueOrNull));
@@ -692,13 +692,13 @@ namespace SwissKnife.Web.Mvc
         #pragma warning restore 1573
 
         /// <inheritdoc href="Action{TController}(UrlHelper, Expression{Func{TController, ActionResult}}, Option{object})" />
-        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<RouteValueDictionary> routeValues) where TController : Controller
+        public static string Action<TController>(this UrlHelper urlHelper, Expression<Func<TController, ActionResult>> actionExpression, Option<RouteValueDictionary> routeValues) where TController : IController
         {
             Argument.IsNotNull(urlHelper, "urlHelper");
             Argument.IsNotNull(actionExpression, "actionExpression");
 
             var actionName = ControllerHelper.GetActionName(actionExpression);
-            var controllerName = ControllerHelper.GetControllerName(typeof(TController));
+            var controllerName = ControllerHelper.GetControllerName<TController>();
 
             return urlHelper.Action(actionName, controllerName, routeValues.ValueOrNull);
         }
