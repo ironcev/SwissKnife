@@ -1,0 +1,1 @@
+#Build.bat "/target:NuGet" Debug

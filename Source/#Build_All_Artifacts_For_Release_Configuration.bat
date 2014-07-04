@@ -1,0 +1,1 @@
+#Build.bat "/target:Binaries;NuGet" Release
