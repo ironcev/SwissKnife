@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle(AssemblyDescription.Title)]
 [assembly: AssemblyProduct(AssemblyDescription.Product)]
-[assembly: AssemblyDescription(AssemblyDescription.Product)]
+[assembly: AssemblyDescription(AssemblyDescription.Description)]
 
 [assembly: AssemblyVersion(AssemblyDescription.Version)]
 // We will not set the AssemblyFileVersion explicitly. This will automatically make it same as the AssemblyVersion.
@@ -30,7 +30,7 @@ internal static partial class AssemblyDescription
     public const string Copyright = "Copyright © 2013 - 2014 " + Company;
     public const string Product = "SwissKnife";
 
-    public const string Version = "0.5.5.*";
+    public const string Version = "0.5.6";
     public const string FileVersion = Version;
 
     public const string Culture = "";

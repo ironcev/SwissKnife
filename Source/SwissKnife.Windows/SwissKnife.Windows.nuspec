@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$id$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <projectUrl>http://github.com/ironcev/swissknife</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <summary>$title$</summary>
+    <releaseNotes></releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>WPF</tags>
+  </metadata>
+</package>

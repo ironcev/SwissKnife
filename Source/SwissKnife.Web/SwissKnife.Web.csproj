@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="SwissKnife.Web.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SwissKnife\SwissKnife.csproj">
