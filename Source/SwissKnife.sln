@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwissKnife.Web.Tests.Unit",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwissKnife.Windows", "SwissKnife.Windows\SwissKnife.Windows.csproj", "{1340254E-3A8F-46F1-A689-DB8C29841EA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwissKnife.Tests.Integration", "SwissKnife.Tests.Integration\SwissKnife.Tests.Integration.csproj", "{9C1EAC23-ED7F-4988-8F76-94466ACB61ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{1340254E-3A8F-46F1-A689-DB8C29841EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1340254E-3A8F-46F1-A689-DB8C29841EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1340254E-3A8F-46F1-A689-DB8C29841EA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C1EAC23-ED7F-4988-8F76-94466ACB61ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C1EAC23-ED7F-4988-8F76-94466ACB61ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C1EAC23-ED7F-4988-8F76-94466ACB61ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C1EAC23-ED7F-4988-8F76-94466ACB61ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

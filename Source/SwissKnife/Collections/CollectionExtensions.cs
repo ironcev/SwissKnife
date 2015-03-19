@@ -101,12 +101,10 @@ namespace SwissKnife.Collections
             Argument.IsNotNull(source, "source");
             Argument.IsGreaterThanZero(groupSize, "groupSize");
 
-            // The source is implicitly captured in a closure. This is exactly what we want, because we want to have method implemented by using deferred execution.
-            // The method actually enumerates the source several times, first time to get the first element in each group and later on to take the members of each group.
-            // This is an acceptable trade-off keeping in mind that we easily got implementation with deferred execution.
-            // ReSharper disable PossibleMultipleEnumeration
-            return source.Where((x, i) => i % groupSize == 0).Select((x, i) => source.Skip(i * groupSize).Take(groupSize));
-            // ReSharper restore PossibleMultipleEnumeration
+            return source
+                .Select((element, index) => new { Index = index / groupSize, Element = element })
+                .GroupBy(y => y.Index)
+                .Select(v => v.Select(t => t.Element));
         }
 
         /// <summary>
