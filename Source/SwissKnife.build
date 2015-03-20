@@ -27,7 +27,7 @@
     <RemoveDir Directories="$(NuGetPackageOutputDirectory)" />
     <MakeDir Directories="$(NuGetPackageOutputDirectory)" />
     <Exec WorkingDirectory="$(BaseDir)"
-          Command="$(NuGetExe) pack %(ProjectFile.Identity)\%(ProjectFile.Identity).csproj -Prop Configuration=$(Configuration) -IncludeReferencedProjects -Symbols -OutputDirectory $(NuGetPackageOutputDirectory)" />
+          Command="$(NuGetExe) pack %(ProjectFile.Identity)\%(ProjectFile.Identity).csproj -Prop Configuration=$(Configuration) -Symbols -OutputDirectory $(NuGetPackageOutputDirectory)" />
   </Target>
   
 </Project>

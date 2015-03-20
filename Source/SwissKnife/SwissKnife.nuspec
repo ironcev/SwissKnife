@@ -10,7 +10,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <summary>$title$</summary>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>Version 0.5.7
+Bug fixes:
+ * CollectionExtensions.Split&lt;T&gt;() works properly with Entity Framework queryables.
+    </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Option Option-Idiom Code-Contracts Cryptography Date-and-Time String-Conversions Collections Enums Sequential-GUID</tags>
   </metadata>
