@@ -5,7 +5,7 @@
     <DebugProperties>
       Platform=Any CPU
     </DebugProperties>
-    <NuGetExe>.nuget\NuGet.exe</NuGetExe>
+    <NuGetExe>..\Tools\nuget.exe</NuGetExe>
     <NuGetPackageOutputDirectory>Artifacts\Nupkg\$(Configuration)</NuGetPackageOutputDirectory>
     <BinOutputDirectory>Artifacts\Bin\$(Configuration)</BinOutputDirectory>
   </PropertyGroup>
@@ -19,12 +19,13 @@
   
   <Target Name="Binaries">
     <RemoveDir Directories="$(BinOutputDirectory)" />
+    <Exec WorkingDirectory="$(BaseDir)" Command="$(NuGetExe) restore @(Solution)" />
     <MSBuild Projects="@(Solution)" Properties="$(DebugProperties)" />
   </Target>
   
   <Target Name="NuGet">
     <RemoveDir Directories="$(NuGetPackageOutputDirectory)" />
-    <MakeDir Directories="$(NuGetPackageOutputDirectory)" />    
+    <MakeDir Directories="$(NuGetPackageOutputDirectory)" />
     <Exec WorkingDirectory="$(BaseDir)"
           Command="$(NuGetExe) pack %(ProjectFile.Identity)\%(ProjectFile.Identity).csproj -Prop Configuration=$(Configuration) -IncludeReferencedProjects -Symbols -OutputDirectory $(NuGetPackageOutputDirectory)" />
   </Target>

@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion(AssemblyDescription.Version)]
 // We will not set the AssemblyFileVersion explicitly. This will automatically make it same as the AssemblyVersion.
+[assembly: AssemblyInformationalVersion(AssemblyDescription.InformationalVersion)]
 
 [assembly: AssemblyCulture(AssemblyDescription.Culture)]
 [assembly: NeutralResourcesLanguage("en-US")]
@@ -30,8 +31,8 @@ internal static partial class AssemblyDescription
     public const string Copyright = "Copyright © 2013 - 2014 " + Company;
     public const string Product = "SwissKnife";
 
-    public const string Version = "0.5.6";
-    public const string FileVersion = Version;
+    public const string Version = "0.5.7";
+    public const string InformationalVersion = Version;
 
     public const string Culture = "";
 
