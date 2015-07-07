@@ -82,8 +82,8 @@ namespace SwissKnife.Diagnostics.Contracts // TODO-IG: Rethink the usage of Cont
         /// </summary>
         /// <remarks>
         /// A method parameter is compatible with a given type if it can be assigned to a variable of that type.
-        /// Null is considered to be compatible with all types.
-        /// Thus, if the <paramref name="parameterValue"/> is null, this method will never throw an exception.
+        /// None is considered to be compatible with all types.
+        /// Thus, if the <paramref name="parameterValue"/> is None, this method will never throw an exception.
         /// </remarks>
         /// <inheritdoc cref="IsNotNullOrWhitespace(string, Option{string})" select="param"/>
         /// <param name="type">The type to which the method parameter must be assignable.</param>
