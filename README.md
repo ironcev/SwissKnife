@@ -3,9 +3,7 @@
 
 ## Inevitable Ritual
 >The Art of Programming:
-
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl + C
-
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl + V
 
 This genuine Art was practiced by me for years. Every project initiation ceremony contained the same inevitable ritual. Open any solution you did so far. Any. Find the project that all other projects in the solution depend on. You will easily recognize it by its generic and faceless name - *Core* or *Common* or perhaps *Helpers*. Recycle the classes out of it. Don't think too much which ones. You will most likely need all of them. If you find some time, wipe them of a bit. Call it refactoring if it will make you feel better. Be sure not to forget to rename the namespaces.
