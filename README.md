@@ -14,9 +14,9 @@ All these general purpose classes were diligently copied from one .NET project t
 ## Tools
 *SwissKnife* is currently equipped with the following tools:
 
-* [Option idiom](Projects/SwissKnife/Idioms/Option.cs)
-* [Extension methods for various .NET collections](Projects/SwissKnife/Collections/CollectionExtensions.cs)
-* [Commonly used code contracts](Projects/SwissKnife/Diagnostics/Contracts)
+* [Option idiom](Source/SwissKnife/Option.cs)
+* [Extension methods for various .NET collections](Source/SwissKnife/Collections/CollectionExtensions.cs)
+* [Commonly used code contracts](Source/SwissKnife/Diagnostics/Contracts)
 * [Extension methods for System.Type](Source/SwissKnife/TypeExtensions.cs)
 
 If you have a good candidate for an additional tool, let me know. I'll be glad to see it being a part of *SwissKnife*.
